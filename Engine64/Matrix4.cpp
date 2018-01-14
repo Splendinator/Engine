@@ -34,6 +34,14 @@ Matrix4 Matrix4::scale(float x, float y, float z) {
 	return m;
 }
 
+Matrix4 Matrix4::translate(float x, float y, float z) {
+	Matrix4 m = Matrix4::identity();
+	m.value[3] = x;
+	m.value[7] = y;
+	m.value[11] = z;
+	return m;
+}
+
 Matrix4 Matrix4::identity() {
 	Matrix4 m = Matrix4();
 	m.value[0] = 1;

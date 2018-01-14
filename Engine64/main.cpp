@@ -9,6 +9,7 @@
 
 Mesh m = Mesh();
 Object o = Object(&m);
+Object o2 = Object(&m);
 GLuint p;
 
 //Print out freeglut errors, and pause program.
@@ -29,7 +30,12 @@ void initOpenGL() {
 
 	p = Shader::compileProgram("Shaders\\basic.vert", "Shaders\\basic.frag");
 
+	o.transform = o.transform * Matrix4::translate(-0.5, 0, 0) * Matrix4::scale(0.5, 0.5, 0.5);
+	o2.transform = o2.transform * Matrix4::translate(0.5, 0, 0) * Matrix4::scale(0.5, 0.5, 0.5);
+
 	o.LinkProgram(p);
+	o2.LinkProgram(p);
+
 }
 
 //Called by the window once per frame.
@@ -37,9 +43,9 @@ void displayCallBack() {
 	
 	glClear(GL_COLOR_BUFFER_BIT);
 	
-	o.transform = o.transform * Matrix4::scale(1, 0.999, 1);
+	
 	o.Draw();
-	glDrawArrays(GL_TRIANGLES, 0, 3);
+	o2.Draw();
 
 	glutSwapBuffers();
 

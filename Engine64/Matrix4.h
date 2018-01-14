@@ -15,7 +15,7 @@ public:
 
 	static Matrix4 rotation(float x, float y, float z);
 	static Matrix4 scale(float x, float y, float z);
-	static Matrix4 transform(float x, float y, float z);
+	static Matrix4 translate(float x, float y, float z);
 
 	
 };
