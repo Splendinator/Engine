@@ -7,9 +7,11 @@ GLuint Shader::compileProgram(std::string vert, std::string frag) {
 	GLuint program = glCreateProgram();
 	GLuint vertObj = glCreateShader(GL_VERTEX_SHADER);
 	GLuint fragObj = glCreateShader(GL_FRAGMENT_SHADER);
-	char *vertText = IO::loadTextFromFile(vert);
+	char *vertText = IO::loadTextFromFile(vert);		
 	char *fragText = IO::loadTextFromFile(frag);
-	GLint status;
+
+	GLint status;		//Status GL_TRUE if worked or GL_FALSE if failed.
+	char error[8192];	//Buffer to hold text.
 	
 	if (!vertText || !fragText) {
 		std::cout << "Error reading file(s)" << std::endl;
@@ -21,10 +23,8 @@ GLuint Shader::compileProgram(std::string vert, std::string frag) {
 	glCompileShader(vertObj);
 	glGetShaderiv(vertObj,GL_COMPILE_STATUS,&status);
 	if (status != GL_TRUE) {
-		char error[8192];
 		glGetShaderInfoLog(vertObj, 8192, NULL, error);
-		std::cout << error;
-		return 0;
+		std::cout << "Vertex: "<< error;
 	}
 	glAttachShader(program, vertObj);
 
@@ -33,19 +33,24 @@ GLuint Shader::compileProgram(std::string vert, std::string frag) {
 	glCompileShader(fragObj);
 	glGetShaderiv(fragObj, GL_COMPILE_STATUS, &status);
 	if (status != GL_TRUE) {
-		char error[8192];
 		glGetShaderInfoLog(fragObj, 8192, NULL, error);
-		std::cout << error;
+		std::cout << "Fragment: " << error;
 		return 0;
 	}
 	glAttachShader(program, fragObj);
 
 	glLinkProgram(program);
+	glGetShaderiv(program, GL_LINK_STATUS, &status);
+	if (status != GL_TRUE) {
+		glGetShaderInfoLog(program, 8192, NULL, error);
+		std::cout << "Linking: " << error;
+		return 0;
+	}
 	glUseProgram(program);
 
 
 
-	return 0;
+	return program;
 }
 
 Shader::Shader()

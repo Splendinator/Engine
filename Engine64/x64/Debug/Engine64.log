@@ -1,3 +1,7 @@
-﻿  Shader.cpp
-  Engine64.vcxproj -> c:\users\dominic\source\repos\Engine64\x64\Debug\Engine64.exe
-  Engine64.vcxproj -> c:\users\dominic\source\repos\Engine64\x64\Debug\Engine64.pdb (Partial PDB)
+﻿  main.cpp
+c:\users\dominic\source\repos\engine64\engine64\object.h(2): warning C4067: unexpected tokens following preprocessor directive - expected a newline
+c:\users\dominic\source\repos\engine64\engine64\object.h(3): warning C4067: unexpected tokens following preprocessor directive - expected a newline
+c:\users\dominic\source\repos\engine64\engine64\main.cpp(27): warning C4305: 'argument': truncation from 'double' to 'GLclampf'
+c:\users\dominic\source\repos\engine64\engine64\main.cpp(40): warning C4305: 'argument': truncation from 'double' to 'float'
+  Engine64.vcxproj -> C:\Users\Dominic\source\repos\Engine64\x64\Debug\Engine64.exe
+  Engine64.vcxproj -> C:\Users\Dominic\source\repos\Engine64\x64\Debug\Engine64.pdb (Partial PDB)

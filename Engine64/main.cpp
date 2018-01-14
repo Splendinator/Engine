@@ -3,7 +3,13 @@
 #include "GL\freeglut.h"
 #include "IO.h"
 #include "Shader.h"
+#include "Mesh.h"
+#include "Object.h"
+#include "Matrix4.h"
 
+Mesh m = Mesh();
+Object o = Object(&m);
+GLuint p;
 
 //Print out freeglut errors, and pause program.
 void errorHandle(const char *text, va_list val) {
@@ -20,17 +26,10 @@ void warningHandle(const char *text, va_list val) {
 void initOpenGL() {
 	glClearColor(0.1,0.1,0.1,1);
 
-	GLuint bufferNum;
-	glGenBuffers(1, &bufferNum);
-	GLfloat triangle[9] = { -1,-1,0,0,1,0,1,-1,0 };
-	glBindBuffer(GL_ARRAY_BUFFER, bufferNum);
-	glBufferData(GL_ARRAY_BUFFER, 9 * sizeof(GLfloat), &triangle, GL_STATIC_DRAW);
 
-	glEnableVertexAttribArray(0);
-	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, 0);
+	p = Shader::compileProgram("Shaders\\basic.vert", "Shaders\\basic.frag");
 
-	Shader::compileProgram("Shaders\\basic.vert", "Shaders\\basic.frag");
-
+	o.LinkProgram(p);
 }
 
 //Called by the window once per frame.
@@ -38,6 +37,8 @@ void displayCallBack() {
 	
 	glClear(GL_COLOR_BUFFER_BIT);
 	
+	o.transform = o.transform * Matrix4::scale(1, 0.999, 1);
+	o.Draw();
 	glDrawArrays(GL_TRIANGLES, 0, 3);
 
 	glutSwapBuffers();
@@ -65,6 +66,8 @@ int main(int argc, char** argv) {
 	
 
 	glutDisplayFunc(&displayCallBack);
+	glutIdleFunc(&displayCallBack);
+
 	glutMainLoop();
 
 	return 0;
