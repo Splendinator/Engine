@@ -1,6 +1,8 @@
-﻿  main.cpp
-c:\users\dominic\source\repos\engine64\engine64\object.h(2): warning C4067: unexpected tokens following preprocessor directive - expected a newline
-c:\users\dominic\source\repos\engine64\engine64\object.h(3): warning C4067: unexpected tokens following preprocessor directive - expected a newline
-c:\users\dominic\source\repos\engine64\engine64\main.cpp(28): warning C4305: 'argument': truncation from 'double' to 'GLclampf'
+﻿  Matrix4.cpp
+c:\users\dominic\source\repos\engine64\engine64\matrix4.h(5): warning C4305: 'initializing': truncation from 'double' to 'float'
+c:\users\dominic\source\repos\engine64\engine64\matrix4.cpp(52): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+c:\users\dominic\source\repos\engine64\engine64\matrix4.cpp(53): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+c:\users\dominic\source\repos\engine64\engine64\matrix4.cpp(54): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+c:\users\dominic\source\repos\engine64\engine64\matrix4.cpp(55): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
   Engine64.vcxproj -> C:\Users\Dominic\source\repos\Engine64\x64\Debug\Engine64.exe
   Engine64.vcxproj -> C:\Users\Dominic\source\repos\Engine64\x64\Debug\Engine64.pdb (Partial PDB)

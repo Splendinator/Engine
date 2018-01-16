@@ -1,4 +1,9 @@
 #pragma once
+#include <math.h>
+
+
+const float PI = 3.14159265359;
+
 class Matrix4
 {
 private:
@@ -9,6 +14,7 @@ public:
 	Matrix4();
 	~Matrix4();
 	Matrix4 operator* (Matrix4 rhs);
+	void operator*= (Matrix4 rhs);
 
 
 	static Matrix4 identity();

@@ -16,13 +16,18 @@ Matrix4 Matrix4::operator*(Matrix4 rhs)
 	Matrix4 ans;
 	for (int y = 0; y < 4; y++) {
 		for (int x = 0; x < 4; x++) {
-			ans.value[y * 4 + x] = value[x + 0]  * rhs.value[y * 4 + 0]
-								 + value[x + 4]  * rhs.value[y * 4 + 1]
-								 + value[x + 8]  * rhs.value[y * 4 + 2]
-								 + value[x + 12] * rhs.value[y * 4 + 3];
+			ans.value[y * 4 + x] = value[y * 4 + 0] * value[x + 0]
+								 + value[y * 4 + 1] * value[x + 4]
+								 + value[y * 4 + 2] * value[x + 8]
+								 + value[y * 4 + 3] * value[x + 12];
 		}
 	}
 	return ans;
+}
+
+void Matrix4::operator*=(Matrix4 rhs)
+{
+	*this = rhs * *this;
 }
 
 Matrix4 Matrix4::scale(float x, float y, float z) {
@@ -39,6 +44,15 @@ Matrix4 Matrix4::translate(float x, float y, float z) {
 	m.value[3] = x;
 	m.value[7] = y;
 	m.value[11] = z;
+	return m;
+}
+
+Matrix4 Matrix4::rotation(float x, float y, float z) {
+	Matrix4 m = Matrix4::identity();
+	m.value[0] = cos(y); 
+	m.value[2] = sin(y);
+	m.value[8] = -sin(y);
+	m.value[10] = cos(y);
 	return m;
 }
 

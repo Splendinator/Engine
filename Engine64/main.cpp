@@ -30,11 +30,23 @@ void initOpenGL() {
 
 	p = Shader::compileProgram("Shaders\\basic.vert", "Shaders\\basic.frag");
 
-	o.transform = o.transform * Matrix4::translate(-0.5, 0, 0) * Matrix4::scale(0.5, 0.5, 0.5);
-	o2.transform = o2.transform * Matrix4::translate(0.5, 0, 0) * Matrix4::scale(0.5, 0.5, 0.5);
+	o.transform *= Matrix4::scale(0.3, 0.3, 0.3);
+	o2.transform = o2.transform;
 
 	o.LinkProgram(p);
 	o2.LinkProgram(p);
+
+}
+
+//Moving mouse callback
+void handleMouse(int x, int y) {
+	static int lastx = x;	//Static so retain value between func calls.
+	static int lasty = y;
+
+	//o.transform = o.transform * Matrix4::translate(float(lastx-x)/300, -float(lasty-y)/300, 0);
+
+	lastx = x;
+	lasty = y;
 
 }
 
@@ -43,9 +55,11 @@ void displayCallBack() {
 	
 	glClear(GL_COLOR_BUFFER_BIT);
 	
-	
+	//o.transform = o.transform * Matrix4::rotation(0,0.01,0);
+	//o.transform = o.transform * Matrix4::scale(0.999, 0.999, 0.999);
+
 	o.Draw();
-	o2.Draw();
+	//o2.Draw();
 
 	glutSwapBuffers();
 
@@ -70,7 +84,8 @@ int main(int argc, char** argv) {
 	
 	initOpenGL();
 	
-
+	glutPassiveMotionFunc(&handleMouse);
+	glutMotionFunc(&handleMouse);
 	glutDisplayFunc(&displayCallBack);
 	glutIdleFunc(&displayCallBack);
 
