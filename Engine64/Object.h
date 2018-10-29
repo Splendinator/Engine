@@ -16,6 +16,6 @@ public:
 	~Object();
 	void LinkProgram(GLuint program);
 
-	void Draw();
+	void draw();
 };
 

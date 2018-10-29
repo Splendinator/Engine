@@ -14,7 +14,7 @@ public:
 	Matrix4();
 	~Matrix4();
 	Matrix4 operator* (Matrix4 rhs);
-	void operator*= (Matrix4 rhs);
+	Matrix4 operator*= (Matrix4 rhs);
 
 
 	static Matrix4 identity();

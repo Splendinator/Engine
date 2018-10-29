@@ -3,7 +3,7 @@
 
 Object::Object()
 {
-	m = new Mesh();
+	m = new Mesh();      
 }
 
 Object::Object(Mesh *mesh)
@@ -14,10 +14,10 @@ Object::Object(Mesh *mesh)
 
 Object::~Object()
 {
-	delete m;
+
 }
 
-void Object::Draw() {
+void Object::draw() {
 	
 	m->buffer();	
 	glEnableVertexAttribArray(0);

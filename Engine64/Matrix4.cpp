@@ -16,18 +16,19 @@ Matrix4 Matrix4::operator*(Matrix4 rhs)
 	Matrix4 ans;
 	for (int y = 0; y < 4; y++) {
 		for (int x = 0; x < 4; x++) {
-			ans.value[y * 4 + x] = value[y * 4 + 0] * value[x + 0]
-								 + value[y * 4 + 1] * value[x + 4]
-								 + value[y * 4 + 2] * value[x + 8]
-								 + value[y * 4 + 3] * value[x + 12];
+			ans.value[y * 4 + x] = value[y * 4 + 0] * rhs.value[x + 0]
+								 + value[y * 4 + 1] * rhs.value[x + 4]
+								 + value[y * 4 + 2] * rhs.value[x + 8]
+								 + value[y * 4 + 3] * rhs.value[x + 12];
 		}
 	}
 	return ans;
 }
 
-void Matrix4::operator*=(Matrix4 rhs)
+Matrix4 Matrix4::operator*=(Matrix4 rhs)
 {
 	*this = rhs * *this;
+	return *this;
 }
 
 Matrix4 Matrix4::scale(float x, float y, float z) {
