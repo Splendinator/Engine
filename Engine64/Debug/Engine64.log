@@ -1,3 +1,58 @@
-﻿  main.cpp
-  Engine64.vcxproj -> c:\users\dominic\source\repos\Engine64\Debug\Engine64.exe
-  Engine64.vcxproj -> c:\users\dominic\source\repos\Engine64\Debug\Engine64.pdb (Partial PDB)
+﻿  Shader.cpp
+  Scene.cpp
+  Rasteriser.cpp
+c:\users\dominic\desktop\engine\engine64\object.h(2): warning C4067: unexpected tokens following preprocessor directive - expected a newline
+c:\users\dominic\desktop\engine\engine64\object.h(3): warning C4067: unexpected tokens following preprocessor directive - expected a newline
+c:\users\dominic\desktop\engine\engine64\matrix4.h(5): warning C4305: 'initializing': truncation from 'double' to 'float'
+c:\users\dominic\desktop\engine\engine64\rasteriser.cpp(53): warning C4305: 'argument': truncation from 'double' to 'GLclampf'
+  Object.cpp
+c:\users\dominic\desktop\engine\engine64\object.h(2): warning C4067: unexpected tokens following preprocessor directive - expected a newline
+c:\users\dominic\desktop\engine\engine64\object.h(3): warning C4067: unexpected tokens following preprocessor directive - expected a newline
+c:\users\dominic\desktop\engine\engine64\matrix4.h(5): warning C4305: 'initializing': truncation from 'double' to 'float'
+  Mesh.cpp
+  Matrix4.cpp
+c:\users\dominic\desktop\engine\engine64\matrix4.h(5): warning C4305: 'initializing': truncation from 'double' to 'float'
+c:\users\dominic\desktop\engine\engine64\matrix4.cpp(53): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+c:\users\dominic\desktop\engine\engine64\matrix4.cpp(54): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+c:\users\dominic\desktop\engine\engine64\matrix4.cpp(55): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+c:\users\dominic\desktop\engine\engine64\matrix4.cpp(56): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+  main.cpp
+c:\users\dominic\desktop\engine\engine64\object.h(2): warning C4067: unexpected tokens following preprocessor directive - expected a newline
+c:\users\dominic\desktop\engine\engine64\object.h(3): warning C4067: unexpected tokens following preprocessor directive - expected a newline
+c:\users\dominic\desktop\engine\engine64\matrix4.h(5): warning C4305: 'initializing': truncation from 'double' to 'float'
+  IO.cpp
+c:\users\dominic\desktop\engine\engine64\io.cpp(20): warning C4244: '=': conversion from 'std::streamoff' to 'int', possible loss of data
+  Generating Code...
+  LINK : C:\Users\Dominic\Desktop\Engine\Debug\Engine64.exe not found or not built by the last incremental link; performing full link
+main.obj : error LNK2019: unresolved external symbol __imp__glutMainLoop@0 referenced in function _main
+main.obj : error LNK2019: unresolved external symbol __imp__glutIdleFunc@4 referenced in function _main
+main.obj : error LNK2019: unresolved external symbol __imp__glutDisplayFunc@4 referenced in function _main
+main.obj : error LNK2019: unresolved external symbol __imp__glutMotionFunc@4 referenced in function _main
+main.obj : error LNK2019: unresolved external symbol __imp__glutPassiveMotionFunc@4 referenced in function _main
+Mesh.obj : error LNK2001: unresolved external symbol __imp____glewBindBuffer
+Mesh.obj : error LNK2001: unresolved external symbol __imp____glewBufferData
+Mesh.obj : error LNK2001: unresolved external symbol __imp____glewGenBuffers
+Object.obj : error LNK2001: unresolved external symbol __imp____glewEnableVertexAttribArray
+Object.obj : error LNK2001: unresolved external symbol __imp____glewGetUniformLocation
+Object.obj : error LNK2001: unresolved external symbol __imp____glewUniformMatrix4fv
+Object.obj : error LNK2001: unresolved external symbol __imp____glewVertexAttribPointer
+Rasteriser.obj : error LNK2019: unresolved external symbol __imp__glewInit@0 referenced in function "public: void __thiscall Rasteriser::init(int,char * *)" (?init@Rasteriser@@QAEXHPAPAD@Z)
+Rasteriser.obj : error LNK2019: unresolved external symbol __imp__glutInitWindowPosition@8 referenced in function "public: void __thiscall Rasteriser::init(int,char * *)" (?init@Rasteriser@@QAEXHPAPAD@Z)
+Rasteriser.obj : error LNK2019: unresolved external symbol __imp__glutInitWindowSize@8 referenced in function "public: void __thiscall Rasteriser::init(int,char * *)" (?init@Rasteriser@@QAEXHPAPAD@Z)
+Rasteriser.obj : error LNK2019: unresolved external symbol __imp__glutInitDisplayMode@4 referenced in function "public: void __thiscall Rasteriser::init(int,char * *)" (?init@Rasteriser@@QAEXHPAPAD@Z)
+Rasteriser.obj : error LNK2019: unresolved external symbol __imp__glutSwapBuffers@0 referenced in function "public: void __thiscall Rasteriser::update(void)" (?update@Rasteriser@@QAEXXZ)
+Rasteriser.obj : error LNK2019: unresolved external symbol __imp____glutInitWithExit@12 referenced in function _glutInit_ATEXIT_HACK@8
+Rasteriser.obj : error LNK2019: unresolved external symbol __imp____glutCreateWindowWithExit@8 referenced in function _glutCreateWindow_ATEXIT_HACK@4
+Rasteriser.obj : error LNK2019: unresolved external symbol __imp__glutInitErrorFunc@4 referenced in function "public: void __thiscall Rasteriser::init(int,char * *)" (?init@Rasteriser@@QAEXHPAPAD@Z)
+Rasteriser.obj : error LNK2019: unresolved external symbol __imp__glutInitWarningFunc@4 referenced in function "public: void __thiscall Rasteriser::init(int,char * *)" (?init@Rasteriser@@QAEXHPAPAD@Z)
+Shader.obj : error LNK2001: unresolved external symbol __imp____glewAttachShader
+Shader.obj : error LNK2001: unresolved external symbol __imp____glewCompileShader
+Shader.obj : error LNK2001: unresolved external symbol __imp____glewCreateProgram
+Shader.obj : error LNK2001: unresolved external symbol __imp____glewCreateShader
+Shader.obj : error LNK2001: unresolved external symbol __imp____glewGetShaderInfoLog
+Shader.obj : error LNK2001: unresolved external symbol __imp____glewGetShaderiv
+Shader.obj : error LNK2001: unresolved external symbol __imp____glewLinkProgram
+Shader.obj : error LNK2001: unresolved external symbol __imp____glewShaderSource
+Shader.obj : error LNK2001: unresolved external symbol __imp____glewUseProgram
+../lib\freeglut.lib : warning LNK4272: library machine type 'x64' conflicts with target machine type 'x86'
+C:\Users\Dominic\Desktop\Engine\Debug\Engine64.exe : fatal error LNK1120: 30 unresolved externals

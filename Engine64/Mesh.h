@@ -1,7 +1,8 @@
 #pragma once
+#include "GL/glew.h"
 #include <string>
 #include <iostream>
-#include <GL\glew.h>
+
 class Mesh
 {
 private:

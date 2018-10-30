@@ -67,11 +67,13 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <None Include="Shaders\basic.frag">
-      <Filter>Shaders</Filter>
-    </None>
     <None Include="Shaders\basic.vert">
       <Filter>Shaders</Filter>
     </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="Shaders\basic.frag">
+      <Filter>Shaders</Filter>
+    </Text>
   </ItemGroup>
 </Project>

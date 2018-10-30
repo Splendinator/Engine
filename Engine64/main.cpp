@@ -1,3 +1,5 @@
+#include "GL/glew.h"
+#include "GL/freeglut.h"
 #include <iostream>
 #include <string.h>
 #include "Mesh.h"
