@@ -14,7 +14,6 @@ public:
 	Object();
 	Object(Mesh *mesh);
 	~Object();
-	void LinkProgram(GLuint program);
 
 	void draw();
 };

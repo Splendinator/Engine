@@ -18,6 +18,7 @@ void Rasteriser::warningHandle(const char *text, va_list val) {
 	std::cout << "Warning: " << text;
 }
 
+
 void Rasteriser::update()
 {
 	glClear(GL_COLOR_BUFFER_BIT);
@@ -31,13 +32,21 @@ void Rasteriser::update()
 
 }
 
+
+
+
+
+
+
+
+
 //Initialise OpenGL
 void Rasteriser::init(int argc, char **argv) {
 	
 	//Initialise freeGLUT (Window Manager)
 	glutInit(&argc, argv);
 	glutInitWindowPosition(600, 200);
-	glutInitWindowSize(600, 600);
+	glutInitWindowSize(SCREEN_WIDTH, SCREEN_HEIGHT);
 	glutInitDisplayMode(GLUT_RGBA | GLUT_DOUBLE);
 	glutInitErrorFunc(&Rasteriser::errorHandle);
 	glutInitWarningFunc(&Rasteriser::warningHandle);
@@ -53,7 +62,7 @@ void Rasteriser::init(int argc, char **argv) {
 	glClearColor(0.1, 0.1, 0.1, 1);
 
 
-	program = Shader::compileProgram("Shaders\\basic.vert", "Shaders\\basic.frag");
+	
 
 	
 
@@ -75,17 +84,7 @@ Rasteriser::~Rasteriser()
 	
 }
 
-void Rasteriser::addObject(Object * o)
-{
-	objects.push_back(o);
-}
 
-void Rasteriser::removeObject(Object * o)
-{
-	for (std::vector<Object *>::iterator it = objects.begin(); it != objects.end(); ++it) {
-		if (*it == o) {
-			objects.erase(it);
-			break;
-		}
-	}
-}
+
+
+

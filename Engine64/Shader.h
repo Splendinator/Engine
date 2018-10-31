@@ -6,12 +6,20 @@
 
 class Shader
 {
-public:
-	Shader();
+private:
+	GLuint programID = 0;
 
-	//Compiles shaders pointed to by filepaths. Returns program ID.
-	static GLuint compileProgram(std::string vert, std::string frag);
+public:
+	
+	Shader() {};
+
+	//Compiles shaders pointed to by filepaths.
+	Shader(std::string vert, std::string frag);
+
+
 
 	~Shader();
+
+	friend class Rasteriser;
 };
 

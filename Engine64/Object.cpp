@@ -26,9 +26,3 @@ void Object::draw() {
 	glDrawArrays(GL_TRIANGLES, 0, m->getLength());
 
 }
-
-void Object::LinkProgram(GLuint program) {
-
-	transformId = glGetUniformLocation(program,"transform");
-
-}
