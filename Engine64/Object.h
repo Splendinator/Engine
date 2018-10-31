@@ -6,7 +6,6 @@ class Object
 {
 private:
 	Mesh *m;
-	GLint transformId;
 
 public:
 	Matrix4 transform = Matrix4::identity();

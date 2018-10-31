@@ -2,10 +2,17 @@
 
 in vec3 position;
 
-uniform mat4 transform;
+uniform mat4 model;
+uniform mat4 view;
+uniform mat4 proj;
+
+out vec4 pos;
 
 void main(){
-	gl_Position = vec4(position,1) * transform; 
+	mat4 mvp = model * view * proj; 
+	
+	pos = vec4(position,1) * mvp;
+	
+	gl_Position = pos;
 	
 }
-//Hello

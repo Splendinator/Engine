@@ -25,7 +25,7 @@ char * IO::loadTextFromFile(string filename) {
 	fs.read(text, length);
 	fs.close();
 
-	//Null terminator at end (This is why we do 'length+1' when calculating text array size.
+	//Null terminator at end (This is why we do 'length+1' when calculating text array size.)
 	text[length] = '\0';
 	
 	return text;

@@ -19,13 +19,11 @@ private:
 	GLint locModel, locView, locProj;
 
 	Matrix4 projection;
+	Matrix4 view;
 
 	std::vector<Object *> objects;	//Vector of all the objects will be drawn
 
 
-
-	static void errorHandle(const char *text, va_list val);
-	static void warningHandle(const char *text, va_list val);
 	 
 	
 
@@ -39,7 +37,6 @@ public:
 	Rasteriser();
 
 	void update();
-	void init(int argc, char **argv);
 
 	~Rasteriser();
 
@@ -49,11 +46,17 @@ public:
 	void setProjection(const Matrix4 &m);	
 	
 	void setShader(const Shader &s);
-
+	void bindCamera(Matrix4 &m);
 
 
 
 };
+
+inline void Rasteriser::bindCamera(Matrix4 &m)
+{
+	view = m;
+	glUniformMatrix4fv(locView, 1, false, (GLfloat *)&view);
+}
 
 inline void Rasteriser::addObject(Object * o)
 {
@@ -86,5 +89,7 @@ inline void Rasteriser::setShader(const Shader & s)
 	locModel = glGetUniformLocation(program, "model");
 	locView = glGetUniformLocation(program, "view");
 	locProj = glGetUniformLocation(program, "proj");
+
+	std::cout << locModel << " " << locView << " " << locProj;
 
 }

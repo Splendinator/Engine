@@ -6,11 +6,14 @@
 
 class Shader
 {
-private:
-	GLuint programID = 0;
+
+
 
 public:
-	
+
+	GLuint programID = 0;
+
+
 	Shader() {};
 
 	//Compiles shaders pointed to by filepaths.
