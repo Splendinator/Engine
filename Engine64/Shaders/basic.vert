@@ -2,14 +2,11 @@
 
 in vec3 position;
 
-uniform mat4 model;
-uniform mat4 view;
-uniform mat4 proj;
+uniform mat4 mvp;
 
 out vec4 pos;
 
 void main(){
-	mat4 mvp = model * view * proj; 
 	
 	pos = vec4(position,1) * mvp;
 	

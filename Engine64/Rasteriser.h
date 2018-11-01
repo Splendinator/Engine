@@ -8,6 +8,7 @@
 #include "Mesh.h"
 #include "Object.h"
 #include "Matrix4.h"
+#include "Camera.h"
 #include <vector>
 
 class Rasteriser
@@ -16,10 +17,11 @@ private:
 
 
 	GLuint program;
-	GLint locModel, locView, locProj;
+	GLint locMVP;
 
 	Matrix4 projection;
-	Matrix4 view;
+	
+	Camera *camera;
 
 	std::vector<Object *> objects;	//Vector of all the objects will be drawn
 
@@ -46,16 +48,15 @@ public:
 	void setProjection(const Matrix4 &m);	
 	
 	void setShader(const Shader &s);
-	void bindCamera(Matrix4 &m);
+	void bindCamera(Camera *c);
 
 
 
 };
 
-inline void Rasteriser::bindCamera(Matrix4 &m)
+inline void Rasteriser::bindCamera(Camera *c)
 {
-	view = m;
-	glUniformMatrix4fv(locView, 1, false, (GLfloat *)&view);
+	camera = c;
 }
 
 inline void Rasteriser::addObject(Object * o)
@@ -76,8 +77,6 @@ inline void Rasteriser::removeObject(Object * o)
 inline void Rasteriser::setProjection(const Matrix4 & m)
 {
 	projection = m;
-	glUniformMatrix4fv(locProj, 1, false, (GLfloat *)&projection);
-	
 }
 
 inline void Rasteriser::setShader(const Shader & s)
@@ -85,11 +84,7 @@ inline void Rasteriser::setShader(const Shader & s)
 	program = s.programID;
 	glUseProgram(program);
 
-	//Get locations of MVP;
-	locModel = glGetUniformLocation(program, "model");
-	locView = glGetUniformLocation(program, "view");
-	locProj = glGetUniformLocation(program, "proj");
-
-	std::cout << locModel << " " << locView << " " << locProj;
+	//Get location of MVP;
+	locMVP = glGetUniformLocation(program, "mvp");
 
 }

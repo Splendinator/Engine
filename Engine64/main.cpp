@@ -17,6 +17,7 @@ Object o2 = Object(m);
 
 Shader s;
 
+Camera cam;
 
 
 //Moving mouse callback
@@ -24,11 +25,11 @@ void handleMouse(int x, int y) {
 	static int lastx = x;	//Static so retain value between func calls.
 	static int lasty = y;
 
-	o.transform *= Matrix4::translate(float(lastx-x)/1, -float(lasty-y)/1, 0);
+	cam.rollYaw((x - lastx) / 100.f);
+	cam.rollPitch((y - lasty) / 100.f);
 
 	lastx = x;
 	lasty = y;
-
 }
 
 
@@ -36,8 +37,8 @@ void handleMouse(int x, int y) {
 //GAME LOOP
 void gameLoop(void) {
 
-	o.transform *= Matrix4::rotation(0.1f, 0.1f, 0.1f);
-
+	//o.transform *= Matrix4::rotation(0.01f, 0.01f, 0.01f);
+	//c.move(0.01f, 0, 0);
 	r.update();
 	
 }
@@ -64,49 +65,54 @@ void initGL(int argc, char** argv) {
 	glutInitWarningFunc(warningHandle);
 	glutCreateWindow("OpenGL Program");
 
+	//GLUT input settings
+	//glutSetKeyRepeat(GLUT_KEY_REPEAT_OFF);
+
 	//Initialise GLEW (Lets OpenGL work on multiple OS)
 	if (glewInit() != GLEW_OK) {
 		std::cout << "Error initialising GLEW";
 		exit(1);
 	}
 
-	//======= USER INIT ==========
 	glClearColor(0.1, 0.1, 0.1, 1);
 
-
-
-
-
-
-	//============================
-
-
-	//glutPassiveMotionFunc(&handleMouse);
-	//glutMotionFunc(&handleMouse);
-	//glutDisplayFunc(&displayCallBack);
-	//glutIdleFunc(&displayCallBack);
-
-	//glutMainLoop();
-
 }
 
-void renderScene(void) {
+void handleKeyDown(unsigned char c, int x, int y) {
+	switch (c) {
+	case ('a'): 
+		cam.move(-0.1f, 0, 0);
+		break;
+	case ('d'):
+		cam.move(0.1f, 0, 0);
+		break;
+	case ('w'):
+		cam.move(0, 0, -0.1f);
+		break;
+	case ('s'):
+		cam.move(0, 0, 0.1f);
+		break;
+	case ('z'):
+		cam.move(0, -0.1f, 0);
+		break;
+	case (' '):
+		cam.move(0, 0.1f, 0);
 
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-	glBegin(GL_TRIANGLES);
-	glVertex3f(-0.5, -0.5, 0.0);
-	glVertex3f(0.5, 0.0, 0.0);
-	glVertex3f(0.0, 0.5, 0.0);
-	glEnd();
-
-	glutSwapBuffers();
-
-
+		break;
+	}
+	glutPostRedisplay();
 }
 
-void nothing() {};
-void nothing(int a, int b) {};
+void handleKeyUp(unsigned char c, int x, int y) {
+	switch (c) {
+	case ('a'):
+		cam.move(-0.1f, 0, 0);
+		break;
+	}
+	glutPostRedisplay();
+}
+
 
 int main(int argc, char** argv) {
 
@@ -114,23 +120,24 @@ int main(int argc, char** argv) {
 	//SETUP
 	initGL(argc, argv);
 
-	o.transform *= Matrix4::translate(-0.5, 0, 0) * Matrix4::scale(5, 10, 10) * Matrix4::rotation(0, 1, 0);
-	o2.transform *= Matrix4::translate(0.5, 0, 0) * Matrix4::rotation(0, 1, 0) * Matrix4::scale(0.5, 1, 1);
-	
+	//OBJECTS
+	o.transform *= Matrix4::translate(0, 0, -5);
 	r.addObject(&o);
 	
+	//SHADER
 	s = Shader("Shaders\\basic.vert", "Shaders\\basic.frag");
-	
 	r.setShader(s);
 	
-	//r.setProjection(Matrix4::identity());
-	r.bindCamera(Matrix4::identity());
-
-	r.setProjection(Matrix4::Perspective(-1,4,40,1));
-	r.bindCamera(Matrix4::translate(0,1.0f,-30.0f));
+	//MVP
+	r.bindCamera(&cam);
+	r.setProjection(Matrix4::Perspective(1,10,40,1));
 
 	glutDisplayFunc(gameLoop);
 	glutIdleFunc(gameLoop);
+	glutKeyboardFunc(handleKeyDown);
+	
+	//glutKeyboardUpFunc(handleKeyUp);
+	glutPassiveMotionFunc(handleMouse);
 
 	glutMainLoop();
 	

@@ -1,9 +1,11 @@
 #pragma once
 #include <math.h>
+#include <iostream>
 
 
 const float PI = 3.14159265359;
 
+//Have to do multiplications backwards
 class Matrix4
 {
 private:
@@ -18,13 +20,18 @@ public:
 
 
 	static Matrix4 identity();
-
-	static Matrix4 rotation(float x, float y, float z);
+				   
+	static Matrix4 rotationY(float x);
+	static Matrix4 rotationX(float x);
+	static Matrix4 rotationZ(float x);
+				   
 	static Matrix4 scale(float x, float y, float z);
 	static Matrix4 translate(float x, float y, float z);
-
+				   
 	static Matrix4 Perspective(float znear, float zfar, float fov, float aspect);
 	
+	friend std::ostream &operator<<(std::ostream &o, Matrix4 m);
+
 };
 
 inline Matrix4 Matrix4::operator*(Matrix4 rhs)
@@ -66,12 +73,30 @@ inline Matrix4 Matrix4::translate(float x, float y, float z) {
 
 
 
-inline Matrix4 Matrix4::rotation(float x, float y, float z) {
+inline Matrix4 Matrix4::rotationY(float x) {
 	Matrix4 m = Matrix4::identity();
-	m.value[0] = cos(y);
-	m.value[2] = sin(y);
-	m.value[8] = -sin(y);
-	m.value[10] = cos(y);
+	m.value[0] = cos(x);
+	m.value[2] = sin(x);
+	m.value[8] = -sin(x);
+	m.value[10] = cos(x);
+	return m;
+}
+
+inline Matrix4 Matrix4::rotationX(float x) {
+	Matrix4 m = Matrix4::identity();
+	m.value[5] = cos(x);
+	m.value[6] = -sin(x);
+	m.value[9] = sin(x);
+	m.value[10] = cos(x);
+	return m;
+}
+
+inline Matrix4 Matrix4::rotationZ(float x) {
+	Matrix4 m = Matrix4::identity();
+	m.value[0] = cos(x);
+	m.value[1] = -sin(x);
+	m.value[4] = sin(x);
+	m.value[5] = cos(x);
 	return m;
 }
 
