@@ -5,6 +5,8 @@
 #include "Mesh.h"
 #include "Object.h"
 #include "Rasteriser.h"
+#include "Vector.h"
+#include "Input.h"
 
 
 
@@ -18,20 +20,6 @@ Object o2 = Object(m);
 Shader s;
 
 Camera cam;
-
-
-//Moving mouse callback
-void handleMouse(int x, int y) {
-	static int lastx = x;	//Static so retain value between func calls.
-	static int lasty = y;
-
-	cam.rollYaw((x - lastx) / 100.f);
-	cam.rollPitch((y - lasty) / 100.f);
-
-	lastx = x;
-	lasty = y;
-}
-
 
 
 //GAME LOOP
@@ -78,41 +66,6 @@ void initGL(int argc, char** argv) {
 
 }
 
-void handleKeyDown(unsigned char c, int x, int y) {
-	switch (c) {
-	case ('a'): 
-		cam.move(-0.1f, 0, 0);
-		break;
-	case ('d'):
-		cam.move(0.1f, 0, 0);
-		break;
-	case ('w'):
-		cam.move(0, 0, -0.1f);
-		break;
-	case ('s'):
-		cam.move(0, 0, 0.1f);
-		break;
-	case ('z'):
-		cam.move(0, -0.1f, 0);
-		break;
-	case (' '):
-		cam.move(0, 0.1f, 0);
-
-
-		break;
-	}
-	glutPostRedisplay();
-}
-
-void handleKeyUp(unsigned char c, int x, int y) {
-	switch (c) {
-	case ('a'):
-		cam.move(-0.1f, 0, 0);
-		break;
-	}
-	glutPostRedisplay();
-}
-
 
 int main(int argc, char** argv) {
 
@@ -134,10 +87,9 @@ int main(int argc, char** argv) {
 
 	glutDisplayFunc(gameLoop);
 	glutIdleFunc(gameLoop);
-	glutKeyboardFunc(handleKeyDown);
-	
-	//glutKeyboardUpFunc(handleKeyUp);
-	glutPassiveMotionFunc(handleMouse);
+
+	Input::setup();
+
 
 	glutMainLoop();
 	

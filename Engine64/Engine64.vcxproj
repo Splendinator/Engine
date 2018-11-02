@@ -136,6 +136,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Camera.cpp" />
+    <ClCompile Include="Input.cpp" />
     <ClCompile Include="IO.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Matrix4.cpp" />
@@ -144,9 +145,11 @@
     <ClCompile Include="Rasteriser.cpp" />
     <ClCompile Include="Scene.cpp" />
     <ClCompile Include="Shader.cpp" />
+    <ClCompile Include="Vector.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Camera.h" />
+    <ClInclude Include="Input.h" />
     <ClInclude Include="IO.h" />
     <ClInclude Include="Matrix4.h" />
     <ClInclude Include="Mesh.h" />
@@ -154,6 +157,7 @@
     <ClInclude Include="Rasteriser.h" />
     <ClInclude Include="Scene.h" />
     <ClInclude Include="Shader.h" />
+    <ClInclude Include="Vector.h" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="Shaders\basic.frag">
