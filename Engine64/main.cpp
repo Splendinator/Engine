@@ -25,7 +25,7 @@ Camera cam;
 
 const float CAMERA_SPEED = 2.0f;
 const float SPRINT_SPEED = 5.0f;
-const float SENSITIVITY = 0.02f;
+const float SENSITIVITY = 0.003f;
 
 
 //GAME LOOP
@@ -33,26 +33,29 @@ void gameLoop(void) {
 	float delta = Timer::getDelta();
 	float camSpeed = CAMERA_SPEED;
 
-	if (Input::isDown(Input::KEYBOARD_SHIFT)) {
+	if (Input::keyDown(Input::KEYBOARD_ESC)) {
+		exit(0);
+	}
+	if (Input::keyDown(Input::KEYBOARD_SHIFT)) {
 		camSpeed = SPRINT_SPEED;
 	}
-	if (Input::isDown(Input::KEYBOARD_W)) {
+	if (Input::keyDown(Input::KEYBOARD_W)) {
 		cam.move(cam.foward() * delta * camSpeed);
 	}
-	if (Input::isDown(Input::KEYBOARD_A)) {
+	if (Input::keyDown(Input::KEYBOARD_A)) {
 		cam.move(cam.right() * -delta * camSpeed);
 	}
-	if (Input::isDown(Input::KEYBOARD_S)) {
+	if (Input::keyDown(Input::KEYBOARD_S)) {
 		cam.move(cam.foward() * -delta * camSpeed);
 	}
-	if (Input::isDown(Input::KEYBOARD_D)) {
+	if (Input::keyDown(Input::KEYBOARD_D)) {
 		cam.move(cam.right() * delta * camSpeed);
 	}
-	if (Input::isDown(Input::KEYBOARD_SPACE)) {
-		cam.move(Vector3({ 0,1,0 }) * delta * camSpeed);
+	if (Input::keyDown(Input::KEYBOARD_SPACE)) {
+		cam.move(cam.up() * delta * camSpeed);
 	}
-	if (Input::isDown(Input::KEYBOARD_CTRL)) {
-		cam.move(Vector3({ 0,-1,0 }) * delta * camSpeed);
+	if (Input::keyDown(Input::KEYBOARD_CTRL)) {
+		cam.move(cam.up() * -delta * camSpeed);
 	}
 
 	cam.rollYaw(Input::relativeMousePos()[0] * SENSITIVITY);
@@ -81,7 +84,7 @@ int main(int argc, char** argv) {
 	
 	//MVP
 	r.bindCamera(&cam);
-	r.setProjection(Matrix4::Perspective(1,10,40,1));
+	r.setProjection(Matrix4::Perspective(0.01f,1000,100,1));
 
 	glutDisplayFunc(gameLoop);
 	glutIdleFunc(gameLoop);

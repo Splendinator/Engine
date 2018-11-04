@@ -22,8 +22,7 @@ void Initialize::init(int argc, char** argv) {
 	glutInitWarningFunc(warningHandle);
 	glutCreateWindow("OpenGL Program");
 
-	//GLUT input settings
-	//glutSetKeyRepeat(GLUT_KEY_REPEAT_OFF);
+	glutFullScreen();
 
 	//Initialise GLEW (Lets OpenGL work on multiple OS)
 	if (glewInit() != GLEW_OK) {

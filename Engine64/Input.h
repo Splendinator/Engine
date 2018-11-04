@@ -8,12 +8,14 @@
 
 
 
+
 namespace Input {
 
 	const static int SPECIAL = 256;
 	const static int MOUSE = 512;
 
 	enum Key {
+		KEYBOARD_ESC = 27,
 		KEYBOARD_SPACE = 32,
 		KEYBOARD_A = 97,
 		KEYBOARD_D = 100,
@@ -28,7 +30,7 @@ namespace Input {
 
 
 
-	bool isDown(Key key);
+	bool keyDown(Key key);
 
 	//TODO: Inline these, requires making input a class to private away read only variables.
 	Vector2i relativeMousePos();

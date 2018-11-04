@@ -2,8 +2,7 @@
 
 
 
-
-bool keyDown[1024];	//Is a key currently held down?
+bool keysDown[1024];	//Is a key currently held down?
 Vector2i mousePos;	//Mouse position in pixels.
 Vector2i relMousePos;	//Mouse position relative to last frame in pixels.
 
@@ -16,7 +15,6 @@ void handleMotion(int x, int y) {
 	static int lasty = y;
 
 	mousePos = Vector2i({ x,y });
-	relMousePos = Vector2i({ x - lastx, y - lasty });
 
 	lastx = x;
 	lasty = y;
@@ -27,32 +25,32 @@ void handleMotion(int x, int y) {
 void handleKeyDown(unsigned char c, int x, int y)
 {
 
-	keyDown[mapping[c]] = true;
+	keysDown[mapping[c]] = true;
 	std::cout << "KEY DOWN: " << int(mapping[c]) << std::endl;
 }
 
 void handleKeyUp(unsigned char c, int x, int y)
 {
-	keyDown[mapping[c]] = false;
+	keysDown[mapping[c]] = false;
 	std::cout << "KEY UP: " << int(mapping[c]) << std::endl;
 }
 
 
 void handleSpecialUp(int c, int x, int y)
 {
-	keyDown[Input::SPECIAL + c] = false;
+	keysDown[Input::SPECIAL + c] = false;
 	std::cout << "SPECIAL UP: " << c << std::endl;
 }
 
 void handleSpecialDown(int c, int x, int y)
 {
-	keyDown[Input::SPECIAL + c] = true;
+	keysDown[Input::SPECIAL + c] = true;
 	std::cout << "SPECIAL DOWN: " << c << std::endl;
 }
 
 void handleMouse(int button, int state, int x, int y)
 {
-	keyDown[Input::MOUSE + button] = !state;
+	keysDown[Input::MOUSE + button] = !state;
 }
 
 
@@ -97,14 +95,15 @@ void Input::setup() {
 	initMapping();
 }
 
-bool Input::isDown(Key key)
+bool Input::keyDown(Key key)
 {
-	return keyDown[key];
+	return keysDown[key];
 }
 
 Vector2i Input::relativeMousePos()
 {
-	return relMousePos;
+	return Vector2i({ mousePos[0] - glutGet(GLUT_WINDOW_WIDTH) / 2, mousePos[1] - glutGet(GLUT_WINDOW_HEIGHT) / 2 });
+	
 }
 
 Vector2i Input::absoluteMousePos()
@@ -114,7 +113,11 @@ Vector2i Input::absoluteMousePos()
 
 void Input::update()
 {
-	relMousePos = Vector2i({ 0,0 });
+	//if(mouseVisible)
+	mousePos = Vector2i({ glutGet(GLUT_WINDOW_WIDTH) / 2, glutGet(GLUT_WINDOW_HEIGHT) / 2 });
+	glutWarpPointer(glutGet(GLUT_WINDOW_WIDTH)/2, glutGet(GLUT_WINDOW_HEIGHT) / 2);
 }
+
+//TODO mouseVisible(false);
 
 
