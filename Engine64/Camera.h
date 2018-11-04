@@ -22,7 +22,7 @@ public:
 	Camera() { };
 	~Camera() {};
 
-	void move(Vector3 v) { translate *= Matrix4::translate(v[0], v[1], v[2]); }
+	void move(Vector3 v) { translate *= Matrix4::translate(-v[0], -v[1], -v[2]); }
 	void rollYaw(float x) { yaw += x; }
 	void rollPitch(float x) { pitch += x; }
 
@@ -41,10 +41,10 @@ inline Vector3 Camera::foward() {
 	Vector3 v;
 	float f = cos(pitch);
 
-	v[0] = -sin(yaw);
-	v[2] = cos(yaw);
+	v[0] = sin(yaw);
+	v[2] =- cos(yaw);
 	
-	v[1] = sin(pitch);
+	v[1] = -sin(pitch);
 	v[0] *= f;
 	v[2] *= f;
 

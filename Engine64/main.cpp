@@ -7,6 +7,8 @@
 #include "Rasteriser.h"
 #include "Vector.h"
 #include "Input.h"
+#include "Initialize.h"
+#include "Timer.h"
 
 
 
@@ -21,57 +23,53 @@ Shader s;
 
 Camera cam;
 
+const float CAMERA_SPEED = 2.0f;
+const float SPRINT_SPEED = 5.0f;
+const float SENSITIVITY = 0.02f;
+
 
 //GAME LOOP
 void gameLoop(void) {
+	float delta = Timer::getDelta();
+	float camSpeed = CAMERA_SPEED;
 
-	//o.transform *= Matrix4::rotation(0.01f, 0.01f, 0.01f);
-	//c.move(0.01f, 0, 0);
-	r.update();
-	
-}
-
-
-//Print out freeglut errors, and pause program.
-void errorHandle(const char *text, va_list val) {
-	std::cout << "Error: " << text;
-}
-
-//Print out freeglut warnings
-void warningHandle(const char *text, va_list val) {
-	std::cout << "Warning: " << text;
-}
-
-
-void initGL(int argc, char** argv) {
-	//Initialise freeGLUT (Window Manager)
-	glutInit(&argc, argv);
-	glutInitWindowPosition(600, 200);
-	glutInitWindowSize(Rasteriser::SCREEN_WIDTH, Rasteriser::SCREEN_HEIGHT);
-	glutInitDisplayMode(GLUT_RGBA | GLUT_DOUBLE | GLUT_DEPTH);
-	glutInitErrorFunc(errorHandle);
-	glutInitWarningFunc(warningHandle);
-	glutCreateWindow("OpenGL Program");
-
-	//GLUT input settings
-	//glutSetKeyRepeat(GLUT_KEY_REPEAT_OFF);
-
-	//Initialise GLEW (Lets OpenGL work on multiple OS)
-	if (glewInit() != GLEW_OK) {
-		std::cout << "Error initialising GLEW";
-		exit(1);
+	if (Input::isDown(Input::KEYBOARD_SHIFT)) {
+		camSpeed = SPRINT_SPEED;
+	}
+	if (Input::isDown(Input::KEYBOARD_W)) {
+		cam.move(cam.foward() * delta * camSpeed);
+	}
+	if (Input::isDown(Input::KEYBOARD_A)) {
+		cam.move(cam.right() * -delta * camSpeed);
+	}
+	if (Input::isDown(Input::KEYBOARD_S)) {
+		cam.move(cam.foward() * -delta * camSpeed);
+	}
+	if (Input::isDown(Input::KEYBOARD_D)) {
+		cam.move(cam.right() * delta * camSpeed);
+	}
+	if (Input::isDown(Input::KEYBOARD_SPACE)) {
+		cam.move(Vector3({ 0,1,0 }) * delta * camSpeed);
+	}
+	if (Input::isDown(Input::KEYBOARD_CTRL)) {
+		cam.move(Vector3({ 0,-1,0 }) * delta * camSpeed);
 	}
 
-	glClearColor(0.1, 0.1, 0.1, 1);
+	cam.rollYaw(Input::relativeMousePos()[0] * SENSITIVITY);
+	cam.rollPitch(Input::relativeMousePos()[1] * SENSITIVITY);
 
+
+	r.update();
+	Input::update();
 }
+
 
 
 int main(int argc, char** argv) {
 
 	
-	//SETUP
-	initGL(argc, argv);
+	//INIT OPENGL/FREEGLUT
+	Initialize::init(argc, argv);
 
 	//OBJECTS
 	o.transform *= Matrix4::translate(0, 0, -5);
@@ -90,9 +88,7 @@ int main(int argc, char** argv) {
 
 	Input::setup();
 
-
 	glutMainLoop();
-	
 
 	return 0;
 

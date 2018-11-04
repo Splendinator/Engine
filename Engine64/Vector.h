@@ -1,5 +1,4 @@
 #pragma once
-#pragma once
 #include <ostream>
 
 
@@ -38,8 +37,13 @@ public:
 	~Vector() {};
 };
 
+//TYPEDEFS
+typedef Vector<float, 2> Vector2;
 typedef Vector<float, 3> Vector3;
 typedef Vector<float, 4> Vector4;
+
+typedef Vector<int, 2> Vector2i;
+
 
 
 template <class E, unsigned int LENGTH>
