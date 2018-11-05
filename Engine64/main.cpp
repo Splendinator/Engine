@@ -9,6 +9,7 @@
 #include "Input.h"
 #include "Initialize.h"
 #include "Timer.h"
+#include "SOIL\SOIL.h"
 
 
 

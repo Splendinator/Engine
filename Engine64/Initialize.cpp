@@ -22,8 +22,6 @@ void Initialize::init(int argc, char** argv) {
 	glutInitWarningFunc(warningHandle);
 	glutCreateWindow("OpenGL Program");
 
-	glutFullScreen();
-
 	//Initialise GLEW (Lets OpenGL work on multiple OS)
 	if (glewInit() != GLEW_OK) {
 		std::cout << "Error initialising GLEW";
