@@ -16,7 +16,7 @@ class Rasteriser
 private:
 
 
-	GLuint program;
+	//GLuint program;
 	GLint locMVP;
 
 	Matrix4 projection;
@@ -79,12 +79,3 @@ inline void Rasteriser::setProjection(const Matrix4 & m)
 	projection = m;
 }
 
-inline void Rasteriser::setShader(const Shader & s)
-{
-	program = s.programID;
-	glUseProgram(program);
-
-	//Get location of MVP;
-	locMVP = glGetUniformLocation(program, "mvp");
-
-}

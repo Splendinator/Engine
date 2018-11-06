@@ -3,6 +3,8 @@
 #include <string>
 #include <iostream>
 
+enum ID {VERTEX_ID, TEXTURE_ID};
+
 class Mesh
 {
 private:
@@ -10,20 +12,28 @@ private:
 
 public:
 
-	float *verts;
-	float *cols;
+	GLfloat *verts;
+	GLfloat *tex;
+
+	GLuint vertId;
+	GLuint texId;
+
+	GLuint vaoId;
+
 	int num = 0;
+
+
 
 	Mesh();
 	~Mesh();
 	Mesh(std::string filepath);	//Read from file TODO:
 
 	static Mesh *Triangle();
-	static Mesh *Cube();
+	static Mesh *Quad();
 
-	void buffer() const;
+	void buffer(); 
 	
-	int getLength() { return num / 3; }
+	int getLength() { return num; }
 
 
 	

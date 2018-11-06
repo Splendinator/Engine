@@ -9,18 +9,18 @@
 #include "Input.h"
 #include "Initialize.h"
 #include "Timer.h"
-#include "SOIL\SOIL.h"
 
 
 
 Rasteriser r;
 
-Mesh *m = Mesh::Triangle();
+Mesh *m = Mesh::Quad();
 
-Object o = Object(m);
-Object o2 = Object(m);
+Texture *t;
 
 Shader s;
+
+Object o;
 
 Camera cam;
 
@@ -55,7 +55,7 @@ void gameLoop(void) {
 	if (Input::keyDown(Input::KEYBOARD_SPACE)) {
 		cam.move(cam.up() * delta * camSpeed);
 	}
-	if (Input::keyDown(Input::KEYBOARD_CTRL)) {
+	if (Input::keyDown(Input::Key('q'))) {
 		cam.move(cam.up() * -delta * camSpeed);
 	}
 
@@ -71,21 +71,34 @@ void gameLoop(void) {
 
 int main(int argc, char** argv) {
 
-	
 	//INIT OPENGL/FREEGLUT
 	Initialize::init(argc, argv);
 
-	//OBJECTS
-	o.transform *= Matrix4::translate(0, 0, -5);
-	r.addObject(&o);
+
 	
 	//SHADER
 	s = Shader("Shaders\\basic.vert", "Shaders\\basic.frag");
-	r.setShader(s);
 	
+	
+	t = new Texture("Textures/checkerboard.jpg");
+
+	//OBJECT
+	o = Object(m, t, &s);
+	o.transform *= Matrix4::scale(100, 100, 1);
+	o.transform *= Matrix4::rotationX(PI / 2);
+	o.transform *= Matrix4::translate(0, -10, 0);
+	
+
+	//THIS STUFF SHOULD BE IN A SCENE NODE INITIALISE RECURSIVE THING.
+	o.init();
+
+
+	o.transform *= Matrix4::translate(0, 0, -5);
+	r.addObject(&o);
+
 	//MVP
 	r.bindCamera(&cam);
-	r.setProjection(Matrix4::Perspective(0.01f,1000,100,1));
+	r.setProjection(Matrix4::Perspective(0.01f,1000,PI, float(glutGet(GLUT_WINDOW_WIDTH)) / glutGet(GLUT_WINDOW_HEIGHT)));
 
 	glutDisplayFunc(gameLoop);
 	glutIdleFunc(gameLoop);

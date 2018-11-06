@@ -23,6 +23,5 @@ public:
 
 	~Shader();
 
-	friend class Rasteriser;
 };
 

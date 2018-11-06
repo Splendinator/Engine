@@ -28,6 +28,8 @@ void Initialize::init(int argc, char** argv) {
 		exit(1);
 	}
 
+	glEnable(GL_CULL_FACE);
+
 	glClearColor(0.1, 0.1, 0.1, 1);
 
 }

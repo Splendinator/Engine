@@ -26,26 +26,26 @@ void handleKeyDown(unsigned char c, int x, int y)
 {
 
 	keysDown[mapping[c]] = true;
-	std::cout << "KEY DOWN: " << int(mapping[c]) << std::endl;
+	//std::cout << "KEY DOWN: " << int(mapping[c]) << std::endl;
 }
 
 void handleKeyUp(unsigned char c, int x, int y)
 {
 	keysDown[mapping[c]] = false;
-	std::cout << "KEY UP: " << int(mapping[c]) << std::endl;
+	//std::cout << "KEY UP: " << int(mapping[c]) << std::endl;
 }
 
 
 void handleSpecialUp(int c, int x, int y)
 {
 	keysDown[Input::SPECIAL + c] = false;
-	std::cout << "SPECIAL UP: " << c << std::endl;
+	//std::cout << "SPECIAL UP: " << c << std::endl;
 }
 
 void handleSpecialDown(int c, int x, int y)
 {
 	keysDown[Input::SPECIAL + c] = true;
-	std::cout << "SPECIAL DOWN: " << c << std::endl;
+	//std::cout << "SPECIAL DOWN: " << c << std::endl;
 }
 
 void handleMouse(int button, int state, int x, int y)
