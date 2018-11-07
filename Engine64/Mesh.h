@@ -3,7 +3,7 @@
 #include <string>
 #include <iostream>
 
-enum ID {VERTEX_ID, TEXTURE_ID};
+enum ID {VERTEX_ID, TEXTURE_ID, ALPHA_ID};
 
 class Mesh
 {
@@ -12,11 +12,15 @@ private:
 
 public:
 
+	//Data
 	GLfloat *verts;
 	GLfloat *tex;
+	GLfloat *alpha;
 
+	//Ids
 	GLuint vertId;
 	GLuint texId;
+	GLuint alphaId;
 
 	GLuint vaoId;
 

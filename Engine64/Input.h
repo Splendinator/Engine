@@ -1,5 +1,5 @@
 #pragma once
-#include <iostream>
+#include <iostream>main
 #include "GL\freeglut.h"
 #include "Vector.h"
 

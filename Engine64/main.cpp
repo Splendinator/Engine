@@ -104,18 +104,18 @@ int main(int argc, char** argv) {
 
 	//o.transform(Matrix4::rotationZ(delta));
 
-	o.setOffset(0, 0, 3);
-	o2.setOffset(0, 0, 3);
-	o3.setOffset(0, 0, 3);
+	o.transform(Matrix4::translate(0, 0, -3));
+	o2.transform(Matrix4::translate(0, 0, -3));
+	o3.transform(Matrix4::translate(0, 0, -3));
+
 
 	o.addChild(&o2);
 	o2.addChild(&o3);
 
+	r.addObject(&o);
 	r.addObject(&o2);
 	r.addObject(&o3);
-
-	//o.transform *= Matrix4::translate(0, 0, -5);
-	r.addObject(&o);
+	
 
 	//MVP
 	r.bindCamera(&cam);

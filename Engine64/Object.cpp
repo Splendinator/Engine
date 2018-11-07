@@ -43,28 +43,3 @@ void Object::draw() {
 	
 }
 
-inline void Object::updateChildren() {
-	for (std::vector<Object *>::iterator it = children.begin(); it != children.end(); ++it)
-		(*it)->updateWorldMatrix(getTransform());
-};
-
-inline void Object::updateWorldMatrix(Matrix4 m)
-{
-	worldTransform = m;
-	updateChildren();
-}
-
-
-void Object::transform(Matrix4 transform)
-{
-	localTransform *= Matrix4::translate(-offset[0], -offset[1], -offset[2]);
-	localTransform *= transform;
-	localTransform *= Matrix4::translate(offset[0], offset[1], offset[2]);
-	updateChildren();
-}
-
-void Object::addChild(Object * o)
-{
-	children.push_back(o);
-	o->updateWorldMatrix(getTransform());
-}

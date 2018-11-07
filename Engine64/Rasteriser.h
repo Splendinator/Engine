@@ -10,6 +10,7 @@
 #include "Matrix4.h"
 #include "Camera.h"
 #include <vector>
+#include <algorithm>
 
 class Rasteriser
 {

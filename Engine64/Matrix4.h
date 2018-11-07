@@ -30,6 +30,8 @@ public:
 				   
 	static Matrix4 Perspective(float znear, float zfar, float fov, float aspect);
 	
+	float &operator[] (int x) { return value[x]; }
+
 	friend std::ostream &operator<<(std::ostream &o, Matrix4 m);
 
 };
