@@ -15,12 +15,15 @@
 Rasteriser r;
 
 Mesh *m = Mesh::Quad();
+Mesh *tri = Mesh::Triangle();
 
 Texture *t;
 
 Shader s;
 
 Object o;
+Object o2;
+Object o3;
 
 Camera cam;
 
@@ -63,6 +66,11 @@ void gameLoop(void) {
 	cam.rollPitch(Input::relativeMousePos()[1] * SENSITIVITY);
 
 
+
+	o.transform(Matrix4::rotationZ(delta));
+	o2.transform(Matrix4::rotationZ(delta));
+	o3.transform(Matrix4::rotationZ(delta));
+
 	r.update();
 	Input::update();
 }
@@ -84,16 +92,29 @@ int main(int argc, char** argv) {
 
 	//OBJECT
 	o = Object(m, t, &s);
-	o.transform *= Matrix4::scale(100, 100, 1);
-	o.transform *= Matrix4::rotationX(PI / 2);
-	o.transform *= Matrix4::translate(0, -10, 0);
+	o2 = Object(m, t, &s);
+	o3 = Object(m, t, &s);
+	
 	
 
 	//THIS STUFF SHOULD BE IN A SCENE NODE INITIALISE RECURSIVE THING.
 	o.init();
+	o2.init();
+	o3.init();
 
+	//o.transform(Matrix4::rotationZ(delta));
 
-	o.transform *= Matrix4::translate(0, 0, -5);
+	o.setOffset(0, 0, 3);
+	o2.setOffset(0, 0, 3);
+	o3.setOffset(0, 0, 3);
+
+	o.addChild(&o2);
+	o2.addChild(&o3);
+
+	r.addObject(&o2);
+	r.addObject(&o3);
+
+	//o.transform *= Matrix4::translate(0, 0, -5);
 	r.addObject(&o);
 
 	//MVP

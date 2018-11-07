@@ -20,7 +20,7 @@ void Rasteriser::update()
 	
 
 	for (std::vector<Object *>::iterator it = objects.begin(); it != objects.end(); ++it) {
-		MVP = VP * (**it).transform;
+		MVP = VP * (**it).getTransform();
 		//glUniformMatrix4fv(10, 1, false, (GLfloat *) &MVP);	//TODO: Elegant way of doing this.
 		//glUniform1i(11, (**it).t->id);
 		glUniformMatrix4fv(glGetUniformLocation((**it).s->programID,"mvp"), 1, false, (GLfloat *)&MVP);
