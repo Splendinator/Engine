@@ -9,7 +9,7 @@
 
 class Object
 {
-private:
+protected:
 	Mesh *m;
 	Texture *t;
 	Shader *s; 
@@ -31,7 +31,7 @@ public:
 
 	Object();
 	Object(Mesh *mesh, Texture *texture, Shader *shader);
-	~Object();
+	virtual ~Object();
 
 	void calcCameraDist(Camera *c) { cameraDist = 
 		((transformMatrix[3] - c->getTransform()[3]) * (transformMatrix[3] - c->getTransform()[3]))

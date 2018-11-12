@@ -5,16 +5,16 @@
 
 Object::Object()
 {
-	m = new Mesh();      
+	m = nullptr;
+	t = nullptr;
+	s = nullptr;
 }
 
 Object::Object(Mesh *mesh, Texture *texture, Shader *shader)
 {
 	m = mesh;
 	t = texture;
-
 	s = shader;
-
 }
 
 Object::~Object()
@@ -37,7 +37,10 @@ void Object::draw() {
 	glBindTexture(GL_TEXTURE_2D, t->id);
 
 	glBindVertexArray(m->vaoId);
-	glDrawArrays(GL_TRIANGLES, 0, m->getLength());
+	if (m->inds)
+		glDrawElements(GL_TRIANGLES, m->numIndicies, GL_UNSIGNED_INT, 0);
+	else
+		glDrawArrays(GL_TRIANGLES, 0, m->getLength());
 
 	
 	

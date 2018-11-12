@@ -9,21 +9,24 @@
 #include "Input.h"
 #include "Initialize.h"
 #include "Timer.h"
+#include "Heightmap.h"
 
 
 
 Rasteriser r;
 
-Mesh *m = Mesh::Quad();
-Mesh *tri = Mesh::Triangle();
+//Mesh *m = Mesh::Plane(3, 3, 1.0f, 1.0f);
 
-Texture *t;
+
+Texture t;
 
 Shader s;
 
 Object o;
 Object o2;
 Object o3;
+
+Heightmap h(257,257,1.f,1.f,&t,&s);
 
 Camera cam;
 
@@ -33,8 +36,11 @@ const float SENSITIVITY = 0.003f;
 
 
 //GAME LOOP
+
 void gameLoop(void) {
+	static float time = 0;
 	float delta = Timer::getDelta();
+	time += delta;
 	float camSpeed = CAMERA_SPEED;
 
 	if (Input::keyDown(Input::KEYBOARD_ESC)) {
@@ -65,11 +71,13 @@ void gameLoop(void) {
 	cam.rollYaw(Input::relativeMousePos()[0] * SENSITIVITY);
 	cam.rollPitch(Input::relativeMousePos()[1] * SENSITIVITY);
 
+	for (int x = 0; x < h.getSizeX(); ++x) {
+		for (int z = 0; z < h.getSizeZ(); ++z) {
+			h.height(x, z) = sin((time / 1.f + x / 20.f)) * 1.f;
+		}
+	}
 
-
-	o.transform(Matrix4::rotationZ(delta));
-	o2.transform(Matrix4::rotationZ(delta));
-	o3.transform(Matrix4::rotationZ(delta));
+	h.updateHeight();
 
 	r.update();
 	Input::update();
@@ -82,39 +90,39 @@ int main(int argc, char** argv) {
 	//INIT OPENGL/FREEGLUT
 	Initialize::init(argc, argv);
 
-
+	std::cout << sizeof(float) << " " << sizeof(Vector3) << std::endl;
 	
 	//SHADER
 	s = Shader("Shaders\\basic.vert", "Shaders\\basic.frag");
 	
 	
-	t = new Texture("Textures/checkerboard.jpg");
+	t = Texture("Textures/checkerboard.jpg");
 
 	//OBJECT
-	o = Object(m, t, &s);
-	o2 = Object(m, t, &s);
-	o3 = Object(m, t, &s);
+	//o = Object(m, t, &s);
+	//o2 = Object(m, t, &s);
+	//o3 = Object(m, t, &s);
 	
 	
 
 	//THIS STUFF SHOULD BE IN A SCENE NODE INITIALISE RECURSIVE THING.
-	o.init();
-	o2.init();
-	o3.init();
+	h.init();
+	//o2.init();
+	//o3.init();
 
 	//o.transform(Matrix4::rotationZ(delta));
 
-	o.transform(Matrix4::translate(0, 0, -3));
-	o2.transform(Matrix4::translate(0, 0, -3));
-	o3.transform(Matrix4::translate(0, 0, -3));
+	h.transform(Matrix4::scale(10.f,1.f,10.f));
+	//o2.transform(Matrix4::translate(0, 0, -3));
+	//o3.transform(Matrix4::translate(0, 0, -3));
 
 
-	o.addChild(&o2);
-	o2.addChild(&o3);
+	//o.addChild(&o2);
+	//o2.addChild(&o3);
 
-	r.addObject(&o);
-	r.addObject(&o2);
-	r.addObject(&o3);
+	r.addObject(&h);
+	//r.addObject(&o2);
+	//r.addObject(&o3);
 	
 
 	//MVP

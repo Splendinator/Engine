@@ -7,6 +7,7 @@ Mesh::Mesh()
 	verts = nullptr;
 	tex = nullptr;
 	alpha = nullptr;
+	inds = nullptr;
 }
 
 
@@ -15,7 +16,9 @@ Mesh::~Mesh()
 	delete [] verts;
 	delete [] tex;
 	delete [] alpha;
+	delete [] inds;
 }
+
 
 void Mesh::buffer(){
 	
@@ -40,34 +43,116 @@ void Mesh::buffer(){
 
 	glVertexAttribPointer(TEXTURE_ID, 2, GL_FLOAT, GL_FALSE, 0, 0);
 	glEnableVertexAttribArray(TEXTURE_ID);
+	
 
 	//Alpha
-	glGenBuffers(1, &alphaId);
-	glBindBuffer(GL_ARRAY_BUFFER, alphaId);
-	glBufferData(GL_ARRAY_BUFFER, num * sizeof(GLfloat), alpha, GL_STATIC_DRAW);
+	if (alpha) {
+		glGenBuffers(1, &alphaId);
+		glBindBuffer(GL_ARRAY_BUFFER, alphaId);
+		glBufferData(GL_ARRAY_BUFFER, num * sizeof(GLfloat), alpha, GL_STATIC_DRAW);
 
-	glVertexAttribPointer(ALPHA_ID, 1, GL_FLOAT, GL_FALSE, 0, 0);
-	glEnableVertexAttribArray(ALPHA_ID);
+		glVertexAttribPointer(ALPHA_ID, 1, GL_FLOAT, GL_FALSE, 0, 0);
+		glEnableVertexAttribArray(ALPHA_ID);
+	}
 
+
+	//Indicies
+	if (inds) {
+	
+		glGenBuffers(1, &indsId);
+		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indsId);
+		glBufferData(GL_ELEMENT_ARRAY_BUFFER, numIndicies * sizeof(GLuint), inds, GL_STATIC_DRAW);
+
+
+		//Don't need this part since it is assumed indicies are UINTS of size 1
+		///glVertexAttribPointer(INDICIES_ID, 1, GL_UNSIGNED_INT, GL_FALSE, 0, 0);
+		///glEnableVertexAttribArray(INDICIES_ID);
+	}
 
 }
 
-Mesh * Mesh::Triangle() {
+//Mesh *Mesh::Triangle() {
+//	Mesh *m = new Mesh;
+//	m->num = 3;
+//	m->verts = new Vector3[m->num]{ -1,-1,0,0,1,0,1,-1,0 };
+//	m->tex = new GLfloat[6]{ 0,0,0.5,1,1,0 };
+//	m->alpha = new GLfloat[3]{ 1,1,1 };
+//	return m;
+//}
+
+//Mesh *Mesh::Quad()
+//{
+//	Mesh *m = new Mesh;
+//	m->num = 6;
+//	m->verts = new GLfloat[18]{ -1,-1,0,-1,1,0,1,-1,0 , -1 ,1 ,0 , 1 ,1,0, 1,-1,0  };
+//	m->tex = new GLfloat[12]{ 0,0,0,1,1,0,0,1,1,1,1,0 };
+//	m->alpha = new GLfloat[6]{ 0.1f,0.1f,0.1f,0.1f,0.1f,0.1f };
+//	return m;
+//}
+
+Mesh *Mesh::QuadInds()
+{
 	Mesh *m = new Mesh;
-	m->num = 3;
-	m->verts = new GLfloat[9]{ -1,-1,0,0,1,0,1,-1,0 };
-	m->tex = new GLfloat[6]{ 0,0,0.5,1,1,0 };
-	m->alpha = new GLfloat[3]{ 1,1,1 };
+	m->num = 4;
+	m->verts = new Vector3[m->num]{ Vector3({-1,-1,0}), Vector3({-1,1,0}), Vector3({ 1,1,0}), Vector3({ 1,-1,0}) };
+	m->tex = new Vector2[m->num]{ Vector2({0,0}),  Vector2({0,1}),  Vector2({1,1}),  Vector2({1,0}) };
+	m->alpha = new GLfloat[4]{ 0.1f,0.1f,0.1f,0.1f };
+
+	m->numIndicies = 6;
+	m->inds = new GLuint[6]{ 1,0,2,2,0,3 };
+
 	return m;
 }
 
-Mesh * Mesh::Quad()
-{
+Mesh *Mesh::Plane(int xNum, int zNum, float xTexture, float zTexture) {
 	Mesh *m = new Mesh;
-	m->num = 6;
-	m->verts = new GLfloat[18]{ -1,-1,0,-1,1,0,1,-1,0 , -1 ,1 ,0 , 1 ,1,0, 1,-1,0  };
-	m->tex = new GLfloat[12]{ 0,0,0,1,1,0,0,1,1,1,1,0 };
-	m->alpha = new GLfloat[6]{ 0.1f,0.1f,0.1f,0.1f,0.1f,0.1f };
+	m->num = xNum * zNum;
+	m->numIndicies = 6 * (xNum-1) * (zNum-1);
+
+	m->verts = new Vector3[m->num];
+	m->tex = new Vector2[m->num];
+	m->alpha = new GLfloat[m->num];
+	m->inds = new GLuint[m->numIndicies];
+
+	float xNumf = xNum-1;
+	float zNumf = zNum-1;
+
+	//std::cout << m->num << " " << m->numIndicies;
+
+	for (int z = 0; z < zNum; ++z){
+		for (int x = 0; x < xNum; ++x){
+			
+			//verts
+			m->verts[(z*zNum + x)][0] = (2 * x / xNumf) - 1;
+			m->verts[(z*zNum + x)][1] = 0.f;
+			m->verts[(z*zNum + x)][2] = (2 * z / zNumf) - 1;
+
+			//texCoords
+			m->tex[(z*zNum + x)][0] = x / xNumf * xTexture;
+			m->tex[(z*zNum + x)][1] = z / zNumf * zTexture;
+
+			//alpha
+			m->alpha[(z*zNum + x) + 0] = 1.0f;
+
+		}
+	}
+
+
+	for (int z = 0; z < zNum-1; ++z) {
+		for (int x = 0; x < xNum-1; ++x) {
+
+			//inds
+			m->inds[6 * (z*(zNum - 1) + x) + 0] = (z*zNum + x);
+			m->inds[6 * (z*(zNum - 1) + x) + 1] = ((z+1)*zNum + x);
+			m->inds[6 * (z*(zNum - 1) + x) + 2] = ((z + 1)*zNum + (x+1));
+											
+			m->inds[6 * (z*(zNum - 1) + x) + 3] = (z*zNum + x);
+			m->inds[6 * (z*(zNum - 1) + x) + 4] = ((z + 1)*zNum + (x + 1));
+			m->inds[6 * (z*(zNum - 1) + x) + 5] = (z*zNum + (x+1));
+
+		}
+	}
+
 	return m;
 }
  

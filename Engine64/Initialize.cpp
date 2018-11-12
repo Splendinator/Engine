@@ -28,7 +28,7 @@ void Initialize::init(int argc, char** argv) {
 		exit(1);
 	}
 
-	//glEnable(GL_CULL_FACE);
+	glEnable(GL_CULL_FACE);
 
 	glEnable(GL_DEPTH_TEST);
 	//glDepthFunc(GL_LEQUAL);
