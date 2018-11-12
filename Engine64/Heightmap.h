@@ -16,7 +16,7 @@ public:
 
 	float &height(int x, int z) { return m->verts[(x + z*sizeZ)][1]; };
 
-	void updateHeight() { m->updateVerts(); }
+	void updateHeight() { m->calculateNormals(); m->updateVerts(); }
 
 	float getSizeX() { return sizeX; }
 	float getSizeZ() { return sizeZ; }

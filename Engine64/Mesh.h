@@ -4,7 +4,7 @@
 #include <string>
 #include <iostream>
 
-enum ID {VERTEX_ID, TEXTURE_ID, ALPHA_ID, INDICIES_ID};
+enum ID {VERTEX_ID, TEXTURE_ID, ALPHA_ID, NORMALS_ID, INDICIES_ID};
 
 class Mesh
 {
@@ -18,12 +18,14 @@ public:
 	Vector2 *tex;
 	GLfloat *alpha;
 	GLuint *inds;
+	Vector3 *normals;
 
 	//Ids
 	GLuint vertId;
 	GLuint texId;
 	GLuint alphaId;
 	GLuint indsId;
+	GLuint normalId;
 
 	GLuint vaoId; 
 
@@ -43,8 +45,12 @@ public:
 	
 	void updateVerts() { 
 		glBindBuffer(GL_ARRAY_BUFFER, vertId);
-		glBufferData(GL_ARRAY_BUFFER, num * 3 * sizeof(GLfloat), verts, GL_STATIC_DRAW);
+		glBufferData(GL_ARRAY_BUFFER, num * sizeof(Vector3), verts, GL_STATIC_DRAW);
+		glBindBuffer(GL_ARRAY_BUFFER, normalId);
+		glBufferData(GL_ARRAY_BUFFER, num * sizeof(Vector3), normals, GL_STATIC_DRAW);
 	}
+
+	void calculateNormals();
 
 	void buffer(); 
 	

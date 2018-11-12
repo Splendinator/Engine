@@ -18,9 +18,13 @@ private:
 
 
 	//GLuint program;
-	GLint locMVP;
+	GLint locModel;
+	GLint locView;
+	GLint locProj;
+
 
 	Matrix4 projection;
+	//Matrix4 orthogonal; 
 	
 	Camera *camera;
 
@@ -47,8 +51,7 @@ public:
 	void removeObject(Object *o);
 
 	void setProjection(const Matrix4 &m);	
-	
-	void setShader(const Shader &s);
+
 	void bindCamera(Camera *c);
 
 

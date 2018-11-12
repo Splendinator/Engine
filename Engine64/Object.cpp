@@ -25,8 +25,10 @@ Object::~Object()
 void Object::init()
 {
 	//Set default atributes.
-	glBindAttribLocation(s->programID, VERTEX_ID, "pos");
-	glBindAttribLocation(s->programID, TEXTURE_ID, "tex");
+	//glBindAttribLocation(s->programID, VERTEX_ID, "position");
+	//glBindAttribLocation(s->programID, TEXTURE_ID, "texCoords");
+	//glBindAttribLocation(s->programID, ALPHA_ID, "alpha");
+	//glBindAttribLocation(s->programID, NORMALS_ID, "norms");
 
 	m->buffer();
 }

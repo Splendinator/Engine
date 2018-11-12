@@ -26,7 +26,7 @@ Object o;
 Object o2;
 Object o3;
 
-Heightmap h(257,257,1.f,1.f,&t,&s);
+Heightmap h(129, 129,1.f,1.f,&t,&s);
 
 Camera cam;
 
@@ -73,7 +73,7 @@ void gameLoop(void) {
 
 	for (int x = 0; x < h.getSizeX(); ++x) {
 		for (int z = 0; z < h.getSizeZ(); ++z) {
-			h.height(x, z) = sin((time / 1.f + x / 20.f)) * 1.f;
+			h.height(x, z) = sin((time / 1.f + x / 10.f)) * 1.f;
 		}
 	}
 
@@ -89,12 +89,11 @@ int main(int argc, char** argv) {
 
 	//INIT OPENGL/FREEGLUT
 	Initialize::init(argc, argv);
-
-	std::cout << sizeof(float) << " " << sizeof(Vector3) << std::endl;
 	
 	//SHADER
 	s = Shader("Shaders\\basic.vert", "Shaders\\basic.frag");
-	
+
+
 	
 	t = Texture("Textures/checkerboard.jpg");
 

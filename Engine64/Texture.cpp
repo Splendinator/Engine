@@ -17,7 +17,7 @@ Texture::Texture(char * filepath)
 	if (0 == id)
 		std::cout << "SOIL loading error: " << SOIL_last_result();
 
-	std::cout << id;
+	
 
 }
 

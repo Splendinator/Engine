@@ -18,6 +18,7 @@ public:
 	Vector operator*(const E x) const;
 	Vector operator-(const Vector &v) const;
 
+
 	E &operator[] (int x) { return data[x]; };
 	E operator[] (int x) const { return data[x]; };
 
@@ -36,6 +37,8 @@ public:
 
 	~Vector() {};
 };
+
+
 
 //TYPEDEFS
 typedef Vector<float, 2> Vector2;
@@ -91,6 +94,11 @@ inline Vector<E,LENGTH> &Vector<E,LENGTH>::normalise()
 	for (int i = 0; i < LENGTH; ++i)
 		data[i] /= tot;
 
-	//std::cout << "Normal: " << *this << std::endl;
 	return *this;
+}
+
+namespace Util {
+	inline Vector3 cross(Vector3 a, Vector3 b) {
+		return Vector3({ a[1] * b[2] - a[2] * b[1], a[2] * b[0] - a[0] * b[2], a[0] * b[1] - a[1] * b[0] });
+	}
 }

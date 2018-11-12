@@ -20,6 +20,32 @@ Mesh::~Mesh()
 }
 
 
+void Mesh::calculateNormals()
+{	
+	memset(normals, 0, sizeof(Vector3) * num);
+
+	for (int i = 0; i < numIndicies; i+=3) {
+		int a = inds[i];
+		int b = inds[i + 1];
+		int c = inds[i + 2];
+
+		//std::cout << verts[b] - verts[a] << " " << verts[c] - verts[a] << " " << Util::cross(verts[b] - verts[a], verts[c] - verts[a]) << std::endl;
+
+		Vector3 v = Util::cross(verts[b] - verts[a], verts[c] - verts[a]);
+	
+
+		normals[a] += v;
+		normals[b] += v;
+		normals[c] += v;
+
+	}
+
+	for (int i = 0; i < num; ++i) {
+		normals[i].normalise();
+	}
+
+}
+
 void Mesh::buffer(){
 	
 	//VAO
@@ -30,7 +56,7 @@ void Mesh::buffer(){
 	//Verts
 	glGenBuffers(1, &vertId);
 	glBindBuffer(GL_ARRAY_BUFFER, vertId);
-	glBufferData(GL_ARRAY_BUFFER, num * 3 * sizeof(GLfloat), verts, GL_STATIC_DRAW);
+	glBufferData(GL_ARRAY_BUFFER, num * sizeof(Vector3), verts, GL_STATIC_DRAW);
 
 	glVertexAttribPointer(VERTEX_ID, 3, GL_FLOAT, GL_FALSE, 0, 0);
 	glEnableVertexAttribArray(VERTEX_ID);
@@ -39,7 +65,7 @@ void Mesh::buffer(){
 	//Tex
 	glGenBuffers(1, &texId);
 	glBindBuffer(GL_ARRAY_BUFFER, texId);
-	glBufferData(GL_ARRAY_BUFFER, num * 2 * sizeof(GLfloat), tex, GL_STATIC_DRAW);
+	glBufferData(GL_ARRAY_BUFFER, num * sizeof(Vector2), tex, GL_STATIC_DRAW);
 
 	glVertexAttribPointer(TEXTURE_ID, 2, GL_FLOAT, GL_FALSE, 0, 0);
 	glEnableVertexAttribArray(TEXTURE_ID);
@@ -55,6 +81,16 @@ void Mesh::buffer(){
 		glEnableVertexAttribArray(ALPHA_ID);
 	}
 
+	//Normals
+	if (normals) {
+		glGenBuffers(1, &normalId);
+		glBindBuffer(GL_ARRAY_BUFFER, normalId);
+		glBufferData(GL_ARRAY_BUFFER, num * sizeof(Vector3), normals, GL_STATIC_DRAW);
+
+		glVertexAttribPointer(NORMALS_ID, 3, GL_FLOAT, GL_FALSE, 0, 0);
+		glEnableVertexAttribArray(NORMALS_ID);
+	}
+
 
 	//Indicies
 	if (inds) {
@@ -64,7 +100,7 @@ void Mesh::buffer(){
 		glBufferData(GL_ELEMENT_ARRAY_BUFFER, numIndicies * sizeof(GLuint), inds, GL_STATIC_DRAW);
 
 
-		//Don't need this part since it is assumed indicies are UINTS of size 1
+		//Don't need this part since it is assumed indicies are unsigned ints of size 1
 		///glVertexAttribPointer(INDICIES_ID, 1, GL_UNSIGNED_INT, GL_FALSE, 0, 0);
 		///glEnableVertexAttribArray(INDICIES_ID);
 	}
@@ -97,6 +133,7 @@ Mesh *Mesh::QuadInds()
 	m->verts = new Vector3[m->num]{ Vector3({-1,-1,0}), Vector3({-1,1,0}), Vector3({ 1,1,0}), Vector3({ 1,-1,0}) };
 	m->tex = new Vector2[m->num]{ Vector2({0,0}),  Vector2({0,1}),  Vector2({1,1}),  Vector2({1,0}) };
 	m->alpha = new GLfloat[4]{ 0.1f,0.1f,0.1f,0.1f };
+	m->normals = new Vector3[m->num];
 
 	m->numIndicies = 6;
 	m->inds = new GLuint[6]{ 1,0,2,2,0,3 };
@@ -113,6 +150,7 @@ Mesh *Mesh::Plane(int xNum, int zNum, float xTexture, float zTexture) {
 	m->tex = new Vector2[m->num];
 	m->alpha = new GLfloat[m->num];
 	m->inds = new GLuint[m->numIndicies];
+	m->normals = new Vector3[m->num];
 
 	float xNumf = xNum-1;
 	float zNumf = zNum-1;
