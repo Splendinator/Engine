@@ -33,10 +33,10 @@ public:
 	Object(Mesh *mesh, Texture *texture, Shader *shader);
 	~Object();
 
-	void calcCameraDist(Camera *c) { cameraDist = sqrt(
-		((transformMatrix[3] + c->getTransform()[3]) * (transformMatrix[3] + c->getTransform()[3]))
-		+ ((transformMatrix[7] + c->getTransform()[7]) * (transformMatrix[7] + c->getTransform()[7]))
-		+ ((transformMatrix[11] + c->getTransform()[11]) * (transformMatrix[11] + c->getTransform()[11])));
+	void calcCameraDist(Camera *c) { cameraDist = 
+		((transformMatrix[3] - c->getTransform()[3]) * (transformMatrix[3] - c->getTransform()[3]))
+		+ ((transformMatrix[7] - c->getTransform()[7]) * (transformMatrix[7] - c->getTransform()[7]))
+		+ ((transformMatrix[11] - c->getTransform()[11]) * (transformMatrix[11] - c->getTransform()[11]));
 	}
 
 	void init();
