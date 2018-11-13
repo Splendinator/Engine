@@ -44,6 +44,7 @@ public:
 	static Mesh *Plane(int x, int z, float xTexture, float yTexture);
 	
 	void updateVerts() { 
+		//glEnableVertexAttribArray(vaoId);
 		glBindBuffer(GL_ARRAY_BUFFER, vertId);
 		glBufferData(GL_ARRAY_BUFFER, num * sizeof(Vector3), verts, GL_STATIC_DRAW);
 		glBindBuffer(GL_ARRAY_BUFFER, normalId);

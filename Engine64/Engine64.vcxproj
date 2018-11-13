@@ -169,6 +169,8 @@
     <ClInclude Include="Vector.h" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Shaders\pp.frag" />
+    <None Include="Shaders\pp.vert" />
     <Text Include="Shaders\basic.frag">
       <FileType>Document</FileType>
     </Text>

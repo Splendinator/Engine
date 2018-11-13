@@ -132,7 +132,7 @@ Mesh *Mesh::QuadInds()
 	m->num = 4;
 	m->verts = new Vector3[m->num]{ Vector3({-1,-1,0}), Vector3({-1,1,0}), Vector3({ 1,1,0}), Vector3({ 1,-1,0}) };
 	m->tex = new Vector2[m->num]{ Vector2({0,0}),  Vector2({0,1}),  Vector2({1,1}),  Vector2({1,0}) };
-	m->alpha = new GLfloat[4]{ 0.1f,0.1f,0.1f,0.1f };
+	m->alpha = new GLfloat[4]{ 1,1,1,1 };
 	m->normals = new Vector3[m->num];
 
 	m->numIndicies = 6;

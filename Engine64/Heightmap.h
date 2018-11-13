@@ -11,7 +11,7 @@ private:
 public:
 
 	//Heightmap() : Object() {};
-	Heightmap(int numX, int numZ, float textureX, float textureZ, Texture *texture, Shader *shader) : Object(nullptr, texture, shader) { sizeX = numX; sizeZ = numZ; m = Mesh::Plane(numX, numZ, textureX, textureZ); };
+	Heightmap(int numX, int numZ, float textureX, float textureZ, Texture *texture, Shader *shader);
 	~Heightmap() { delete m; Object::~Object(); };
 
 	float &height(int x, int z) { return m->verts[(x + z*sizeZ)][1]; };

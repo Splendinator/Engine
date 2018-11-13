@@ -16,7 +16,7 @@
 Rasteriser r;
 
 //Mesh *m = Mesh::Plane(3, 3, 1.0f, 1.0f);
-
+Mesh *m = Mesh::QuadInds();
 
 Texture t;
 
@@ -25,6 +25,7 @@ Shader s;
 Object o;
 Object o2;
 Object o3;
+
 
 Heightmap h(129, 129,1.f,1.f,&t,&s);
 
@@ -76,11 +77,12 @@ void gameLoop(void) {
 			h.height(x, z) = sin((time / 1.f + x / 10.f)) * 1.f;
 		}
 	}
-
+	
 	h.updateHeight();
-
 	r.update();
 	Input::update();
+	
+
 }
 
 
@@ -89,16 +91,19 @@ int main(int argc, char** argv) {
 
 	//INIT OPENGL/FREEGLUT
 	Initialize::init(argc, argv);
+
+	r.init();
 	
+
+
 	//SHADER
 	s = Shader("Shaders\\basic.vert", "Shaders\\basic.frag");
-
-
 	
 	t = Texture("Textures/checkerboard.jpg");
 
+
 	//OBJECT
-	//o = Object(m, t, &s);
+	o = Object(m, &t, &s);
 	//o2 = Object(m, t, &s);
 	//o3 = Object(m, t, &s);
 	
@@ -106,12 +111,15 @@ int main(int argc, char** argv) {
 
 	//THIS STUFF SHOULD BE IN A SCENE NODE INITIALISE RECURSIVE THING.
 	h.init();
+	o.init();
 	//o2.init();
 	//o3.init();
+
 
 	//o.transform(Matrix4::rotationZ(delta));
 
 	h.transform(Matrix4::scale(10.f,1.f,10.f));
+	o.transform(Matrix4::scale(10.f, 10.f, -1.f));
 	//o2.transform(Matrix4::translate(0, 0, -3));
 	//o3.transform(Matrix4::translate(0, 0, -3));
 
@@ -120,6 +128,7 @@ int main(int argc, char** argv) {
 	//o2.addChild(&o3);
 
 	r.addObject(&h);
+	//r.addObject(&o);
 	//r.addObject(&o2);
 	//r.addObject(&o3);
 	

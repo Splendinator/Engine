@@ -18,21 +18,46 @@ private:
 
 
 	//GLuint program;
-	GLint locModel;
-	GLint locView;
-	GLint locProj;
+	GLuint locModel;
+	GLuint locView;
+	GLuint locProj;
 
-
+	//Perspective
 	Matrix4 projection;
 	//Matrix4 orthogonal; 
+
+	//View
+	Matrix4 view;
+
 	
+	//FBO - Frame Buffer Object.  
+	GLuint FBObuffer;		//Holds data after initial scene render.
+	GLuint FBOpostprocess;	//Holds data after postprocessing.
+
+	//Textures for post processing.
+	GLuint bufferDepthTex;		
+	GLuint bufferColourTex[2];
+
+
 	Camera *camera;
+
+	Mesh *quadMesh = Mesh::QuadInds();
+	Texture texture;
+	Shader pps;	//Post processing shader.
+
+	Object quad = Object(quadMesh, &texture, &pps);
+
+
 
 	std::vector<Object *> objects;	//Vector of all the objects will be drawn
 
 
-	 
 	
+
+	 
+	void drawScene();
+	void postProcess();
+	void presentScene();
 
 
 
@@ -53,6 +78,8 @@ public:
 	void setProjection(const Matrix4 &m);	
 
 	void bindCamera(Camera *c);
+
+	void init();
 
 
 

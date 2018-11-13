@@ -13,6 +13,7 @@ layout (location = 12) uniform mat4 proj;
 out vec2 tex;
 out float a;
 out vec3 n;
+out vec3 pos;
 
 
 void main(){
@@ -22,7 +23,14 @@ void main(){
 
 	tex = texCoords;
 
-	gl_Position = vec4(position,1) * model * view;
+	vec4 p = vec4(position,1);
+	p *= model;
+	pos = vec3(p.x,p.y,p.z);
+	p *= view;
+	p *= proj;
+	
+
+	gl_Position = p;// * model * view * proj;
 	
 	
 }

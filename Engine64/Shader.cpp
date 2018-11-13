@@ -12,6 +12,8 @@ Shader::Shader(std::string vert, std::string frag)
 	char *vertText = IO::loadTextFromFile(vert);
 	char *fragText = IO::loadTextFromFile(frag);
 
+
+
 	GLint status;		//Status GL_TRUE if worked or GL_FALSE if failed.
 	char error[8192];	//Buffer to hold text.
 
@@ -22,6 +24,7 @@ Shader::Shader(std::string vert, std::string frag)
 	if (!fragText) {
 		std::cout << "Error reading file: " << frag << std::endl;
 	}
+
 
 	
 	//Vertex Shader
@@ -34,7 +37,7 @@ Shader::Shader(std::string vert, std::string frag)
 		programID = 0;
 	}
 	glAttachShader(programID, vertObj);
-
+;
 	
 	//Fragment Shader
 	glShaderSource(fragObj, 1, &fragText, NULL);
@@ -48,13 +51,18 @@ Shader::Shader(std::string vert, std::string frag)
 	glAttachShader(programID, fragObj);
 
 
+
+
+
+
 	glLinkProgram(programID);
-	glGetShaderiv(programID, GL_LINK_STATUS, &status);
+	glGetProgramiv(programID, GL_LINK_STATUS, &status);
 	if (status != GL_TRUE) {
-		glGetShaderInfoLog(programID, 8192, NULL, error);
+		glGetProgramInfoLog(programID, 8192, NULL, error);
 		std::cout << "Error linking compiled shader: " << error;
 		programID = 0;
 	}
+	
 
 }
 
