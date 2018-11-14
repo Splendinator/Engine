@@ -10,10 +10,9 @@ Rasteriser::Rasteriser()
 
 void Rasteriser::drawScene() {
 	Matrix4 model;
-	view = camera->getTransform();
+	
 
-	glBindFramebuffer(GL_FRAMEBUFFER, FBObuffer);
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
 	
 
 
@@ -38,20 +37,33 @@ void Rasteriser::drawScene() {
 }
 
 void Rasteriser::postProcess() {
-	//glDisable(GL_DEPTH);
+	
 	glBindFramebuffer(GL_FRAMEBUFFER,FBOpostprocess);
-	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0,GL_TEXTURE_2D, bufferColourTex[1], 0);
-	glClear(GL_COLOR_BUFFER_BIT);
 	glUseProgram(pps.programID);
-
 	glUniform2f(glGetUniformLocation(pps.programID,
-		" pixelSize "), 1.0f / SCREEN_WIDTH, 1.0f / SCREEN_HEIGHT);
-	texture.id = bufferColourTex[0];
+		"pixelSize"), 1.0f / SCREEN_WIDTH, 1.0f / SCREEN_HEIGHT);
 
+
+	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, bufferColourTex[1], 0);
+	glClear(GL_COLOR_BUFFER_BIT);
+	texture.id = bufferColourTex[0];
 	quad.draw();
 
 
-	//glEnable(GL_DEPTH);
+	///Multiple Passes
+	//for (int i = 0; i < 600; ++i) {
+	//	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, bufferColourTex[1], 0);
+	//	glClear(GL_COLOR_BUFFER_BIT);
+	//	texture.id = bufferColourTex[0];
+	//	quad.draw();
+	//
+	//	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, bufferColourTex[0], 0);
+	//	glClear(GL_COLOR_BUFFER_BIT);
+	//	texture.id = bufferColourTex[1];
+	//	quad.draw();
+	//}
+
+
 
 
 }
@@ -63,9 +75,31 @@ void Rasteriser::presentScene() {
 	quad.draw();
 }
 
+void Rasteriser::drawSkyBox() {
+
+	
+	glDisable(GL_DEPTH_TEST);
+
+	glUseProgram(sbs.programID);
+
+	glUniformMatrix4fv(glGetUniformLocation(sbs.programID, "proj"), 1, false, (GLfloat *)&projection);
+	glUniformMatrix4fv(glGetUniformLocation(sbs.programID, "view"), 1, false, (GLfloat *)&view);
+	//glBindTexture(GL_TEXTURE_3D, cubeMapSkybox);
+
+	quad.draw();
+
+	//glClear(GL_DEPTH_BUFFER);
+	glEnable(GL_DEPTH_TEST);
+
+}
+
 void Rasteriser::update()
 {
+	glBindFramebuffer(GL_FRAMEBUFFER, FBObuffer);
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
+	view = camera->getTransform();
+	drawSkyBox();
 	drawScene();
 	postProcess();
 	presentScene();
@@ -87,7 +121,10 @@ void Rasteriser::init()
 	glTexParameterf ( GL_TEXTURE_2D , GL_TEXTURE_MAG_FILTER , GL_NEAREST );
 	glTexParameterf ( GL_TEXTURE_2D , GL_TEXTURE_MIN_FILTER , GL_NEAREST );
 	glTexImage2D ( GL_TEXTURE_2D , 0 , GL_DEPTH24_STENCIL8 , SCREEN_WIDTH , SCREEN_HEIGHT,
-	0 , GL_DEPTH_STENCIL , GL_UNSIGNED_INT_24_8 , NULL );	//COLOUR TEXTURES
+	0 , GL_DEPTH_STENCIL , GL_UNSIGNED_INT_24_8 , NULL );
+
+
+	//COLOUR TEXTURES
 	for (int i = 0; i < 2; ++i) {
 		glGenTextures(1, &bufferColourTex[i]);
 		glBindTexture(GL_TEXTURE_2D, bufferColourTex[i]);
@@ -97,7 +134,9 @@ void Rasteriser::init()
 		glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
 		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, SCREEN_WIDTH, SCREEN_HEIGHT, 0,
 			GL_RGBA, GL_UNSIGNED_BYTE, NULL);
-	}
+	}
+
+
 
 	//FRAME BUFFER
 	glGenFramebuffers(1, &FBObuffer);
@@ -107,7 +146,33 @@ void Rasteriser::init()
 	glFramebufferTexture2D ( GL_FRAMEBUFFER , GL_STENCIL_ATTACHMENT ,
 	GL_TEXTURE_2D , bufferDepthTex , 0);
 	glFramebufferTexture2D ( GL_FRAMEBUFFER , GL_COLOR_ATTACHMENT0 ,
-	GL_TEXTURE_2D , bufferColourTex [0] , 0);		glGenFramebuffers(1, &FBOpostprocess);	pps = Shader("Shaders\\pp.vert","Shaders\\pp.frag");	quad.init();
+	GL_TEXTURE_2D , bufferColourTex [0] , 0);
+	
+	glGenFramebuffers(1, &FBOpostprocess);
+
+
+
+	pps = Shader("Shaders\\pp.vert","Shaders\\pp.frag");
+	sbs = Shader("Shaders\\skybox.vert", "Shaders\\skybox.frag");
+
+	quad.init();
+
+	cubeMapSkybox = SOIL_load_OGL_cubemap(
+		"Textures/interstellar_+x.png",
+		"Textures/interstellar_-x.png",
+		"Textures/interstellar_+y.png",
+		"Textures/interstellar_-y.png",
+		"Textures/interstellar_+z.png",
+		"Textures/interstellar_-z.png",
+		 SOIL_LOAD_RGB,
+		 SOIL_CREATE_NEW_ID, 0
+		);
+
+	glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+	glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+	glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_R, GL_CLAMP_TO_EDGE);
 }
 
 

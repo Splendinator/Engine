@@ -33,7 +33,7 @@ Shader::Shader(std::string vert, std::string frag)
 	glGetShaderiv(vertObj, GL_COMPILE_STATUS, &status);
 	if (status != GL_TRUE) {
 		glGetShaderInfoLog(vertObj, 8192, NULL, error);
-		std::cout << "Error compiling vertex shader: " << error;
+		std::cout << "Error compiling vertex shader (" << vert << ") " <<  error;
 		programID = 0;
 	}
 	glAttachShader(programID, vertObj);
@@ -45,7 +45,7 @@ Shader::Shader(std::string vert, std::string frag)
 	glGetShaderiv(fragObj, GL_COMPILE_STATUS, &status);
 	if (status != GL_TRUE) {
 		glGetShaderInfoLog(fragObj, 8192, NULL, error);
-		std::cout << "Error compiling fragment shader: " << error;
+		std::cout << "Error compiling fragment shader: (" << frag << ") " << error;
 		programID = 0;
 	}
 	glAttachShader(programID, fragObj);

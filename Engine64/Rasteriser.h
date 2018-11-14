@@ -11,6 +11,7 @@
 #include "Camera.h"
 #include <vector>
 #include <algorithm>
+#include "SOIL\SOIL.h"
 
 class Rasteriser
 {
@@ -39,11 +40,17 @@ private:
 	GLuint bufferColourTex[2];
 
 
+	//Skybox
+	GLuint cubeMapSkybox;
+
 	Camera *camera;
 
 	Mesh *quadMesh = Mesh::QuadInds();
 	Texture texture;
+
 	Shader pps;	//Post processing shader.
+	Shader sbs; //Sky box shader.
+
 
 	Object quad = Object(quadMesh, &texture, &pps);
 
@@ -56,6 +63,7 @@ private:
 
 	 
 	void drawScene();
+	void drawSkyBox();
 	void postProcess();
 	void presentScene();
 
