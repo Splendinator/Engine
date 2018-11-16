@@ -28,7 +28,8 @@ public:
 	void rollYaw(float x) { yaw += x; }
 	void rollPitch(float x);
 
-	Matrix4 getTransform() { return   Matrix4::rotationX(pitch) * Matrix4::rotationY(yaw) * translate; }
+	Matrix4 getTransform() const { return   Matrix4::rotationX(pitch) * Matrix4::rotationY(yaw) * translate; }
+	void setTransform(const Matrix4 &m) { translate = m; }
 
 	Vector3 foward();
 	Vector3 right() { return Vector3({ cos(yaw), 0,sin(yaw) }).normalise(); }

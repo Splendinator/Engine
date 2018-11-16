@@ -34,10 +34,12 @@ private:
 	//FBO - Frame Buffer Object.  
 	GLuint FBObuffer;		//Holds data after initial scene render.
 	GLuint FBOpostprocess;	//Holds data after postprocessing.
+	GLuint FBOreflection;	//Holds the data when calculating a cubemap.
 
 	//Textures for post processing.
 	GLuint bufferDepthTex;		
 	GLuint bufferColourTex[2];
+	GLuint bufferReflectTexture[6];	//Used to calculate the six cubemap textures;
 
 
 	//Skybox
@@ -62,10 +64,10 @@ private:
 	
 
 	 
-	void drawScene();
-	void drawSkyBox();
+	void drawScene(Camera &c, const Matrix4 &proj);
+	void drawSkyBox(Camera &c, const Matrix4 &proj);
 	void postProcess();
-	void presentScene();
+	void presentScene(GLuint bufferObject);
 
 
 
@@ -89,7 +91,7 @@ public:
 
 	void init();
 
-
+	void makeReflectionMap(Vector3 pos, GLuint *cubeMap);
 
 };
 

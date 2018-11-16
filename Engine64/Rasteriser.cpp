@@ -8,16 +8,13 @@ Rasteriser::Rasteriser()
 
 }
 
-void Rasteriser::drawScene() {
+void Rasteriser::drawScene(Camera &c, const Matrix4 &proj) {
 	Matrix4 model;
-	
-
-
-	
+	Matrix4 view = c.getTransform();
 
 
 	for (std::vector<Object *>::iterator it = objects.begin(); it != objects.end(); ++it)
-		(*it)->calcCameraDist(camera);
+		(*it)->calcCameraDist(&c);
 
 	std::sort(objects.begin(), objects.end(), Object::compareCameraDistGT);
 
@@ -28,7 +25,7 @@ void Rasteriser::drawScene() {
 		glUseProgram((*it)->s->programID);
 		glUniformMatrix4fv(glGetUniformLocation((**it).s->programID, "model"), 1, false, (GLfloat *)&model);
 		glUniformMatrix4fv(glGetUniformLocation((**it).s->programID, "view"), 1, false, (GLfloat *)&view);
-		glUniformMatrix4fv(glGetUniformLocation((**it).s->programID, "proj"), 1, false, (GLfloat *)&projection);
+		glUniformMatrix4fv(glGetUniformLocation((**it).s->programID, "proj"), 1, false, (GLfloat *)&proj);
 		glUniform1i(glGetUniformLocation((**it).s->programID, "theTexture"), 0);	//Sample from texture unit 0
 		(*it)->draw();
 
@@ -63,28 +60,36 @@ void Rasteriser::postProcess() {
 	//	quad.draw();
 	//}
 
-
-
-
 }
 
-void Rasteriser::presentScene() {
-	glBindFramebuffer(GL_FRAMEBUFFER, 0);
+void Rasteriser::presentScene(GLuint bufferObject) {
+	glBindFramebuffer(GL_FRAMEBUFFER, bufferObject);
 	glClear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT);
 	quad.t->id = bufferColourTex[1];
 	quad.draw();
 }
 
-void Rasteriser::drawSkyBox() {
+void Rasteriser::drawSkyBox(Camera &c, const Matrix4 &proj) {
 
 	
 	glDisable(GL_DEPTH_TEST);
 
 	glUseProgram(sbs.programID);
 
-	glUniformMatrix4fv(glGetUniformLocation(sbs.programID, "proj"), 1, false, (GLfloat *)&projection);
+	Matrix4 view = c.getTransform();
+
+
+	glBindTexture(GL_TEXTURE_CUBE_MAP, cubeMapSkybox);
+
+	glUniformMatrix4fv(glGetUniformLocation(sbs.programID, "proj"), 1, false, (GLfloat *)&proj);
 	glUniformMatrix4fv(glGetUniformLocation(sbs.programID, "view"), 1, false, (GLfloat *)&view);
-	//glBindTexture(GL_TEXTURE_3D, cubeMapSkybox);
+	glUniform1i(glGetUniformLocation(sbs.programID, "cubeTex"), 0);
+
+	//std::cout << glGetUniformLocation(sbs.programID, "cubeTex") << " " << cubeMapSkybox << std::endl;
+
+
+
+
 
 	quad.draw();
 
@@ -93,16 +98,27 @@ void Rasteriser::drawSkyBox() {
 
 }
 
+
 void Rasteriser::update()
 {
+	
+
+
 	glBindFramebuffer(GL_FRAMEBUFFER, FBObuffer);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	
+	GLuint temp;
+	makeReflectionMap(Vector3({ 0,0,0 }), &temp);
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+		
 
 	view = camera->getTransform();
-	drawSkyBox();
-	drawScene();
+	drawSkyBox(*camera,projection);
+	drawScene(*camera, projection);
 	postProcess();
-	presentScene();
+
+
+	presentScene(0);
 
 	//glutSwapBuffers();
 	glFlush();
@@ -138,6 +154,8 @@ void Rasteriser::init()
 
 
 
+
+
 	//FRAME BUFFER
 	glGenFramebuffers(1, &FBObuffer);
 	glBindFramebuffer ( GL_FRAMEBUFFER , FBObuffer );
@@ -146,9 +164,13 @@ void Rasteriser::init()
 	glFramebufferTexture2D ( GL_FRAMEBUFFER , GL_STENCIL_ATTACHMENT ,
 	GL_TEXTURE_2D , bufferDepthTex , 0);
 	glFramebufferTexture2D ( GL_FRAMEBUFFER , GL_COLOR_ATTACHMENT0 ,
-	GL_TEXTURE_2D , bufferColourTex [0] , 0);
+	GL_TEXTURE_2D , bufferColourTex[0] , 0);
 	
 	glGenFramebuffers(1, &FBOpostprocess);
+
+	glGenFramebuffers(1, &FBOreflection);
+
+
 
 
 
@@ -173,6 +195,12 @@ void Rasteriser::init()
 	glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
 	glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
 	glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_R, GL_CLAMP_TO_EDGE);
+
+
+
+	//TEMP
+	GLuint temp;
+
 }
 
 
@@ -188,6 +216,68 @@ Rasteriser::~Rasteriser()
 }
 
 
+GLubyte *temp = new GLubyte[2048 * 2048 * 4];
 
+void Rasteriser::makeReflectionMap(Vector3 v, GLuint *cubeMap) {
+
+	Matrix4 proj = Matrix4::Perspective(0.1f,1000.f,PI/2.f,1.0f);
+
+	Camera c;
+	c.move(v);
+
+	//Texture
+	glDeleteTextures(1, &bufferReflectTexture[0]);
+	glGenTextures(1, &bufferReflectTexture[0]);
+	//glBindTexture(GL_TEXTURE_2D, bufferReflectTexture[0]);
+
+	glBindFramebuffer(GL_FRAMEBUFFER, FBObuffer);
+	glClearColor(0, 1, 0, 1);
+	glClear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT);
+	
+
+	//drawSkyBox(c, proj);
+	drawScene(c, proj);
+	
+
+	glGetTexImage(
+		GL_TEXTURE_2D,
+		bufferColourTex[0],
+		GL_RGB,
+		GL_UNSIGNED_BYTE,
+		temp
+	);
+	
+	for (int i = 0; i < 512 * 512 * 4; ++i) {
+		temp[i] = i%256;
+	}
+
+	//for (int i = 0; i < 6; ++i) {
+	//	glBindTexture(GL_TEXTURE_2D,bufferReflectTexture[0]);
+	//	glTexImage2D(
+	//		GL_TEXTURE_2D,
+	//		0, GL_RGB, 512, 512, 0,
+	//		GL_RGB, GL_UNSIGNED_BYTE
+	//		, temp
+	//	);
+	//	std::cout << glGetError() << std::endl;
+	//}
+
+
+	
+	glBindTexture(GL_TEXTURE_CUBE_MAP, cubeMapSkybox);
+
+	for (int i = 0; i < 6; ++i) {
+		glTexImage2D(
+			GL_TEXTURE_CUBE_MAP_POSITIVE_X + i,
+			0, GL_RGB, 512, 512, 0,
+			GL_RGB, GL_UNSIGNED_BYTE
+			, temp
+		);
+
+
+	}
+
+
+}
 
 
