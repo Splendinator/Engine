@@ -20,7 +20,7 @@ void main(){
 		float dist = length(LIGHTPOS - pos);
 
 
-		light *= max(1-(dist/70.f),0);
+		light *= max(1-(dist/8000.f),0);
 
 		light = max(min(light,0.8f),0.2f);
 
