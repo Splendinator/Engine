@@ -12,11 +12,15 @@
 #include <vector>
 #include <algorithm>
 #include "SOIL\SOIL.h"
+#include "HUD.h"
 
 class Rasteriser
 {
 private:
 
+	static const int REFLECTION_RESOLUTION = 1024;
+
+	HUD h;
 
 	//GLuint program;
 	GLuint locModel;
@@ -34,10 +38,14 @@ private:
 	//FBO - Frame Buffer Object.  
 	GLuint FBObuffer;		//Holds data after initial scene render.
 	GLuint FBOpostprocess;	//Holds data after postprocessing.
+	GLuint FBOreflection;	//Used to calculate reflections. 
 
 	//Textures for post processing.
 	GLuint bufferDepthTex;		
 	GLuint bufferColourTex[2];
+	//GLuint bufferReflectionTex[6];
+	GLuint bufferReflectColourTex;
+	GLuint bufferReflectDepthTex;
 
 
 	//Skybox
@@ -50,20 +58,23 @@ private:
 
 	Shader pps;	//Post processing shader.
 	Shader sbs; //Sky box shader.
+	Shader shaderCopy;//Copy texture t into bound texture.
 
 
 	Object quad = Object(quadMesh, &texture, &pps);
 
 
+	std::vector<Object *> opaque;	//Opaque
+	std::vector<Object *> objects;	//Transparent
+	std::vector<Object *> reflectiveObjs;	//Reflective
 
-	std::vector<Object *> objects;	//Vector of all the objects will be drawn
 
 
 	
 
 	 
-	void drawScene();
-	void drawSkyBox();
+	void drawScene(Camera &c, const Matrix4 &proj);
+	void drawSkyBox(Camera &c, const Matrix4 &proj);
 	void postProcess();
 	void presentScene();
 
@@ -80,6 +91,8 @@ public:
 
 	~Rasteriser();
 
+	void calculateReflections(Vector3 pos);
+
 	void addObject(Object *o);
 	void removeObject(Object *o);
 
@@ -88,6 +101,7 @@ public:
 	void bindCamera(Camera *c);
 
 	void init();
+	void temp(Camera &c, const Matrix4 &proj);
 
 
 

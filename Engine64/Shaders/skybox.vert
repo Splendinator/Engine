@@ -21,6 +21,7 @@ void main(){
 
 	vec3 tempPos = (position * multiply)- vec3(0, 0, 1);
 	normal = mat3(view) * normalize(tempPos);
+
 	gl_Position = vec4 (position, 1.0);
 
 

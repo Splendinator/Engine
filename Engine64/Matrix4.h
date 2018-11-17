@@ -1,6 +1,9 @@
 #pragma once
+#undef near
+#undef far
 #include <math.h>
 #include <iostream>
+
 
 
 const float PI = 3.14159265359;
@@ -29,6 +32,7 @@ public:
 	static Matrix4 translate(float x, float y, float z);
 				   
 	static Matrix4 Perspective(float znear, float zfar, float fov, float aspect);
+	static Matrix4 Orthogonal(int left, int right, int far, int near, int top, int bottom);
 	
 	float &operator[] (int x) { return value[x]; }
 
@@ -115,7 +119,7 @@ inline Matrix4 Matrix4::identity() {
 inline Matrix4 Matrix4::Perspective(float znear, float zfar, float fov, float aspect)
 {
 	Matrix4 m;
-	float f = atan(fov / 2);
+	float f = 1 / (tan(fov / 2));
 	m.value[0] = f / aspect;
 	m.value[5] = f;
 	m.value[10] = (znear + zfar) / (znear - zfar);
@@ -123,4 +127,22 @@ inline Matrix4 Matrix4::Perspective(float znear, float zfar, float fov, float as
 	m.value[14] = -1;
 
 	return m;
+}
+
+inline Matrix4 Matrix4::Orthogonal(int left, int right, int far, int near, int top, int bottom) {
+	Matrix4 m;
+	
+	//scaling
+	m[0] = 2 / (right - left);
+	m[5] = 2 / (top - bottom);
+	m[10] = -2 / (far - near);
+
+	//Translation
+	m[3] = (right + left) / (right - left);
+	m[7] = (top + bottom) / (top - bottom);
+	m[11] = (far + near) / (far - near);
+	m[15] = 1;
+
+	return m;
+
 }

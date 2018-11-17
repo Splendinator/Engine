@@ -13,6 +13,8 @@
 
 
 
+
+
 Rasteriser r;
 
 //Mesh *m = Mesh::Plane(3, 3, 1.0f, 1.0f);
@@ -34,7 +36,7 @@ Heightmap water(257, 257, 1.f, 1.f, &waterTex, &s);
 Camera cam;
 
 const float CAMERA_SPEED = 5.0f;
-const float SPRINT_SPEED = 15.0f;
+const float SPRINT_SPEED = 15000.0f;
 const float SENSITIVITY = 0.003f;
 
 
@@ -83,6 +85,7 @@ void gameLoop(void) {
 	//h.updateHeight();
 	r.update();
 	Input::update();
+
 	
 
 }
@@ -147,7 +150,7 @@ int main(int argc, char** argv) {
 
 	//MVP
 	r.bindCamera(&cam);
-	r.setProjection(Matrix4::Perspective(0.01f,1000,PI, float(glutGet(GLUT_WINDOW_WIDTH)) / glutGet(GLUT_WINDOW_HEIGHT)));
+	r.setProjection(Matrix4::Perspective(0.01f,1000,PI/2.f, float(glutGet(GLUT_WINDOW_WIDTH)) / glutGet(GLUT_WINDOW_HEIGHT)));
 
 	glutDisplayFunc(gameLoop);
 	glutIdleFunc(gameLoop);

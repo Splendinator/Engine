@@ -64,6 +64,9 @@
     <ClCompile Include="Heightmap.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="HUD.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="IO.h">
@@ -108,6 +111,9 @@
     <ClInclude Include="Heightmap.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="HUD.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="Shaders\basic.vert">
@@ -123,6 +129,12 @@
       <Filter>Shaders</Filter>
     </None>
     <None Include="Shaders\skybox.vert">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="Shaders\copy.frag">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="Shaders\copy.vert">
       <Filter>Shaders</Filter>
     </None>
   </ItemGroup>
