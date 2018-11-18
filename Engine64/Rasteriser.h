@@ -20,7 +20,9 @@ private:
 
 	static const int REFLECTION_RESOLUTION = 1024;
 
-	HUD h;
+	HUD hud;
+
+	std::string hudText = "FPS 60";
 
 	//GLuint program;
 	GLuint locModel;
@@ -59,6 +61,7 @@ private:
 	Shader pps;	//Post processing shader.
 	Shader sbs; //Sky box shader.
 	Shader shaderCopy;//Copy texture t into bound texture.
+	Shader shaderText;//Draw text.
 
 
 	Object quad = Object(quadMesh, &texture, &pps);
@@ -77,6 +80,7 @@ private:
 	void drawSkyBox(Camera &c, const Matrix4 &proj);
 	void postProcess();
 	void presentScene();
+	void drawHUD();
 
 
 

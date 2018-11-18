@@ -95,7 +95,30 @@ void Rasteriser::drawSkyBox(Camera &c, const Matrix4 &proj) {
 }
 
 
-std::string s = "FPS";
+void Rasteriser::drawHUD() {
+
+	Matrix4 orth = Matrix4::Orthogonal(0, SCREEN_WIDTH, -1, 1, SCREEN_HEIGHT,0);
+	Matrix4 view = Matrix4::identity();
+	Matrix4 model;
+
+	glDisable(GL_DEPTH_TEST);
+	
+	glUseProgram(shaderText.programID);
+
+
+	glUniformMatrix4fv(glGetUniformLocation(shaderText.programID, "proj"), 1, false, (GLfloat *)&orth);
+	glUniformMatrix4fv(glGetUniformLocation(shaderText.programID, "view"), 1, false, (GLfloat *)&view);
+
+
+	for (int i = 0; i < hudText.length(); ++i) {
+		model = Matrix4::identity() * Matrix4::translate(-SCREEN_WIDTH + 32*(i+1), -16, 0) * Matrix4::scale(16.f, 16.f, 2.f);
+		glUniformMatrix4fv(glGetUniformLocation(shaderText.programID, "model"), 1, false, (GLfloat *)&model);
+		texture.id = hud.textures[hudText[i]];
+		quad.draw();
+	}
+
+	glEnable(GL_DEPTH_TEST);
+}
 
 void Rasteriser::update()
 {
@@ -111,6 +134,8 @@ void Rasteriser::update()
 	drawScene(*camera,projection);
 	postProcess();
 	presentScene();
+
+	drawHUD();
 	
 	//glutSwapBuffers();
 	glFlush();
@@ -121,6 +146,9 @@ void Rasteriser::update()
 
 void Rasteriser::init()
 {
+	hud.init();
+
+
 	//DEPTH TEXTURE
 	glGenTextures (1 , &bufferDepthTex );
 	glBindTexture ( GL_TEXTURE_2D , bufferDepthTex );
@@ -194,6 +222,7 @@ void Rasteriser::init()
 	pps = Shader("Shaders\\pp.vert","Shaders\\pp.frag");
 	sbs = Shader("Shaders\\skybox.vert", "Shaders\\skybox.frag");
 	shaderCopy = Shader("Shaders\\copy.vert", "Shaders\\copy.frag");
+	shaderText = Shader("Shaders/text.vert", "Shaders/text.frag");
 
 	quad.init();
 

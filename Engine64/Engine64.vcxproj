@@ -177,6 +177,8 @@
     <None Include="Shaders\pp.vert" />
     <None Include="Shaders\skybox.frag" />
     <None Include="Shaders\skybox.vert" />
+    <None Include="Shaders\text.frag" />
+    <None Include="Shaders\text.vert" />
     <Text Include="Shaders\basic.frag">
       <FileType>Document</FileType>
     </Text>

@@ -32,7 +32,7 @@ public:
 	static Matrix4 translate(float x, float y, float z);
 				   
 	static Matrix4 Perspective(float znear, float zfar, float fov, float aspect);
-	static Matrix4 Orthogonal(int left, int right, int far, int near, int top, int bottom);
+	static Matrix4 Orthogonal(float left, float right, float far, float near, float top, float bottom);
 	
 	float &operator[] (int x) { return value[x]; }
 
@@ -129,7 +129,7 @@ inline Matrix4 Matrix4::Perspective(float znear, float zfar, float fov, float as
 	return m;
 }
 
-inline Matrix4 Matrix4::Orthogonal(int left, int right, int far, int near, int top, int bottom) {
+inline Matrix4 Matrix4::Orthogonal(float left, float right, float far, float near, float top, float bottom) {
 	Matrix4 m;
 	
 	//scaling
@@ -141,6 +141,7 @@ inline Matrix4 Matrix4::Orthogonal(int left, int right, int far, int near, int t
 	m[3] = (right + left) / (right - left);
 	m[7] = (top + bottom) / (top - bottom);
 	m[11] = (far + near) / (far - near);
+
 	m[15] = 1;
 
 	return m;

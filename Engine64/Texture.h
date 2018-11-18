@@ -13,6 +13,7 @@ public:
 
 	Texture(char *filepath);
 	Texture() { id = 0; };
+	Texture(GLuint name) { id = name; };
 	~Texture();
 };
 
