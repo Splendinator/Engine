@@ -19,6 +19,39 @@ Mesh::~Mesh()
 	delete [] inds;
 }
 
+Mesh::Mesh(std::string filepath)
+{
+	std::vector<Vector3> vverts;
+	std::vector<int> vinds;
+
+	IO::readObj(filepath, vverts, vinds);
+
+	num = vverts.size();
+
+	verts = new Vector3[num];
+	tex = new Vector2[num];
+	alpha = new float[num];
+	normals = new Vector3[num];
+
+	numIndicies = vinds.size();
+	inds = new GLuint[vinds.size()];
+
+	for (int i = 0; i < num; ++i) {
+		verts[i] = vverts[i];
+		tex[i] = Vector2({0,0});
+		alpha[i] = 1.0f;
+		normals[i] = Vector3({ 0,0,0 });
+	}
+
+	for (int i = 0; i < numIndicies; ++i) {
+		inds[i] = vinds[i] - 1;
+	}
+
+	calculateNormals();
+
+
+}
+
 
 void Mesh::calculateNormals()
 {	

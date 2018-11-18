@@ -3,6 +3,8 @@
 #include "Vector.h"
 #include <string>
 #include <iostream>
+#include <vector>
+#include "IO.h"
 
 enum ID {VERTEX_ID, TEXTURE_ID, ALPHA_ID, NORMALS_ID, INDICIES_ID};
 

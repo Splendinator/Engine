@@ -1,7 +1,9 @@
 #pragma once
-#include <iostream>main
+#include <iostream>
 #include "GL\freeglut.h"
 #include "Vector.h"
+#include <vector>
+#include <fstream>
 
 
 
@@ -44,6 +46,8 @@ namespace Input {
 
 	
 
+
+	
 
 
 

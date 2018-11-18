@@ -19,6 +19,7 @@ Rasteriser r;
 
 //Mesh *m = Mesh::Plane(3, 3, 1.0f, 1.0f);
 Mesh *m = Mesh::QuadInds();
+Mesh monkey("C:/Users/Dominic/Desktop/untitled.obj");
 
 Texture t;
 Texture waterTex;
@@ -35,8 +36,8 @@ Heightmap water(257, 257, 1.f, 1.f, &waterTex, &s);
 
 Camera cam;
 
-const float CAMERA_SPEED = 5.0f;
-const float SPRINT_SPEED = 15000.0f;
+const float CAMERA_SPEED = 10.0f;
+const float SPRINT_SPEED = 30.f;
 const float SENSITIVITY = 0.003f;
 
 
@@ -76,13 +77,6 @@ void gameLoop(void) {
 	cam.rollYaw(Input::relativeMousePos()[0] * SENSITIVITY);
 	cam.rollPitch(Input::relativeMousePos()[1] * SENSITIVITY);
 
-	//for (int x = 0; x < h.getSizeX(); ++x) {
-	//	for (int z = 0; z < h.getSizeZ(); ++z) {
-	//		h.height(x, z) = sin((time / 1.f + x / 10.f)) * 1.f;
-	//	}
-	//}
-	
-	//h.updateHeight();
 	r.update();
 	Input::update();
 
@@ -109,7 +103,7 @@ int main(int argc, char** argv) {
 
 
 	//OBJECT
-	o = Object(m, &t, &s);
+	o = Object(&monkey, &waterTex, &s);
 	//o2 = Object(m, t, &s);
 	//o3 = Object(m, t, &s);
 	
@@ -129,9 +123,9 @@ int main(int argc, char** argv) {
 	h.transform(Matrix4::translate(0, -50.f, 0));
 
 	water.transform(Matrix4::scale(300, 0.6f, 300.f));
-	water.transform(Matrix4::translate(0, -5.f, 0));
+	water.transform(Matrix4::translate(0, -10.f, 0));
 
-	o.transform(Matrix4::scale(10.f, 10.f, -1.f));
+	o.transform(Matrix4::scale(5.f, 5.f, 5.f));
 	//o2.transform(Matrix4::translate(0, 0, -3));
 	//o3.transform(Matrix4::translate(0, 0, -3));
 	
@@ -143,7 +137,7 @@ int main(int argc, char** argv) {
 
 	r.addObject(&h);
 	r.addObject(&water);
-	//r.addObject(&o);
+	r.addObject(&o);
 	//r.addObject(&o2);
 	//r.addObject(&o3);
 	
@@ -158,9 +152,11 @@ int main(int argc, char** argv) {
 	Input::setup();
 
 
+	
+
 	glutMainLoop();
 
-
+	
 
 
 	return 0;

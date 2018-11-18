@@ -1,58 +1,10 @@
-﻿  Vector.cpp
-  Timer.cpp
-  Texture.cpp
-  Shader.cpp
-  Scene.cpp
-  Rasteriser.cpp
+﻿  main.cpp
 c:\users\dominic\desktop\engine\engine64\object.h(2): warning C4067: unexpected tokens following preprocessor directive - expected a newline
 c:\users\dominic\desktop\engine\engine64\object.h(3): warning C4067: unexpected tokens following preprocessor directive - expected a newline
 c:\users\dominic\desktop\engine\engine64\matrix4.h(9): warning C4305: 'initializing': truncation from 'double' to 'float'
 c:\users\dominic\desktop\engine\engine64\hud.h(7): warning C4067: unexpected tokens following preprocessor directive - expected a newline
-c:\users\dominic\desktop\engine\engine64\rasteriser.cpp(100): warning C4244: 'argument': conversion from 'const int' to 'float', possible loss of data
-c:\users\dominic\desktop\engine\engine64\rasteriser.cpp(114): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
-  Object.cpp
-c:\users\dominic\desktop\engine\engine64\object.h(2): warning C4067: unexpected tokens following preprocessor directive - expected a newline
-c:\users\dominic\desktop\engine\engine64\object.h(3): warning C4067: unexpected tokens following preprocessor directive - expected a newline
-c:\users\dominic\desktop\engine\engine64\matrix4.h(9): warning C4305: 'initializing': truncation from 'double' to 'float'
-  Mesh.cpp
-c:\users\dominic\desktop\engine\engine64\mesh.cpp(155): warning C4244: 'initializing': conversion from 'int' to 'float', possible loss of data
-c:\users\dominic\desktop\engine\engine64\mesh.cpp(156): warning C4244: 'initializing': conversion from 'int' to 'float', possible loss of data
-  Matrix4.cpp
-c:\users\dominic\desktop\engine\engine64\matrix4.h(9): warning C4305: 'initializing': truncation from 'double' to 'float'
-  main.cpp
-c:\users\dominic\desktop\engine\engine64\object.h(2): warning C4067: unexpected tokens following preprocessor directive - expected a newline
-c:\users\dominic\desktop\engine\engine64\object.h(3): warning C4067: unexpected tokens following preprocessor directive - expected a newline
-c:\users\dominic\desktop\engine\engine64\matrix4.h(9): warning C4305: 'initializing': truncation from 'double' to 'float'
-c:\users\dominic\desktop\engine\engine64\hud.h(7): warning C4067: unexpected tokens following preprocessor directive - expected a newline
-c:\users\dominic\desktop\engine\engine64\input.h(2): warning C4067: unexpected tokens following preprocessor directive - expected a newline
 c:\users\dominic\desktop\engine\engine64\heightmap.h(22): warning C4244: 'return': conversion from 'int' to 'float', possible loss of data
 c:\users\dominic\desktop\engine\engine64\heightmap.h(23): warning C4244: 'return': conversion from 'int' to 'float', possible loss of data
-  IO.cpp
-c:\users\dominic\desktop\engine\engine64\io.cpp(20): warning C4244: '=': conversion from 'std::streamoff' to 'int', possible loss of data
-  Input.cpp
-c:\users\dominic\desktop\engine\engine64\input.h(2): warning C4067: unexpected tokens following preprocessor directive - expected a newline
-  Initialize.cpp
-c:\users\dominic\desktop\engine\engine64\object.h(2): warning C4067: unexpected tokens following preprocessor directive - expected a newline
-c:\users\dominic\desktop\engine\engine64\object.h(3): warning C4067: unexpected tokens following preprocessor directive - expected a newline
-c:\users\dominic\desktop\engine\engine64\matrix4.h(9): warning C4305: 'initializing': truncation from 'double' to 'float'
-c:\users\dominic\desktop\engine\engine64\hud.h(7): warning C4067: unexpected tokens following preprocessor directive - expected a newline
-c:\users\dominic\desktop\engine\engine64\initialize.cpp(44): warning C4305: 'argument': truncation from 'double' to 'GLclampf'
-  HUD.cpp
-c:\users\dominic\desktop\engine\engine64\hud.h(7): warning C4067: unexpected tokens following preprocessor directive - expected a newline
-c:\users\dominic\desktop\engine\engine64\hud.cpp(61): warning C4018: '<': signed/unsigned mismatch
-c:\users\dominic\desktop\engine\engine64\hud.cpp(43): warning C4101: 'height': unreferenced local variable
-c:\users\dominic\desktop\engine\engine64\hud.cpp(43): warning C4101: 'width': unreferenced local variable
-c:\users\dominic\desktop\engine\engine64\hud.cpp(42): warning C4101: 'bbox': unreferenced local variable
-c:\users\dominic\desktop\engine\engine64\hud.cpp(41): warning C4101: 'glyph': unreferenced local variable
-  Heightmap.cpp
-c:\users\dominic\desktop\engine\engine64\object.h(2): warning C4067: unexpected tokens following preprocessor directive - expected a newline
-c:\users\dominic\desktop\engine\engine64\object.h(3): warning C4067: unexpected tokens following preprocessor directive - expected a newline
-c:\users\dominic\desktop\engine\engine64\matrix4.h(9): warning C4305: 'initializing': truncation from 'double' to 'float'
-c:\users\dominic\desktop\engine\engine64\heightmap.h(22): warning C4244: 'return': conversion from 'int' to 'float', possible loss of data
-c:\users\dominic\desktop\engine\engine64\heightmap.h(23): warning C4244: 'return': conversion from 'int' to 'float', possible loss of data
-  Camera.cpp
-c:\users\dominic\desktop\engine\engine64\matrix4.h(9): warning C4305: 'initializing': truncation from 'double' to 'float'
-  Generating Code...
   SOIL.lib(SOIL.obj) : MSIL .netmodule or module compiled with /GL found; restarting link with /LTCG; add /LTCG to the link command line to improve linker performance
 LINK : warning LNK4075: ignoring '/INCREMENTAL' due to '/LTCG' specification
 LINK : warning LNK4098: defaultlib 'LIBCMT' conflicts with use of other libs; use /NODEFAULTLIB:library

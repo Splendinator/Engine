@@ -1,6 +1,5 @@
 #include "IO.h"
-#include <fstream>
-#include <iostream>
+
 
 using namespace std;
 
@@ -40,4 +39,42 @@ IO::IO()
 
 IO::~IO()
 {
+}
+
+
+void IO::readObj(std::string filepath, std::vector<Vector3>& pos, std::vector<int> &inds)
+{
+	
+	string line, temp;
+	ifstream file = ifstream(filepath);
+	istringstream s;
+	Vector3 tempvf;
+	int tempi;
+
+	if (!file.is_open()) {
+		cout << "Error reading file " << filepath << endl;
+	}
+
+	while (getline(file, line)) {
+		
+		temp = line.substr(0, 2);
+
+		if (temp == "v ") {
+			s = istringstream(line.substr(2));
+			s >> tempvf[0] >> tempvf[1] >> tempvf[2];
+			pos.push_back(tempvf);
+		}
+		if (temp == "f ") {
+			s = istringstream(line.substr(2));
+			for (int i = 0; i < 3; ++i) {
+				s >> tempi;
+				inds.push_back(tempi);
+			}
+		}
+		else if (line[0] == '#') {/*do nothing*/}
+		else {/*do nothing*/}
+
+	}
+	
+
 }

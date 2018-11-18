@@ -71,25 +71,6 @@ void HUD::init() {
 		glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 		glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
 		
-		int te = face->glyph->bitmap.width % 4;
-		//std::cout << te << " " << face->glyph->bitmap.width << " " << int(i) << " " << width << " " << height << std::endl;
-		//std::cout << face->glyph->bitmap_left << " " << face->glyph->bitmap_top << " " << int(i) << std::endl;
-		//std::cout << face->glyph->bitmap.width << " " << face->glyph->bitmap.rows << " " << std::endl;
-
-
-		std::cout << face->glyph->bitmap.width << " " << face->glyph->bitmap.pitch << " " << face->glyph->metrics.height << std::endl;
-		std::cout << int(face->glyph->bitmap.pixel_mode) << " " << ft_pixel_mode_grays << std::endl;
-
-		//glTexImage2D(GL_TEXTURE_2D,
-		//	0,
-		//	GL_RED,
-		//	(face->glyph->metrics.width),
-		//	face->glyph->metrics.height,
-		//	0,
-		//	GL_RED,
-		//	GL_UNSIGNED_BYTE,
-		//	face->glyph->bitmap.buffer);
-		
 			
 		glTexImage2D(GL_TEXTURE_2D,
 			0,

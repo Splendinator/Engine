@@ -111,7 +111,7 @@ void Rasteriser::drawHUD() {
 
 
 	for (int i = 0; i < hudText.length(); ++i) {
-		model = Matrix4::identity() * Matrix4::translate(-SCREEN_WIDTH + 32*(i+1), -16, 0) * Matrix4::scale(16.f, 16.f, 2.f);
+		model = Matrix4::identity() * Matrix4::translate(-SCREEN_WIDTH + 32*( i+1), -16, 0) * Matrix4::scale(16.f, 16.f, 2.f);
 		glUniformMatrix4fv(glGetUniformLocation(shaderText.programID, "model"), 1, false, (GLfloat *)&model);
 		texture.id = hud.textures[hudText[i]];
 		quad.draw();

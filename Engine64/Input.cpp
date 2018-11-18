@@ -95,6 +95,8 @@ void Input::setup() {
 	initMapping();
 }
 
+
+
 bool Input::keyDown(Key key)
 {
 	return keysDown[key];
@@ -119,5 +121,17 @@ void Input::update()
 }
 
 //TODO mouseVisible(false);
+
+
+
+
+
+
+
+
+
+
+
+
 
 
