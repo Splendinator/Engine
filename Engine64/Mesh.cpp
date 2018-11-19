@@ -21,36 +21,68 @@ Mesh::~Mesh()
 
 Mesh::Mesh(std::string filepath)
 {
-	std::vector<Vector3> vverts;
-	std::vector<int> vinds;
+	std::vector<Vector3> vvert;
+	std::vector<Vector2> vtex;
+	std::vector<Vector3> vnorm;
+	std::vector<Vector3i> vinds;
 
-	IO::readObj(filepath, vverts, vinds);
+	IO::readObj(filepath, vvert,vtex,vnorm, vinds);
 
-	num = vverts.size();
+
+ 	
+
+
+
+	num = vinds.size();
 
 	verts = new Vector3[num];
 	tex = new Vector2[num];
 	alpha = new float[num];
 	normals = new Vector3[num];
 
-	numIndicies = vinds.size();
-	inds = new GLuint[vinds.size()];
-
 	for (int i = 0; i < num; ++i) {
-		verts[i] = vverts[i];
-		tex[i] = Vector2({0,0});
+		verts[i] = vvert[vinds[i][0]-1];
+		tex[i] = vtex[vinds[i][1] - 1];
+		normals[i] = vnorm[vinds[i][2] - 1];
 		alpha[i] = 1.0f;
-		normals[i] = Vector3({ 0,0,0 });
 	}
-
-	for (int i = 0; i < numIndicies; ++i) {
-		inds[i] = vinds[i] - 1;
-	}
-
-	calculateNormals();
-
 
 }
+
+
+///For only vertices;
+//Mesh::Mesh(std::string filepath)
+//{
+//	std::vector<Vector3> vverts;
+//	std::vector<int> vinds;
+//
+//	IO::readObj(filepath, vverts, vinds);
+//
+//	num = vverts.size();
+//
+//	verts = new Vector3[num];
+//	tex = new Vector2[num];
+//	alpha = new float[num];
+//	normals = new Vector3[num];
+//
+//	numIndicies = vinds.size();
+//	inds = new GLuint[vinds.size()];
+//
+//	for (int i = 0; i < num; ++i) {
+//		verts[i] = vverts[i];
+//		tex[i] = Vector2({0,0});
+//		alpha[i] = 1.0f;
+//		normals[i] = Vector3({ 0,0,0 });
+//	}
+//
+//	for (int i = 0; i < numIndicies; ++i) {
+//		inds[i] = vinds[i] - 1;
+//	}
+//
+//	calculateNormals();
+//
+//
+//}
 
 
 void Mesh::calculateNormals()

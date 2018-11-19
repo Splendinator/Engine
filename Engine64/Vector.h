@@ -46,7 +46,7 @@ typedef Vector<float, 3> Vector3;
 typedef Vector<float, 4> Vector4;
 
 typedef Vector<int, 2> Vector2i;
-typedef Vector<int, 2> Vector3i;
+typedef Vector<int, 3> Vector3i;
 
 
 

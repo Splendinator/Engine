@@ -51,7 +51,7 @@ void IO::readObj(std::string filepath, std::vector<Vector3>& pos, std::vector<in
 	Vector3 tempvf;
 	int tempi;
 
-	if (!file.is_open()) {
+	if (!file) {
 		cout << "Error reading file " << filepath << endl;
 	}
 
@@ -77,4 +77,53 @@ void IO::readObj(std::string filepath, std::vector<Vector3>& pos, std::vector<in
 	}
 	
 
+}
+
+void IO::readObj(std::string filepath, std::vector<Vector3>& pos, std::vector<Vector2>& tex, std::vector<Vector3>& norm, std::vector<Vector3i>& inds)
+{
+
+	string line, temp;
+	ifstream file = ifstream(filepath);
+	istringstream s;
+	Vector3 tempvect;
+	Vector2 temptex;
+	Vector3 tempnorm;
+	Vector3i tempinds;
+	char slash;
+
+	if (!file) {
+		cout << "Error reading file " << filepath << endl;
+	}
+
+	while (getline(file, line)) {
+
+		temp = line.substr(0, 2);
+
+		if (temp == "v ") {
+			s = istringstream(line.substr(2));
+			s >> tempvect[0] >> tempvect[1] >> tempvect[2];
+			pos.push_back(tempvect);
+		}
+		else if (temp == "vt") {
+			s = istringstream(line.substr(2));
+			s >> temptex[0] >> temptex[1];
+			tex.push_back(temptex);
+		}
+		else if (temp == "vn") {
+			s = istringstream(line.substr(2));
+			s >> tempnorm[0] >> tempnorm[1] >> tempnorm[2];
+			norm.push_back(tempnorm);
+		}
+
+		if (temp == "f ") {
+			s = istringstream(line.substr(2));
+			for (int i = 0; i < 3; ++i) {
+				s >> tempinds[0] >> slash >> tempinds[1] >> slash >> tempinds[2];
+				inds.push_back(tempinds);
+			}
+		}
+		else if (line[0] == '#') {/*do nothing*/ }
+		else {/*do nothing*/ }
+
+	}
 }

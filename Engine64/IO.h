@@ -18,6 +18,8 @@ public:
 
 
 	static void readObj(std::string filePath, std::vector<Vector3> &pos, std::vector<int> &inds);
+	static void readObj(std::string filePath, std::vector<Vector3> &pos, std::vector<Vector2> &tex, std::vector<Vector3> &norm, std::vector<Vector3i> &inds);
+
 
 
 	~IO();

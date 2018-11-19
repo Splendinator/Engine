@@ -19,7 +19,9 @@ Rasteriser r;
 
 //Mesh *m = Mesh::Plane(3, 3, 1.0f, 1.0f);
 Mesh *m = Mesh::QuadInds();
-Mesh monkey("C:/Users/Dominic/Desktop/untitled.obj");
+Mesh monkey("Models/monkey.obj");
+
+Texture monkeyTex;
 
 Texture t;
 Texture waterTex;
@@ -92,8 +94,6 @@ int main(int argc, char** argv) {
 
 	r.init();
 	
-
-
 	//SHADER
 	s = Shader("Shaders\\basic.vert", "Shaders\\basic.frag");
 	
@@ -101,9 +101,11 @@ int main(int argc, char** argv) {
 
 	waterTex = Texture("Textures/water.jpg");
 
+	monkeyTex = Texture("Models/monkey.jpg");
+
 
 	//OBJECT
-	o = Object(&monkey, &waterTex, &s);
+	o = Object(&monkey, &monkeyTex, &s);
 	//o2 = Object(m, t, &s);
 	//o3 = Object(m, t, &s);
 	
@@ -126,6 +128,7 @@ int main(int argc, char** argv) {
 	water.transform(Matrix4::translate(0, -10.f, 0));
 
 	o.transform(Matrix4::scale(5.f, 5.f, 5.f));
+	o.transform(Matrix4::translate(0, 0, 10.f));
 	//o2.transform(Matrix4::translate(0, 0, -3));
 	//o3.transform(Matrix4::translate(0, 0, -3));
 	
