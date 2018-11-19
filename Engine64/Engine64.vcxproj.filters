@@ -143,6 +143,12 @@
     <None Include="Shaders\text.vert">
       <Filter>Shaders</Filter>
     </None>
+    <None Include="Shaders\heightmap.frag">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="Shaders\heightmap.vert">
+      <Filter>Shaders</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Text Include="Shaders\basic.frag">

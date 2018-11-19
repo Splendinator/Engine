@@ -146,7 +146,6 @@ void Rasteriser::update()
 
 void Rasteriser::init()
 {
-	hud.init();
 
 
 	//DEPTH TEXTURE
@@ -171,6 +170,20 @@ void Rasteriser::init()
 		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, SCREEN_WIDTH, SCREEN_HEIGHT, 0,
 			GL_RGBA, GL_UNSIGNED_BYTE, NULL);
 	}
+
+	for (int i = 0; i < 6; ++i) {
+		glGenTextures(1, &bufferReflectionTex[i]);
+		glBindTexture(GL_TEXTURE_2D, bufferReflectionTex[i]);
+		glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP);
+		glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP);
+		glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+		glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, REFLECTION_RESOLUTION, REFLECTION_RESOLUTION, 0,
+			GL_RGBA, GL_UNSIGNED_BYTE, NULL);
+	
+	
+	}
+
 
 
 
@@ -242,7 +255,20 @@ void Rasteriser::init()
 	glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
 	glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
 	glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_R, GL_CLAMP_TO_EDGE);
+	
 
+	glCreateTextures(GL_TEXTURE_CUBE_MAP, 1, &cubeMapReflection);
+	glBindTexture(GL_TEXTURE_CUBE_MAP, cubeMapReflection);
+	glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+	glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+	glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_R, GL_CLAMP_TO_EDGE);
+	
+
+
+
+	hud.init();
 
 }
 
@@ -286,7 +312,7 @@ void Rasteriser::calculateReflections(Vector3 pos) {
 	*/
 
 	
-
+	glViewport(0, 0, REFLECTION_RESOLUTION, REFLECTION_RESOLUTION);
 
 
 	for (int i = 0; i < 6; ++i) {
@@ -301,11 +327,11 @@ void Rasteriser::calculateReflections(Vector3 pos) {
 
 		glBindFramebuffer(GL_FRAMEBUFFER, FBOpostprocess);
 		glUseProgram(shaderCopy.programID);
-
+		
 
 		//TODO: Don't need to copy texture twice.
 		//glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, bufferReflectionTex[i], 0);
-		glFramebufferTextureLayer(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, cubeMapSkybox, 0, i);
+		glFramebufferTextureLayer(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, cubeMapReflection, 0, i);
 		glClear(GL_COLOR_BUFFER_BIT);
 		texture.id = bufferReflectColourTex;
 
@@ -313,7 +339,7 @@ void Rasteriser::calculateReflections(Vector3 pos) {
 		quad.draw();
 	}
 	
-
+	glViewport(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
 
 
 	

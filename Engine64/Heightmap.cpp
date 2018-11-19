@@ -7,11 +7,22 @@ Heightmap::Heightmap(int numX, int numZ, float textureX, float textureZ, Texture
 	m = Mesh::Plane(numX, numZ, textureX, textureZ);
 }
 
+
+Heightmap::Heightmap(int numX, int numZ, float textureX, float textureZ, Texture * texture, Texture *textureGrad, Shader * shader) : Object(nullptr, texture, shader)
+{
+	sizeX = numX;
+	sizeZ = numZ;
+	m = Mesh::Plane(numX, numZ, textureX, textureZ);
+	grad = textureGrad;
+}
+
+
+
 //TODO: Tesselation
-void Heightmap::readHM( std::string heightmap, int picWidth, int picHeight)
+void Heightmap::readHM(std::string heightmap, int picWidth, int picHeight)
 {
 	unsigned char *data;
-	data = SOIL_load_image("Heightmap/hm.jpg", &picWidth, &picHeight, 0, SOIL_LOAD_RGB);
+	data = SOIL_load_image(heightmap.c_str(), &picWidth, &picHeight, 0, SOIL_LOAD_RGB);
 	float pctX, pctY, dx, dy;
 
 	for (int i = 0; i < sizeX; ++i) {
@@ -33,4 +44,15 @@ void Heightmap::readHM( std::string heightmap, int picWidth, int picHeight)
 
 	updateHeight();
 	delete data;
+}
+
+void Heightmap::draw() {
+
+	if (grad) {
+		glActiveTexture(GL_TEXTURE1); // Texture unit 1
+		glBindTexture(GL_TEXTURE_2D, grad->id);
+		glActiveTexture(GL_TEXTURE0);
+		glUniform1i(glGetUniformLocation( s->programID,"theTexture2"),1);
+	}
+	Object::draw();
 }

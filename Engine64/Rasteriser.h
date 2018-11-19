@@ -18,7 +18,7 @@ class Rasteriser
 {
 private:
 
-	static const int REFLECTION_RESOLUTION = 1024;
+	static const int REFLECTION_RESOLUTION = 2048;
 
 	HUD hud;
 
@@ -45,13 +45,15 @@ private:
 	//Textures for post processing.
 	GLuint bufferDepthTex;		
 	GLuint bufferColourTex[2];
-	//GLuint bufferReflectionTex[6];
+	GLuint bufferReflectionTex[6];
 	GLuint bufferReflectColourTex;
 	GLuint bufferReflectDepthTex;
 
+	
 
 	//Skybox
 	GLuint cubeMapSkybox;
+	GLuint cubeMapReflection;
 
 	Camera *camera;
 

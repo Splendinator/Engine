@@ -10,7 +10,7 @@ HUD::HUD()
 
 	
 	error = FT_New_Face(library,
-		"Fonts/cour.ttf",
+		"Fonts/arial.ttf",
 		0,
 		&face);
 	if (error)
@@ -35,7 +35,7 @@ HUD::HUD()
 }
 
 void HUD::init() {
-
+	glPixelStorei(GL_UNPACK_ALIGNMENT, 1); // Disable byte-alignment restriction
 	glCreateTextures(GL_TEXTURE_2D, CHARS, textures);
 
 	FT_Glyph   glyph;
@@ -75,7 +75,7 @@ void HUD::init() {
 		glTexImage2D(GL_TEXTURE_2D,
 			0,
 			GL_RED,
-			(face->glyph->bitmap.pitch),
+			(face->glyph->bitmap.width),
 			face->glyph->bitmap.rows,
 			0,
 			GL_RED,

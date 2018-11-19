@@ -25,15 +25,17 @@ Texture monkeyTex;
 
 Texture t;
 Texture waterTex;
+Texture rockTex;
 
 Shader s;
+Shader shaderTerrain;
 
 Object o;
 Object o2;
 Object o3;
 
 
-Heightmap h(257, 257,1.f,1.f,&t,&s);
+Heightmap h(257, 257, 16.f,16.f,&t,&rockTex,&shaderTerrain);
 Heightmap water(257, 257, 1.f, 1.f, &waterTex, &s);
 
 Camera cam;
@@ -96,8 +98,10 @@ int main(int argc, char** argv) {
 	
 	//SHADER
 	s = Shader("Shaders\\basic.vert", "Shaders\\basic.frag");
+	shaderTerrain = Shader("Shaders\\heightmap.vert", "Shaders\\heightmap.frag");
 	
-	t = Texture("Textures/checkerboard.jpg");
+	t = Texture("Textures/grass.jpg");
+	rockTex = Texture("Textures/rock.jpg");
 
 	waterTex = Texture("Textures/water.jpg");
 
@@ -105,7 +109,7 @@ int main(int argc, char** argv) {
 
 
 	//OBJECT
-	o = Object(&monkey, &monkeyTex, &s);
+	o = Object(m, &waterTex, &s);
 	//o2 = Object(m, t, &s);
 	//o3 = Object(m, t, &s);
 	

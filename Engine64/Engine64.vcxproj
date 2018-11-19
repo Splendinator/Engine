@@ -173,6 +173,8 @@
   <ItemGroup>
     <None Include="Shaders\copy.frag" />
     <None Include="Shaders\copy.vert" />
+    <None Include="Shaders\heightmap.frag" />
+    <None Include="Shaders\heightmap.vert" />
     <None Include="Shaders\pp.frag" />
     <None Include="Shaders\pp.vert" />
     <None Include="Shaders\skybox.frag" />

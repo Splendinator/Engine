@@ -41,7 +41,7 @@ public:
 
 	void init();
 
-	void draw();
+	virtual void draw();
 
 	void transform(Matrix4 transform);
 	void addChild(Object *o);
