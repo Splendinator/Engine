@@ -260,7 +260,9 @@ Rasteriser::~Rasteriser()
 
 
 void Rasteriser::calculateReflections(Vector3 pos) {
-	Matrix4 proj = Matrix4::Perspective(0.1f, 1000.f, PI/2, 1.f);
+	//Matrix4 proj = Matrix4::Perspective(0.1f, 1000.f, PI/2, 1.f);
+
+	Matrix4 proj = Matrix4::Perspective(0.01f, 1000, PI / 2.f, 1.f);
 
 	Camera c[6];
 	
@@ -271,7 +273,7 @@ void Rasteriser::calculateReflections(Vector3 pos) {
 	c[2].rollPitch(PI / 2);
 	c[3].rollPitch(-PI / 2);
 	c[4].rollYaw(PI);
-	c[5].rollYaw(-PI/2);
+	//c[5].rollYaw(-PI/2);
 
 
 	/*
@@ -303,7 +305,7 @@ void Rasteriser::calculateReflections(Vector3 pos) {
 
 		//TODO: Don't need to copy texture twice.
 		//glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, bufferReflectionTex[i], 0);
-		glFramebufferTextureLayer(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, cubeMapSkybox, 0, 2);
+		glFramebufferTextureLayer(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, cubeMapSkybox, 0, i);
 		glClear(GL_COLOR_BUFFER_BIT);
 		texture.id = bufferReflectColourTex;
 
