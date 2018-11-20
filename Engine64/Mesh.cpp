@@ -96,8 +96,8 @@ void Mesh::calculateNormals()
 
 		//std::cout << verts[b] - verts[a] << " " << verts[c] - verts[a] << " " << Util::cross(verts[b] - verts[a], verts[c] - verts[a]) << std::endl;
 
-		Vector3 v = Util::cross(verts[b] - verts[a], verts[c] - verts[a]);
-	
+		Vector3 v = Util::cross(verts[b] - verts[a], verts[c] - verts[a]); 
+	 
 
 		normals[a] += v;
 		normals[b] += v;
@@ -107,7 +107,9 @@ void Mesh::calculateNormals()
 
 	for (int i = 0; i < num; ++i) {
 		normals[i].normalise();
+		//std::cout << normals[i] << std::endl;
 	}
+	
 
 }
 
@@ -198,7 +200,7 @@ Mesh *Mesh::QuadInds()
 	m->verts = new Vector3[m->num]{ Vector3({-1,-1,0}), Vector3({-1,1,0}), Vector3({ 1,1,0}), Vector3({ 1,-1,0}) };
 	m->tex = new Vector2[m->num]{ Vector2({0,0}),  Vector2({0,1}),  Vector2({1,1}),  Vector2({1,0}) };
 	m->alpha = new GLfloat[4]{ 1,1,1,1 };
-	m->normals = new Vector3[m->num];
+	m->normals = new Vector3[4]{ Vector3({ 0,0,1 }),Vector3({ 0,0,1 }),Vector3({ 0,0,1 }),Vector3({ 0,0,1 }) };
 
 	m->numIndicies = 6;
 	m->inds = new GLuint[6]{ 1,0,2,2,0,3 };
@@ -230,6 +232,9 @@ Mesh *Mesh::Plane(int xNum, int zNum, float xTexture, float zTexture) {
 			m->verts[(z*zNum + x)][1] = 0.f;
 			m->verts[(z*zNum + x)][2] = (2 * z / zNumf) - 1;
 
+			//normals
+			m->normals[(z*zNum + x)] = Vector3({ 0,1,0 });
+
 			//texCoords
 			m->tex[(z*zNum + x)][0] = x / xNumf * xTexture;
 			m->tex[(z*zNum + x)][1] = z / zNumf * zTexture;
@@ -255,7 +260,7 @@ Mesh *Mesh::Plane(int xNum, int zNum, float xTexture, float zTexture) {
 
 		}
 	}
-
+	
 	return m;
 }
  

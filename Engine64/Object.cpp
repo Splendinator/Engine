@@ -37,7 +37,9 @@ void Object::init()
 }
 
 void Object::draw() {
+	glActiveTexture(GL_TEXTURE0);
 	glBindTexture(GL_TEXTURE_2D, t->id);
+	
 
 	glBindVertexArray(m->vaoId);
 	if (m->inds)

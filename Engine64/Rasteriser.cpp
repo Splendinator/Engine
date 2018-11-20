@@ -1,6 +1,6 @@
-#include "Rasteriser.h"
+		#include "Rasteriser.h"
 
-
+ 
 
 
 Rasteriser::Rasteriser()
@@ -11,7 +11,7 @@ Rasteriser::Rasteriser()
 void Rasteriser::drawScene(Camera &c, const Matrix4 &proj) {
 	Matrix4 model;
 	Matrix4 view = c.getTransform();
-
+	Matrix4 shadowMat = Matrix4::Bias() * Matrix4::Perspective(0.01f, 10, PI / 2.f, 1.f);
 
 	for (std::vector<Object *>::iterator it = objects.begin(); it != objects.end(); ++it)
 		(*it)->calcCameraDist(&c);
@@ -26,7 +26,10 @@ void Rasteriser::drawScene(Camera &c, const Matrix4 &proj) {
 		glUniformMatrix4fv(glGetUniformLocation((**it).s->programID, "model"), 1, false, (GLfloat *)&model);
 		glUniformMatrix4fv(glGetUniformLocation((**it).s->programID, "view"), 1, false, (GLfloat *)&view);
 		glUniformMatrix4fv(glGetUniformLocation((**it).s->programID, "proj"), 1, false, (GLfloat *)&proj);
-		glUniform1i(glGetUniformLocation((**it).s->programID, "theTexture"), 0);	//Sample from texture unit 0
+		glUniformMatrix4fv(glGetUniformLocation((**it).s->programID, "shadowMat"), 1, false, (GLfloat *)&shadowMat);
+		glUniform1i(glGetUniformLocation((**it).s->programID, "theTexture"), 0);
+		glUniform1i(glGetUniformLocation((**it).s->programID, "shadowTex"), 1);		glActiveTexture(GL_TEXTURE1);
+		glBindTexture(GL_TEXTURE_2D, bufferShadowDepthTex);		 
 		(*it)->draw();
 
 	}
@@ -101,10 +104,12 @@ void Rasteriser::drawHUD() {
 	Matrix4 view = Matrix4::identity();
 	Matrix4 model;
 
+
+
 	glDisable(GL_DEPTH_TEST);
 	
 	glUseProgram(shaderText.programID);
-
+	
 
 	glUniformMatrix4fv(glGetUniformLocation(shaderText.programID, "proj"), 1, false, (GLfloat *)&orth);
 	glUniformMatrix4fv(glGetUniformLocation(shaderText.programID, "view"), 1, false, (GLfloat *)&view);
@@ -120,22 +125,46 @@ void Rasteriser::drawHUD() {
 	glEnable(GL_DEPTH_TEST);
 }
 
+void Rasteriser::deferredRender()
+{
+	FillBuffers();
+	DrawPointLights();
+	CombineBuffers();
+}
+
+void Rasteriser::FillBuffers()
+{
+}
+
+void Rasteriser::DrawPointLights()
+{
+}
+
+void Rasteriser::CombineBuffers()
+{
+}
+
+
+
+
+
 void Rasteriser::update()
 {
-
-	calculateReflections(Vector3({ 0,0,0 }));
+	deferredRender();
+	//calculateReflections(Vector3({ 0,0,0 }));
+	//calculateShadowmap(Vector3({ 0,0,0 }));
 
 	glBindFramebuffer(GL_FRAMEBUFFER, FBObuffer);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	
 	
 	
-	drawSkyBox(*camera,projection);
-	drawScene(*camera,projection);
-	postProcess();
-	presentScene();
+	//drawSkyBox(*camera,projection);
+	//drawScene(*camera,projection);
+	//postProcess();
+	//presentScene();
 
-	drawHUD();
+	//drawHUD();
 	
 	//glutSwapBuffers();
 	glFlush();
@@ -144,133 +173,6 @@ void Rasteriser::update()
 
 
 
-void Rasteriser::init()
-{
-
-
-	//DEPTH TEXTURE
-	glGenTextures (1 , &bufferDepthTex );
-	glBindTexture ( GL_TEXTURE_2D , bufferDepthTex );
-	glTexParameterf ( GL_TEXTURE_2D , GL_TEXTURE_WRAP_S , GL_CLAMP );
-	glTexParameterf ( GL_TEXTURE_2D , GL_TEXTURE_WRAP_T , GL_CLAMP );
-	glTexParameterf ( GL_TEXTURE_2D , GL_TEXTURE_MAG_FILTER , GL_NEAREST );
-	glTexParameterf ( GL_TEXTURE_2D , GL_TEXTURE_MIN_FILTER , GL_NEAREST );
-	glTexImage2D ( GL_TEXTURE_2D , 0 , GL_DEPTH24_STENCIL8 , SCREEN_WIDTH , SCREEN_HEIGHT,
-	0 , GL_DEPTH_STENCIL , GL_UNSIGNED_INT_24_8 , NULL );
-
-
-	//COLOUR TEXTURES
-	for (int i = 0; i < 2; ++i) {
-		glGenTextures(1, &bufferColourTex[i]);
-		glBindTexture(GL_TEXTURE_2D, bufferColourTex[i]);
-		glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP);
-		glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP);
-		glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-		glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, SCREEN_WIDTH, SCREEN_HEIGHT, 0,
-			GL_RGBA, GL_UNSIGNED_BYTE, NULL);
-	}
-
-	for (int i = 0; i < 6; ++i) {
-		glGenTextures(1, &bufferReflectionTex[i]);
-		glBindTexture(GL_TEXTURE_2D, bufferReflectionTex[i]);
-		glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP);
-		glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP);
-		glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-		glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, REFLECTION_RESOLUTION, REFLECTION_RESOLUTION, 0,
-			GL_RGBA, GL_UNSIGNED_BYTE, NULL);
-	
-	
-	}
-
-
-
-
-	//Reflection Textures
-	glGenTextures(1, &bufferReflectDepthTex);
-	glBindTexture(GL_TEXTURE_2D, bufferReflectDepthTex);
-	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP);
-	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP);
-	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH24_STENCIL8, REFLECTION_RESOLUTION, REFLECTION_RESOLUTION,
-		0, GL_DEPTH_STENCIL, GL_UNSIGNED_INT_24_8, NULL);
-	
-	glGenTextures(1, &bufferReflectColourTex);
-	glBindTexture(GL_TEXTURE_2D, bufferReflectColourTex);
-	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP);
-	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP);
-	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, REFLECTION_RESOLUTION, REFLECTION_RESOLUTION, 0,
-		GL_RGBA, GL_UNSIGNED_BYTE, NULL);
-
-
-	//FRAME BUFFER
-	glGenFramebuffers(1, &FBObuffer);
-	glBindFramebuffer ( GL_FRAMEBUFFER , FBObuffer );
-	glFramebufferTexture2D ( GL_FRAMEBUFFER , GL_DEPTH_ATTACHMENT ,
-	GL_TEXTURE_2D , bufferDepthTex , 0);
-	glFramebufferTexture2D ( GL_FRAMEBUFFER , GL_STENCIL_ATTACHMENT ,
-	GL_TEXTURE_2D , bufferDepthTex , 0);
-	glFramebufferTexture2D ( GL_FRAMEBUFFER , GL_COLOR_ATTACHMENT0 ,
-	GL_TEXTURE_2D , bufferColourTex [0] , 0);
-	
-	glGenFramebuffers(1, &FBOpostprocess);
-
-
-	//Reflection FBO
-	glGenFramebuffers(1, &FBOreflection);
-	glBindFramebuffer(GL_FRAMEBUFFER, FBOreflection);
-	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT,
-		GL_TEXTURE_2D, bufferReflectDepthTex, 0);
-	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_STENCIL_ATTACHMENT,
-		GL_TEXTURE_2D, bufferReflectDepthTex, 0);
-	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0,
-		GL_TEXTURE_2D, bufferReflectColourTex, 0);
-
-
-
-	pps = Shader("Shaders\\pp.vert","Shaders\\pp.frag");
-	sbs = Shader("Shaders\\skybox.vert", "Shaders\\skybox.frag");
-	shaderCopy = Shader("Shaders\\copy.vert", "Shaders\\copy.frag");
-	shaderText = Shader("Shaders/text.vert", "Shaders/text.frag");
-
-	quad.init();
-
-	cubeMapSkybox = SOIL_load_OGL_cubemap(
-		"Textures/interstellar_+x.png",
-		"Textures/interstellar_-x.png",
-		"Textures/interstellar_+y.png",
-		"Textures/interstellar_-y.png",
-		"Textures/interstellar_+z.png",
-		"Textures/interstellar_-z.png",
-		 SOIL_LOAD_RGB,
-		 SOIL_CREATE_NEW_ID, 0
-		);
-
-	glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-	glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-	glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-	glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-	glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_R, GL_CLAMP_TO_EDGE);
-	
-
-	glCreateTextures(GL_TEXTURE_CUBE_MAP, 1, &cubeMapReflection);
-	glBindTexture(GL_TEXTURE_CUBE_MAP, cubeMapReflection);
-	glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-	glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-	glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-	glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-	glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_R, GL_CLAMP_TO_EDGE);
-	
-
-
-
-	hud.init();
-
-}
 
 
 
@@ -290,15 +192,16 @@ void Rasteriser::calculateReflections(Vector3 pos) {
 
 	Matrix4 proj = Matrix4::Perspective(0.01f, 1000, PI / 2.f, 1.f);
 
+
 	Camera c[6];
 	
 	for (int i = 0; i < 6; ++i) c[i].move(pos);
 
-	c[0].rollYaw(PI / 2);
 	c[1].rollYaw(-PI / 2);
+	c[0].rollYaw(PI / 2);
 	c[2].rollPitch(PI / 2);
 	c[3].rollPitch(-PI / 2);
-	c[4].rollYaw(PI);
+	c[5].rollYaw(PI);
 	//c[5].rollYaw(-PI/2);
 
 
@@ -322,10 +225,11 @@ void Rasteriser::calculateReflections(Vector3 pos) {
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 
-		drawSkyBox(c[i], proj);
+		//drawSkyBox(c[i], proj);
 		drawScene(c[i], proj);
 
 		glBindFramebuffer(GL_FRAMEBUFFER, FBOpostprocess);
+
 		glUseProgram(shaderCopy.programID);
 		
 
@@ -345,7 +249,295 @@ void Rasteriser::calculateReflections(Vector3 pos) {
 	
 }
 
+void Rasteriser::calculateShadowmap(Vector3 pos) {
+
+	//std::cout << glGetError() << std::endl;
+	Matrix4 proj = Matrix4::Perspective(0.01f, 10, PI / 2.f, 1.f);
+	Camera c;
+	c.move(pos);
+
+	glBindFramebuffer(GL_FRAMEBUFFER, FBOshadow);
+	glClear(GL_DEPTH_BUFFER_BIT);
+	glViewport(0, 0, SHADOW_RESOLUTION, SHADOW_RESOLUTION);
+	glColorMask(GL_FALSE, GL_FALSE, GL_FALSE, GL_FALSE);	glUseProgram(shaderShadow.programID);
+
+
+	drawSkyBox(c, proj);
+	drawScene(c, proj);
+
+	glColorMask(GL_TRUE, GL_TRUE, GL_TRUE, GL_TRUE);
+	glViewport(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
+
+
+
+
+
+}
 
 
 
 
+
+
+void Rasteriser::init()
+{
+
+
+	//DEPTH TEXTURE
+	glGenTextures(1, &bufferDepthTex);
+	glBindTexture(GL_TEXTURE_2D, bufferDepthTex);
+	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP);
+	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP);
+	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH24_STENCIL8, SCREEN_WIDTH, SCREEN_HEIGHT,
+		0, GL_DEPTH_STENCIL, GL_UNSIGNED_INT_24_8, NULL);
+
+
+	//COLOUR TEXTURES
+	for (int i = 0; i < 2; ++i) {
+		glGenTextures(1, &bufferColourTex[i]);
+		glBindTexture(GL_TEXTURE_2D, bufferColourTex[i]);
+		glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP);
+		glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP);
+		glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+		glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, SCREEN_WIDTH, SCREEN_HEIGHT, 0,
+			GL_RGBA, GL_UNSIGNED_BYTE, NULL);
+	}
+
+	for (int i = 0; i < 6; ++i) {
+		glGenTextures(1, &bufferReflectionTex[i]);
+		glBindTexture(GL_TEXTURE_2D, bufferReflectionTex[i]);
+		glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP);
+		glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP);
+		glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+		glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, REFLECTION_RESOLUTION, REFLECTION_RESOLUTION, 0,
+			GL_RGBA, GL_UNSIGNED_BYTE, NULL);
+
+
+	}
+
+
+
+
+	//Reflection Textures
+	glGenTextures(1, &bufferReflectDepthTex);
+	glBindTexture(GL_TEXTURE_2D, bufferReflectDepthTex);
+	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP);
+	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP);
+	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH24_STENCIL8, REFLECTION_RESOLUTION, REFLECTION_RESOLUTION,
+		0, GL_DEPTH_STENCIL, GL_UNSIGNED_INT_24_8, NULL);
+
+	glGenTextures(1, &bufferReflectColourTex);
+	glBindTexture(GL_TEXTURE_2D, bufferReflectColourTex);
+	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP);
+	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP);
+	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, REFLECTION_RESOLUTION, REFLECTION_RESOLUTION, 0,
+		GL_RGBA, GL_UNSIGNED_BYTE, NULL);
+
+
+
+
+
+	//Shadow map
+	glGenTextures(1, &bufferShadowDepthTex);
+	glBindTexture(GL_TEXTURE_2D, bufferShadowDepthTex);
+	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP);
+	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP);
+	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT, SHADOW_RESOLUTION, SHADOW_RESOLUTION,
+		0, GL_DEPTH_COMPONENT, GL_FLOAT, NULL);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_COMPARE_MODE, GL_COMPARE_R_TO_TEXTURE);
+
+
+
+
+	//GLuint bufferDefferedColour;
+	glGenTextures(1, &bufferDeferredColour);
+	glBindTexture(GL_TEXTURE_2D,bufferDeferredColour);
+	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8,
+		SCREEN_WIDTH, SCREEN_HEIGHT, 0,
+		GL_RGBA, GL_UNSIGNED_BYTE, NULL);
+
+
+	//GLuint bufferDefferedNormal;
+	glGenTextures(1, &bufferDeferredNormal);
+	glBindTexture(GL_TEXTURE_2D, bufferDeferredNormal);
+	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8,
+		SCREEN_WIDTH, SCREEN_HEIGHT, 0,
+		GL_RGBA, GL_UNSIGNED_BYTE, NULL);
+
+	//GLuint bufferDefferedDepth;
+	glGenTextures(1, &bufferDeferredNormal);
+	glBindTexture(GL_TEXTURE_2D, bufferDeferredNormal);
+	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT24,
+		SCREEN_WIDTH, SCREEN_HEIGHT, 0,
+		GL_DEPTH_COMPONENT, GL_UNSIGNED_BYTE, NULL);
+
+	//GLuint bufferLightSpecular;
+	glGenTextures(1, &bufferLightSpecular);
+	glBindTexture(GL_TEXTURE_2D, bufferLightSpecular);
+	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8,
+		SCREEN_WIDTH, SCREEN_HEIGHT, 0,
+		GL_RGBA, GL_UNSIGNED_BYTE, NULL);
+
+	//GLuint bufferLightEmissive;
+	glGenTextures(1, &bufferLightSpecular);
+	glBindTexture(GL_TEXTURE_2D, bufferLightSpecular);
+	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8,
+		SCREEN_WIDTH, SCREEN_HEIGHT, 0,
+		GL_RGBA, GL_UNSIGNED_BYTE, NULL);
+	
+
+
+
+
+
+
+
+
+
+
+	//FRAME BUFFER
+	glGenFramebuffers(1, &FBObuffer);
+	glBindFramebuffer(GL_FRAMEBUFFER, FBObuffer);
+	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT,
+		GL_TEXTURE_2D, bufferDepthTex, 0);
+	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_STENCIL_ATTACHMENT,
+		GL_TEXTURE_2D, bufferDepthTex, 0);
+	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0,
+		GL_TEXTURE_2D, bufferColourTex[0], 0);
+
+	glGenFramebuffers(1, &FBOpostprocess);
+
+
+	//Reflection FBO
+	glGenFramebuffers(1, &FBOreflection);
+	glBindFramebuffer(GL_FRAMEBUFFER, FBOreflection);
+	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT,
+		GL_TEXTURE_2D, bufferReflectDepthTex, 0);
+	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_STENCIL_ATTACHMENT,
+		GL_TEXTURE_2D, bufferReflectDepthTex, 0);
+	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0,
+		GL_TEXTURE_2D, bufferReflectColourTex, 0);
+
+
+	//Shadow FBO
+	glGenFramebuffers(1, &FBOshadow);
+	glBindFramebuffer(GL_FRAMEBUFFER, FBOshadow);
+	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT,
+		GL_TEXTURE_2D, bufferShadowDepthTex, 0);
+
+	glGenFramebuffers(1, &FBOdefferedLight);
+	glGenFramebuffers(1, &FBOdefferedBuffer);
+
+
+
+
+
+	//Deferred Rendering
+	GLenum texBuffers[2] = {
+		GL_COLOR_ATTACHMENT0,
+		GL_COLOR_ATTACHMENT1
+	};
+
+
+	glBindFramebuffer(GL_FRAMEBUFFER, FBOdefferedBuffer);
+	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0,
+	GL_TEXTURE_2D, bufferDeferredColour, 0);
+	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT1,
+	GL_TEXTURE_2D, bufferDeferredNormal, 0);
+	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT,
+	GL_TEXTURE_2D, bufferDeferredDepth, 0);
+	glDrawBuffers(2, texBuffers);
+	glBindFramebuffer(GL_FRAMEBUFFER, FBOdefferedLight);
+	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0,
+		GL_TEXTURE_2D, bufferLightEmissive, 0);
+	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT1,
+		GL_TEXTURE_2D, bufferLightSpecular, 0);;
+	glDrawBuffers(2, texBuffers);
+
+
+
+
+
+
+
+
+	pps = Shader("Shaders\\pp.vert", "Shaders\\pp.frag");
+	sbs = Shader("Shaders\\skybox.vert", "Shaders\\skybox.frag");
+	shaderCopy = Shader("Shaders\\copy.vert", "Shaders\\copy.frag");
+	shaderText = Shader("Shaders/text.vert", "Shaders/text.frag");
+	shaderShadow = Shader("Shaders/shadow.vert", "Shaders/shadow.frag");
+	shaderScene = Shader("Shaders/scene.vert","Shaders/scene.frag");
+	shaderLight	= Shader("Shaders/light.vert","Shaders/light.frag");
+	shaderCombine = Shader("Shaders/combine.vert","Shaders/combine.frag");
+					
+	quad.init();
+
+	cubeMapSkybox = SOIL_load_OGL_cubemap(
+		"Textures/interstellar_+x.png",
+		"Textures/interstellar_-x.png",
+		"Textures/interstellar_+y.png",
+		"Textures/interstellar_-y.png",
+		"Textures/interstellar_+z.png",
+		"Textures/interstellar_-z.png",
+		SOIL_LOAD_RGB,
+		SOIL_CREATE_NEW_ID, 0
+	);
+
+	glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+	glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+	glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_R, GL_CLAMP_TO_EDGE);
+
+
+	glCreateTextures(GL_TEXTURE_CUBE_MAP, 1, &cubeMapReflection);
+	glBindTexture(GL_TEXTURE_CUBE_MAP, cubeMapReflection);
+	glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+	glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+	glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_R, GL_CLAMP_TO_EDGE);
+
+	glCreateTextures(GL_TEXTURE_CUBE_MAP, 1, &cubeMapShadow);
+	glBindTexture(GL_TEXTURE_CUBE_MAP, cubeMapShadow);
+	glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+	glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+	glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_R, GL_CLAMP_TO_EDGE);
+
+
+
+
+	hud.init();
+
+}

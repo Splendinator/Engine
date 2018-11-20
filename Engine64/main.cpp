@@ -19,13 +19,14 @@ Rasteriser r;
 
 //Mesh *m = Mesh::Plane(3, 3, 1.0f, 1.0f);
 Mesh *m = Mesh::QuadInds();
-Mesh monkey("Models/monkey.obj");
+Mesh monkey("Models/monkey.model");
 
 Texture monkeyTex;
 
 Texture t;
 Texture waterTex;
 Texture rockTex;
+Texture bumpMapTex;
 
 Shader s;
 Shader shaderTerrain;
@@ -36,12 +37,12 @@ Object o3;
 
 
 Heightmap h(257, 257, 16.f,16.f,&t,&rockTex,&shaderTerrain);
-Heightmap water(257, 257, 1.f, 1.f, &waterTex, &s);
+Heightmap water(257, 257, 4.f, 4.f, &bumpMapTex, &s);
 
 Camera cam;
 
 const float CAMERA_SPEED = 10.0f;
-const float SPRINT_SPEED = 30.f;
+const float SPRINT_SPEED = 50.f;
 const float SENSITIVITY = 0.003f;
 
 
@@ -81,6 +82,8 @@ void gameLoop(void) {
 	cam.rollYaw(Input::relativeMousePos()[0] * SENSITIVITY);
 	cam.rollPitch(Input::relativeMousePos()[1] * SENSITIVITY);
 
+	//o.transform(Matrix4::translate(2 * delta;, 0, 0));
+
 	r.update();
 	Input::update();
 
@@ -88,8 +91,14 @@ void gameLoop(void) {
 
 }
 
+void myFunc(bool b = false) {
+	std::cout << "Hi" << std::endl;
+}
+
 
 int main(int argc, char** argv) {
+	
+	myFunc();
 
 	//INIT OPENGL/FREEGLUT
 	Initialize::init(argc, argv);
@@ -97,7 +106,7 @@ int main(int argc, char** argv) {
 	r.init();
 	
 	//SHADER
-	s = Shader("Shaders\\basic.vert", "Shaders\\basic.frag");
+	s = Shader("Shaders\\shadow.vert", "Shaders\\shadow.frag");
 	shaderTerrain = Shader("Shaders\\heightmap.vert", "Shaders\\heightmap.frag");
 	
 	t = Texture("Textures/grass.jpg");
@@ -107,9 +116,11 @@ int main(int argc, char** argv) {
 
 	monkeyTex = Texture("Models/monkey.jpg");
 
+	bumpMapTex = Texture("Textures/ASSdiffuse.jpg", "Textures/ASSnormals.jpg");
+
 
 	//OBJECT
-	o = Object(m, &waterTex, &s);
+	o = Object(&monkey, &monkeyTex, &s);
 	//o2 = Object(m, t, &s);
 	//o3 = Object(m, t, &s);
 	
@@ -128,11 +139,12 @@ int main(int argc, char** argv) {
 	h.transform(Matrix4::scale(300,0.6f,300.f));
 	h.transform(Matrix4::translate(0, -50.f, 0));
 
-	water.transform(Matrix4::scale(300, 0.6f, 300.f));
+	water.transform(Matrix4::scale(300, 1.f, 300.f));
 	water.transform(Matrix4::translate(0, -10.f, 0));
+	//water.transform(Matrix4::rotationX(PI/50));
 
 	o.transform(Matrix4::scale(5.f, 5.f, 5.f));
-	o.transform(Matrix4::translate(0, 0, 10.f));
+	o.transform(Matrix4::translate(0, 0, -10.f));
 	//o2.transform(Matrix4::translate(0, 0, -3));
 	//o3.transform(Matrix4::translate(0, 0, -3));
 	
@@ -142,7 +154,7 @@ int main(int argc, char** argv) {
 	//o.addChild(&o2);
 	//o2.addChild(&o3);
 
-	r.addObject(&h);
+	//r.addObject(&h);
 	r.addObject(&water);
 	r.addObject(&o);
 	//r.addObject(&o2);

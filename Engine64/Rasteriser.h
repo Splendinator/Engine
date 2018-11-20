@@ -18,11 +18,15 @@ class Rasteriser
 {
 private:
 
-	static const int REFLECTION_RESOLUTION = 2048;
+	static const int REFLECTION_RESOLUTION = 1024;
+	static const int SHADOW_RESOLUTION = 2048;
 
 	HUD hud;
 
+
 	std::string hudText = "FPS 60";
+
+	
 
 	//GLuint program;
 	GLuint locModel;
@@ -41,6 +45,15 @@ private:
 	GLuint FBObuffer;		//Holds data after initial scene render.
 	GLuint FBOpostprocess;	//Holds data after postprocessing.
 	GLuint FBOreflection;	//Used to calculate reflections. 
+	GLuint FBOshadow; //Used to calculate shadowmap.
+
+	GLuint FBOdefferedLight;
+	GLuint FBOdefferedBuffer;
+
+
+
+	 
+
 
 	//Textures for post processing.
 	GLuint bufferDepthTex;		
@@ -48,12 +61,20 @@ private:
 	GLuint bufferReflectionTex[6];
 	GLuint bufferReflectColourTex;
 	GLuint bufferReflectDepthTex;
+	GLuint bufferShadowDepthTex;
+
+	//Deffered
+	GLuint bufferDeferredColour;
+	GLuint bufferDeferredNormal;
+	GLuint bufferDeferredDepth;
+	GLuint bufferLightSpecular;
+	GLuint bufferLightEmissive;
 
 	
-
-	//Skybox
+	//Cubemaps
 	GLuint cubeMapSkybox;
 	GLuint cubeMapReflection;
+	GLuint cubeMapShadow; 
 
 	Camera *camera;
 
@@ -64,6 +85,11 @@ private:
 	Shader sbs; //Sky box shader.
 	Shader shaderCopy;//Copy texture t into bound texture.
 	Shader shaderText;//Draw text.
+	Shader shaderShadow;//Real time shadows.
+
+	Shader shaderScene;	//Fill GBuffers
+	Shader shaderLight;	//Calculate Lighting
+	Shader shaderCombine; //Combine previous two.
 
 
 	Object quad = Object(quadMesh, &texture, &pps);
@@ -75,14 +101,19 @@ private:
 
 
 
-	
-
 	 
 	void drawScene(Camera &c, const Matrix4 &proj);
 	void drawSkyBox(Camera &c, const Matrix4 &proj);
 	void postProcess();
 	void presentScene();
 	void drawHUD();
+
+
+	void deferredRender();
+
+	void FillBuffers();
+	void DrawPointLights();
+	void CombineBuffers();
 
 
 
@@ -98,6 +129,7 @@ public:
 	~Rasteriser();
 
 	void calculateReflections(Vector3 pos);
+	void calculateShadowmap(Vector3 pos);
 
 	void addObject(Object *o);
 	void removeObject(Object *o);

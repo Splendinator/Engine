@@ -33,6 +33,8 @@ public:
 				   
 	static Matrix4 Perspective(float znear, float zfar, float fov, float aspect);
 	static Matrix4 Orthogonal(float left, float right, float far, float near, float top, float bottom);
+
+	static Matrix4 Bias();
 	
 	float &operator[] (int x) { return value[x]; }
 
@@ -146,4 +148,22 @@ inline Matrix4 Matrix4::Orthogonal(float left, float right, float far, float nea
 
 	return m;
 
+}
+
+inline Matrix4 Matrix4::Bias()
+{
+	Matrix4 m;
+
+	m[0] = 0.5f;
+	m[5] = 0.5f;
+	m[10] = 0.5f;
+
+	m[3] = 0.5f;
+	m[7] = 0.5f;
+	m[11] = 0.5f;
+
+	m[15] = 1.0f;
+	
+	
+	return m;
 }

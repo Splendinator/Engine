@@ -14,6 +14,7 @@ Heightmap::Heightmap(int numX, int numZ, float textureX, float textureZ, Texture
 	sizeZ = numZ;
 	m = Mesh::Plane(numX, numZ, textureX, textureZ);
 	grad = textureGrad;
+	
 }
 
 
