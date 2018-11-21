@@ -12,8 +12,7 @@ public:
 	GLuint id;
 	GLuint normal;
 
-	Texture(char *filepath);
-	Texture(char *diffuse, char *normals);
+	Texture(char *diffuse, char *normals = "Textures/flatNormals.jpg");
 	Texture() { id = 0; };
 	Texture(GLuint name) { id = name; };
 	~Texture();

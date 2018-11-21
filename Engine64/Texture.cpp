@@ -2,12 +2,13 @@
 
 
 
-Texture::Texture(char * filepath)
+
+Texture::Texture(char *diffuse, char *normals)
 {
 	/* load an image file directly as a new OpenGL texture */
 	id = SOIL_load_OGL_texture
 	(
-		filepath,
+		diffuse,
 		SOIL_LOAD_AUTO,
 		SOIL_CREATE_NEW_ID,
 		SOIL_FLAG_MIPMAPS | SOIL_FLAG_INVERT_Y | SOIL_FLAG_NTSC_SAFE_RGB | SOIL_FLAG_COMPRESS_TO_DXT
@@ -20,12 +21,7 @@ Texture::Texture(char * filepath)
 	if (0 == id)
 		std::cout << "SOIL loading error: " << SOIL_last_result();
 
-	
 
-}
-
-Texture::Texture(char * diffuse, char * normals) : Texture(diffuse)
-{
 	/* load an image file directly as a new OpenGL texture */
 	normal = SOIL_load_OGL_texture
 	(

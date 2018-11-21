@@ -82,7 +82,7 @@ void gameLoop(void) {
 	cam.rollYaw(Input::relativeMousePos()[0] * SENSITIVITY);
 	cam.rollPitch(Input::relativeMousePos()[1] * SENSITIVITY);
 
-	//o.transform(Matrix4::translate(2 * delta;, 0, 0));
+	o.transform(Matrix4::translate(2 * delta, 0, 0));
 
 	r.update();
 	Input::update();
@@ -91,14 +91,11 @@ void gameLoop(void) {
 
 }
 
-void myFunc(bool b = false) {
-	std::cout << "Hi" << std::endl;
-}
 
 
 int main(int argc, char** argv) {
 	
-	myFunc();
+
 
 	//INIT OPENGL/FREEGLUT
 	Initialize::init(argc, argv);

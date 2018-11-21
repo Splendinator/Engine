@@ -34,6 +34,7 @@ public:
 	Vector3 right() { return Vector3({ cos(yaw), 0,sin(yaw) }).normalise(); }
 	Vector3 up();
 	
+	Vector3 getPosition() { return Vector3({translate[3],translate[7],translate[11]}); }
 	
 };
 

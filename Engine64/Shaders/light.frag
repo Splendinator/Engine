@@ -1,33 +1,52 @@
 #version 460 core
 
-out vec4 colour;
 
-uniform sampler2D theTexture;
+uniform sampler2D texDepth;
+uniform sampler2D texNorms;
 
-in vec2 tex;
-in float a;
-in vec3 n;
-in vec3 pos;
+uniform vec2 pixelSize;
+uniform vec3 cameraPos;
 
-vec3 LIGHTPOS = vec3(20.f,10.f,20.f);
+uniform float lightRadius;
+uniform vec3 lightPos;
+uniform vec4 lightColour;
+
+in mat4 inverseProjView;
+
+
+out vec4 colour[2];
+
 
 void main(){
 
-		colour = texture(theTexture,tex);
-		colour.a = a;
-		
-		float light = max(dot(normalize(LIGHTPOS - pos),n),0.2f);
-		float dist = length(LIGHTPOS - pos);
 
+vec3 pos = vec3 ((gl_FragCoord.x * pixelSize.x) ,
+(gl_FragCoord.y * pixelSize.y) , 0.0f);
 
-		light *= max(1-(dist/8000.f),0);
+pos.z = texture(texDepth,pos.xy).r;
 
-		light = max(min(light,0.8f),0.2f);
+vec3 normal = normalize(texture(texNorms, pos.xy).xyz * 2.0f - 1.0f);
 
-		colour.x *= light;  
-		colour.y *= light;
-		colour.z *= light;
-		
-		
+vec4 clip = transpose(inverseProjView) * vec4(pos*2.0f - 1.0f, 1.0f);
+pos = clip.xyz / clip.w ;
+
+float dist = length(lightPos - pos);
+float atten = 1.0f - clamp(dist/lightRadius, 0.0f, 1.0f);
+
+if( atten == 0.0) {
+discard ;
+}
+
+vec3 incident = normalize (lightPos - pos);
+vec3 viewDir = normalize (cameraPos - pos);
+vec3 halfDir = normalize (incident + viewDir);
+
+float lambert = clamp(dot(incident , normal) ,0.0 ,1.0);
+float rFactor = clamp(dot(halfDir , normal) ,0.0 ,1.0);
+float sFactor = pow(rFactor,33.0);
+
+colour[0] = vec4(lightColour.xyz * lambert * atten , 1.0f);
+colour[1] = vec4(lightColour.xyz * sFactor * atten * 0.33f ,1.0f);
+
 
 }

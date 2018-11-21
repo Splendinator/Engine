@@ -132,16 +132,105 @@ void Rasteriser::deferredRender()
 	CombineBuffers();
 }
 
+
+//Fills Colour, Normals, and Depth buffers.
 void Rasteriser::FillBuffers()
 {
+
+	Matrix4 view = camera->getTransform();
+	Matrix4 model;
+
+	glBindFramebuffer(GL_FRAMEBUFFER, FBOdefferedBuffer);	glClear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT);	glUseProgram(shaderScene.programID);	glUniform1i(glGetUniformLocation(shaderScene.programID, "texDiffuse"), 0);	glUniform1i(glGetUniformLocation(shaderScene.programID, "texNorms"), 1);	glUniformMatrix4fv(glGetUniformLocation(shaderText.programID, "proj"), 1, false, (GLfloat *)&projection);
+	glUniformMatrix4fv(glGetUniformLocation(shaderText.programID, "view"), 1, false, (GLfloat *)&view);	for (std::vector<Object *>::iterator it = objects.begin(); it != objects.end(); ++it) {
+
+		model = (**it).getTransform();
+
+		glUniformMatrix4fv(glGetUniformLocation((**it).s->programID, "model"), 1, false, (GLfloat *)&model);
+		(*it)->draw();
+
+	}
 }
 
 void Rasteriser::DrawPointLights()
 {
+	
+	
+	Matrix4 view = camera->getTransform();
+	Matrix4 model;
+
+	
+
+	glBindFramebuffer(GL_FRAMEBUFFER, FBOdefferedLight);
+	glClearColor(0, 0, 0, 1);
+	glClear(GL_COLOR_BUFFER_BIT);
+	glBlendFunc(GL_ONE, GL_ONE);
+
+	glUseProgram(shaderLight.programID);
+
+	glUniform1i(glGetUniformLocation(shaderLight.programID, "texDepth"), 3);	glUniform1i(glGetUniformLocation(shaderLight.programID, "texNorms"), 4);
+
+	glActiveTexture(GL_TEXTURE3);
+	glBindTexture(GL_TEXTURE_2D, bufferDeferredDepth);
+
+	glActiveTexture(GL_TEXTURE4);
+	glBindTexture(GL_TEXTURE_2D, bufferDeferredNormal);
+
+	glUniform3fv(glGetUniformLocation(shaderLight.programID, "cameraPos"),1,(GLfloat *)&camera->getPosition());
+	glUniform2f(glGetUniformLocation(shaderLight.programID, "pixelSize"), 1.0f / SCREEN_WIDTH, 1.0f / SCREEN_HEIGHT);
+
+
+	glUniform1f(glGetUniformLocation(shaderLight.programID, "lightRadius"), 30.f);
+	glUniform3fv(glGetUniformLocation(shaderLight.programID, "lightPos"),1, (GLfloat *)&Vector3({ 0,0,0 }));
+	glUniform4fv(glGetUniformLocation(shaderLight.programID, "lightColour"), 1, (GLfloat *)&Vector4({ 0.2f,0.8f,0.2f,1.0f }));
+
+
+	//sphere.transform();
+	model = Matrix4::scale(30.f, 30.f, 30.f);
+
+	float dist = (camera->getPosition()).length();
+	if (dist < 30.f)
+		glCullFace(GL_FRONT);
+	else
+		glCullFace(GL_BACK);
+
+
+
+
+	glUniformMatrix4fv(glGetUniformLocation(shaderLight.programID, "proj"), 1, false, (GLfloat *)&projection);
+	glUniformMatrix4fv(glGetUniformLocation(shaderLight.programID, "view"), 1, false, (GLfloat *)&view);
+	glUniformMatrix4fv(glGetUniformLocation(shaderLight.programID, "model"), 1, false, (GLfloat *)&model);
+
+
+	
+	sphere.draw();
+		glCullFace(GL_BACK);
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+	
+	glClearColor(0.2f, 0.2f, 0.2f, 1);	glBindFramebuffer(GL_FRAMEBUFFER, 0);
 }
 
 void Rasteriser::CombineBuffers()
 {
+	glDisable(GL_DEPTH_TEST);
+	glUseProgram(shaderCombine.programID);
+
+	glUniform1i(glGetUniformLocation(shaderCombine.programID, "texDiffuse"), 2);
+	glUniform1i(glGetUniformLocation(shaderCombine.programID, "texSpecular"), 3);
+	glUniform1i(glGetUniformLocation(shaderCombine.programID, "texEmissive"), 4);
+
+	glActiveTexture(GL_TEXTURE2);
+	glBindTexture(GL_TEXTURE_2D, bufferDeferredColour);
+
+	glActiveTexture(GL_TEXTURE3);
+	glBindTexture(GL_TEXTURE_2D, bufferLightEmissive);
+
+	glActiveTexture(GL_TEXTURE4);
+	glBindTexture(GL_TEXTURE_2D, bufferLightSpecular);
+
+	
+	quad.draw();
+	
+	glEnable(GL_DEPTH_TEST);
 }
 
 
@@ -154,8 +243,8 @@ void Rasteriser::update()
 	//calculateReflections(Vector3({ 0,0,0 }));
 	//calculateShadowmap(Vector3({ 0,0,0 }));
 
-	glBindFramebuffer(GL_FRAMEBUFFER, FBObuffer);
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	//glBindFramebuffer(GL_FRAMEBUFFER, FBObuffer);
+	//glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	
 	
 	
@@ -382,8 +471,8 @@ void Rasteriser::init()
 		GL_RGBA, GL_UNSIGNED_BYTE, NULL);
 
 	//GLuint bufferDefferedDepth;
-	glGenTextures(1, &bufferDeferredNormal);
-	glBindTexture(GL_TEXTURE_2D, bufferDeferredNormal);
+	glGenTextures(1, &bufferDeferredDepth);
+	glBindTexture(GL_TEXTURE_2D, bufferDeferredDepth);
 	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
 	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
 	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
@@ -404,8 +493,8 @@ void Rasteriser::init()
 		GL_RGBA, GL_UNSIGNED_BYTE, NULL);
 
 	//GLuint bufferLightEmissive;
-	glGenTextures(1, &bufferLightSpecular);
-	glBindTexture(GL_TEXTURE_2D, bufferLightSpecular);
+	glGenTextures(1, &bufferLightEmissive);
+	glBindTexture(GL_TEXTURE_2D, bufferLightEmissive);
 	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
 	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
 	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
@@ -414,7 +503,6 @@ void Rasteriser::init()
 		SCREEN_WIDTH, SCREEN_HEIGHT, 0,
 		GL_RGBA, GL_UNSIGNED_BYTE, NULL);
 	
-
 
 
 
@@ -475,7 +563,8 @@ void Rasteriser::init()
 	GL_TEXTURE_2D, bufferDeferredNormal, 0);
 	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT,
 	GL_TEXTURE_2D, bufferDeferredDepth, 0);
-	glDrawBuffers(2, texBuffers);
+	glDrawBuffers(2, texBuffers);	std::cout << FBOdefferedBuffer << std::endl;
+	std::cout << bufferDeferredColour << " " << bufferDeferredNormal << " " << bufferDeferredDepth << std::endl;
 	glBindFramebuffer(GL_FRAMEBUFFER, FBOdefferedLight);
 	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0,
 		GL_TEXTURE_2D, bufferLightEmissive, 0);
@@ -484,7 +573,8 @@ void Rasteriser::init()
 	glDrawBuffers(2, texBuffers);
 
 
-
+	std::cout << FBOdefferedLight << std::endl;
+	std::cout << bufferLightEmissive << " " << bufferLightSpecular << std::endl;
 
 
 
@@ -500,6 +590,7 @@ void Rasteriser::init()
 	shaderCombine = Shader("Shaders/combine.vert","Shaders/combine.frag");
 					
 	quad.init();
+	sphere.init();
 
 	cubeMapSkybox = SOIL_load_OGL_cubemap(
 		"Textures/interstellar_+x.png",

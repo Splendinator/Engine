@@ -28,7 +28,9 @@ void Object::init()
 	glBindAttribLocation(s->programID, VERTEX_ID, "position");
 	glBindAttribLocation(s->programID, TEXTURE_ID, "texCoords");
 	glBindAttribLocation(s->programID, ALPHA_ID, "alpha");
-	glBindAttribLocation(s->programID, NORMALS_ID, "norms");
+	glBindAttribLocation(s->programID, NORMAL_ID, "norms");
+	glBindAttribLocation(s->programID, TANGENT_ID, "tangents");
+	glBindAttribLocation(s->programID, BINORMAL_ID, "binorms");
 
 	if (!m->vertId) {
 		m->buffer();
@@ -40,6 +42,8 @@ void Object::draw() {
 	glActiveTexture(GL_TEXTURE0);
 	glBindTexture(GL_TEXTURE_2D, t->id);
 	
+	glActiveTexture(GL_TEXTURE1);
+	glBindTexture(GL_TEXTURE_2D, t->normal);
 
 	glBindVertexArray(m->vaoId);
 	if (m->inds)

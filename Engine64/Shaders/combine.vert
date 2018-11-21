@@ -6,9 +6,7 @@ in vec2 texCoords;
 in float alpha;
 in vec3 norms;
 
-layout (location = 10) uniform mat4 model;
-layout (location = 11) uniform mat4 view;
-layout (location = 12) uniform mat4 proj;
+uniform vec2 pixelSize;
 
 out vec2 tex;
 out float a;
@@ -22,15 +20,12 @@ void main(){
 	a  = alpha;
 
 	tex = texCoords;
+	pos = position;
 
-	vec4 p = vec4(position,1);
-	p *= model;
-	pos = vec3(p.x,p.y,p.z);
-	p *= view;
-	p *= proj;
-	
 
-	gl_Position = p;// * model * view * proj;
+
+
+	gl_Position =  vec4(position,1);
 	
 	
 }

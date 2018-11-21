@@ -47,6 +47,8 @@ Mesh::Mesh(std::string filepath)
 		alpha[i] = 1.0f;
 	}
 
+	calculateTangents();
+
 }
 
 
@@ -87,6 +89,12 @@ Mesh::Mesh(std::string filepath)
 
 void Mesh::calculateNormals()
 {	
+
+	if (!inds) {
+		std::cout << "Calculating normals with no indicies, TODO: add this." << std::endl;
+		return;
+	}
+
 	memset(normals, 0, sizeof(Vector3) * num);
 
 	for (int i = 0; i < numIndicies; i+=3) {
@@ -112,6 +120,69 @@ void Mesh::calculateNormals()
 	
 
 }
+
+
+
+
+
+inline Vector3 Mesh::GenerateTangent(const Vector3 & a, const Vector3 & b, const Vector3 & c, const Vector2 & ta, const Vector2 & tb, const Vector2 & tc)
+{
+		Vector2 coord1 = tb - ta;
+		Vector2 coord2 = tc - ta;
+
+		Vector3 vertex1 = b - a;
+		Vector3 vertex2 = c - a;
+
+		Vector3 axis = Vector3(vertex1 * coord2[1] - vertex2 * coord1[1]);
+
+		float factor = 1.0f / (coord1[0] * coord2[1] - coord2[0] * coord1[1]);
+
+		return axis * factor;
+
+}
+
+
+void Mesh::calculateTangents()
+{
+	if (!tangents) tangents = new Vector3[num];
+	if (!tex) return;
+
+	memset(tangents, 0, sizeof(Vector3) * num);
+
+
+	if (inds) {
+		for (int i = 0; i < numIndicies; i += 3) {
+			int a = inds[i];
+			int b = inds[i + 1];
+			int c = inds[i + 2];
+
+
+			Vector3 v = GenerateTangent(verts[a], verts[b], verts[c], tex[a], tex[b], tex[c]);
+
+			tangents[a] += v;
+			tangents[b] += v;
+			tangents[c] += v;
+
+		}
+	}
+	else
+	{
+		for (GLuint i = 0; i < num; i += 3) {
+			Vector3 v = GenerateTangent(verts[i], verts[i + 1], verts[i + 2], tex[i], tex[i + 1], tex[i + 2]);
+
+			tangents[i] += v;
+			tangents[i + 1] += v;
+			tangents[i + 2] += v;
+		}
+	}
+
+}
+
+
+
+
+
+
 
 void Mesh::buffer(){
 	
@@ -154,8 +225,30 @@ void Mesh::buffer(){
 		glBindBuffer(GL_ARRAY_BUFFER, normalId);
 		glBufferData(GL_ARRAY_BUFFER, num * sizeof(Vector3), normals, GL_STATIC_DRAW);
 
-		glVertexAttribPointer(NORMALS_ID, 3, GL_FLOAT, GL_FALSE, 0, 0);
-		glEnableVertexAttribArray(NORMALS_ID);
+		glVertexAttribPointer(NORMAL_ID, 3, GL_FLOAT, GL_FALSE, 0, 0);
+		glEnableVertexAttribArray(NORMAL_ID);
+	}
+
+
+	//Tangents
+	if (tangents) {
+		glGenBuffers(1, &tangentId);
+		glBindBuffer(GL_ARRAY_BUFFER, tangentId); 
+		glBufferData(GL_ARRAY_BUFFER, num * sizeof(Vector3), tangents, GL_STATIC_DRAW);
+
+		glVertexAttribPointer(TANGENT_ID, 3, GL_FLOAT, GL_FALSE, 0, 0);
+		glEnableVertexAttribArray(TANGENT_ID);
+	}
+
+
+	//Normals
+	if (binormals) {
+		glGenBuffers(1, &binormalId);
+		glBindBuffer(GL_ARRAY_BUFFER, binormalId);
+		glBufferData(GL_ARRAY_BUFFER, num * sizeof(Vector3), binormals, GL_STATIC_DRAW);
+
+		glVertexAttribPointer(BINORMAL_ID, 3, GL_FLOAT, GL_FALSE, 0, 0);
+		glEnableVertexAttribArray(BINORMAL_ID);
 	}
 
 
@@ -174,24 +267,8 @@ void Mesh::buffer(){
 
 }
 
-//Mesh *Mesh::Triangle() {
-//	Mesh *m = new Mesh;
-//	m->num = 3;
-//	m->verts = new Vector3[m->num]{ -1,-1,0,0,1,0,1,-1,0 };
-//	m->tex = new GLfloat[6]{ 0,0,0.5,1,1,0 };
-//	m->alpha = new GLfloat[3]{ 1,1,1 };
-//	return m;
-//}
 
-//Mesh *Mesh::Quad()
-//{
-//	Mesh *m = new Mesh;
-//	m->num = 6;
-//	m->verts = new GLfloat[18]{ -1,-1,0,-1,1,0,1,-1,0 , -1 ,1 ,0 , 1 ,1,0, 1,-1,0  };
-//	m->tex = new GLfloat[12]{ 0,0,0,1,1,0,0,1,1,1,1,0 };
-//	m->alpha = new GLfloat[6]{ 0.1f,0.1f,0.1f,0.1f,0.1f,0.1f };
-//	return m;
-//}
+
 
 Mesh *Mesh::QuadInds()
 {
@@ -204,6 +281,8 @@ Mesh *Mesh::QuadInds()
 
 	m->numIndicies = 6;
 	m->inds = new GLuint[6]{ 1,0,2,2,0,3 };
+
+	m->calculateTangents();
 
 	return m;
 }
@@ -260,7 +339,7 @@ Mesh *Mesh::Plane(int xNum, int zNum, float xTexture, float zTexture) {
 
 		}
 	}
-	
+	m->calculateTangents();
 	return m;
 }
  

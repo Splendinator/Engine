@@ -34,6 +34,7 @@ public:
 	};
 
 	Vector &normalise();
+	float length();
 
 	~Vector() {};
 };
@@ -102,4 +103,17 @@ namespace Util {
 	inline Vector3 cross(Vector3 a, Vector3 b) {
 		return Vector3({ a[1] * b[2] - a[2] * b[1], a[2] * b[0] - a[0] * b[2], a[0] * b[1] - a[1] * b[0] });
 	}
+}
+
+
+template<class E, unsigned int LENGTH>
+inline float Vector<E, LENGTH>::length()
+{
+	float total = 0;
+	for (int i = 0; i < LENGTH; ++i) {
+		total += data[i] * data[i];
+	}
+
+	return sqrt(total);
+	
 }

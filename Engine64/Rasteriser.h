@@ -79,6 +79,7 @@ private:
 	Camera *camera;
 
 	Mesh *quadMesh = Mesh::QuadInds();
+	Mesh meshSphere = Mesh("Models/sphere.model");
 	Texture texture;
 
 	Shader pps;	//Post processing shader.
@@ -93,6 +94,7 @@ private:
 
 
 	Object quad = Object(quadMesh, &texture, &pps);
+	Object sphere = Object(&meshSphere, &texture, &shaderLight);
 
 
 	std::vector<Object *> opaque;	//Opaque
@@ -139,7 +141,6 @@ public:
 	void bindCamera(Camera *c);
 
 	void init();
-	void temp(Camera &c, const Matrix4 &proj);
 
 
 

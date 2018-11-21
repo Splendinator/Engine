@@ -6,7 +6,7 @@
 #include <vector>
 #include "IO.h"
 
-enum ID {VERTEX_ID, TEXTURE_ID, ALPHA_ID, NORMALS_ID, INDICIES_ID};
+enum ID {VERTEX_ID, TEXTURE_ID, ALPHA_ID, NORMAL_ID, TANGENT_ID, BINORMAL_ID, INDICIES_ID};
 
 class Mesh
 {
@@ -21,6 +21,8 @@ public:
 	GLfloat *alpha;
 	GLuint *inds;
 	Vector3 *normals;
+	Vector3 *tangents;
+	Vector3 *binormals;
 
 	//Ids
 	GLuint vertId;
@@ -28,6 +30,8 @@ public:
 	GLuint alphaId;
 	GLuint indsId;
 	GLuint normalId;
+	GLuint tangentId;
+	GLuint binormalId;
 
 	GLuint vaoId; 
 
@@ -55,10 +59,19 @@ public:
 
 	void calculateNormals();
 
+	void calculateTangents();
+
+
+
 	void buffer(); 
 	
 	int getLength() { return num; }
 
+
+private:
+	Vector3 GenerateTangent(const Vector3 &a, const Vector3 &b,
+		const Vector3 &c, const Vector2 & ta,
+		const Vector2 & tb, const Vector2 & tc);
 
 	
 
