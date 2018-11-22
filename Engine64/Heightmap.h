@@ -18,15 +18,16 @@ public:
 	~Heightmap() { delete m; Object::~Object(); };
 
 	float &height(int x, int z) { return m->verts[(x + z*sizeZ)][1]; };
+	Vector3 &vert(int x, int z) { return m->verts[(x + z*sizeZ)]; }
 
-	void updateHeight() { m->calculateNormals(); m->updateVerts();  }
+	void updateHeight() { m->calculateNormals(); m->updateVerts(); m->calculateNormals(); }
 
 	float getSizeX() { return sizeX; }
 	float getSizeZ() { return sizeZ; }
 
 	void readHM(std::string heightmap, int picWidth, int picHeight);
 
-	void draw();
+	virtual void draw();
 
 
 };

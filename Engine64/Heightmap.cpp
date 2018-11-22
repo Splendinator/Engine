@@ -50,10 +50,10 @@ void Heightmap::readHM(std::string heightmap, int picWidth, int picHeight)
 void Heightmap::draw() {
 
 	if (grad) {
-		glActiveTexture(GL_TEXTURE1); // Texture unit 1
+		glActiveTexture(GL_TEXTURE5); 
 		glBindTexture(GL_TEXTURE_2D, grad->id);
 		glActiveTexture(GL_TEXTURE0);
-		glUniform1i(glGetUniformLocation( s->programID,"theTexture2"),1);
+		glUniform1i(glGetUniformLocation( s->programID,"texDiffuse2"),5);
 	}
 	Object::draw();
 }

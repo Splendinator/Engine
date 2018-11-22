@@ -21,7 +21,8 @@ public:
 	
 	
 
-	Camera() { };
+	Camera() { translate = Matrix4::identity(); };
+	Camera(const Camera &c) { translate = c.translate; yaw = c.yaw; pitch = c.pitch; };
 	~Camera() {};
 
 	void move(Vector3 v) { translate *= Matrix4::translate(-v[0], -v[1], -v[2]); }

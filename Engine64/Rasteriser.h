@@ -13,18 +13,19 @@
 #include <algorithm>
 #include "SOIL\SOIL.h"
 #include "HUD.h"
+#include "PointLight.h"
 
 class Rasteriser
 {
 private:
 
 	static const int REFLECTION_RESOLUTION = 1024;
-	static const int SHADOW_RESOLUTION = 2048;
+	static const int SHADOW_RESOLUTION = 1024;
 
 	HUD hud;
 
 
-	std::string hudText = "FPS 60";
+	
 
 	
 
@@ -39,6 +40,12 @@ private:
 
 	//View
 	Matrix4 view;
+
+
+	//Shadow
+	Matrix4 matShadow;
+	Matrix4 prevMatShadow;
+
 
 	
 	//FBO - Frame Buffer Object.  
@@ -62,6 +69,14 @@ private:
 	GLuint bufferReflectColourTex;
 	GLuint bufferReflectDepthTex;
 	GLuint bufferShadowDepthTex;
+
+
+
+	//Split screen
+	GLuint FBOSplitScreen;
+	GLuint firstHalf;
+	
+
 
 	//Deffered
 	GLuint bufferDeferredColour;
@@ -92,6 +107,8 @@ private:
 	Shader shaderLight;	//Calculate Lighting
 	Shader shaderCombine; //Combine previous two.
 
+	Shader shaderMerge; //Merge two screens for splitscreen.
+
 
 	Object quad = Object(quadMesh, &texture, &pps);
 	Object sphere = Object(&meshSphere, &texture, &shaderLight);
@@ -100,6 +117,11 @@ private:
 	std::vector<Object *> opaque;	//Opaque
 	std::vector<Object *> objects;	//Transparent
 	std::vector<Object *> reflectiveObjs;	//Reflective
+	std::vector<PointLight *> pointLights;	//Reflective
+
+
+	std::vector<Object *> prevObjects;
+	std::vector<PointLight *> prevPointLights;
 
 
 
@@ -107,19 +129,22 @@ private:
 	void drawScene(Camera &c, const Matrix4 &proj);
 	void drawSkyBox(Camera &c, const Matrix4 &proj);
 	void postProcess();
-	void presentScene();
+	void presentScene(GLuint buffer);
 	void drawHUD();
+	void presentSplitScreen(float pct);
 
 
-	void deferredRender();
+	void deferredRender(Camera &c, const Matrix4 &proj);
 
-	void FillBuffers();
-	void DrawPointLights();
-	void CombineBuffers();
+	void FillBuffers(Camera &c, const Matrix4 &proj);
+	void DrawPointLights(Camera &c, const Matrix4 &proj);
+	void CombineBuffers(Camera &c, const Matrix4 &proj);
 
 
 
 public:
+
+	std::string hudText = "";
 
 	const static int SCREEN_WIDTH = 1280;
 	const static int SCREEN_HEIGHT = 720;
@@ -128,13 +153,18 @@ public:
 
 	void update();
 
+	void update(float pct);
+
 	~Rasteriser();
 
-	void calculateReflections(Vector3 pos);
-	void calculateShadowmap(Vector3 pos);
+	GLuint calculateReflections(Vector3 pos);
+	void calculateShadowmap(Vector3 pos, float yaw);
+	void calculateShadowmaps(Vector3 pos);
 
 	void addObject(Object *o);
 	void removeObject(Object *o);
+
+	void addPointLight(PointLight *p);
 
 	void setProjection(const Matrix4 &m);	
 
@@ -142,6 +172,7 @@ public:
 
 	void init();
 
+	void clear();
 
 
 };
@@ -154,6 +185,9 @@ inline void Rasteriser::bindCamera(Camera *c)
 inline void Rasteriser::addObject(Object * o)
 {
 	objects.push_back(o);
+	for (std::vector<Object *>::iterator it = o->children.begin(); it != o->children.end(); ++it) {
+		addObject(*it);
+	}
 }
 
 inline void Rasteriser::removeObject(Object * o)
@@ -164,6 +198,11 @@ inline void Rasteriser::removeObject(Object * o)
 			break;
 		}
 	}
+}
+
+inline void Rasteriser::addPointLight(PointLight *p)
+{
+	pointLights.push_back(p);
 }
 
 inline void Rasteriser::setProjection(const Matrix4 & m)

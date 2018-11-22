@@ -20,6 +20,7 @@ out vec4 colour[2];
 void main(){
 
 
+
 vec3 pos = vec3 ((gl_FragCoord.x * pixelSize.x) ,
 (gl_FragCoord.y * pixelSize.y) , 0.0f);
 
@@ -34,19 +35,19 @@ float dist = length(lightPos - pos);
 float atten = 1.0f - clamp(dist/lightRadius, 0.0f, 1.0f);
 
 if( atten == 0.0) {
-discard ;
+discard;
 }
 
 vec3 incident = normalize (lightPos - pos);
 vec3 viewDir = normalize (cameraPos - pos);
 vec3 halfDir = normalize (incident + viewDir);
 
-float lambert = clamp(dot(incident , normal) ,0.0 ,1.0);
+float lambert = clamp(dot(incident , normal)/3.f ,0.0 ,1.0);
 float rFactor = clamp(dot(halfDir , normal) ,0.0 ,1.0);
 float sFactor = pow(rFactor,33.0);
 
-colour[0] = vec4(lightColour.xyz * lambert * atten , 1.0f);
-colour[1] = vec4(lightColour.xyz * sFactor * atten * 0.33f ,1.0f);
+colour[0] = vec4(lightColour.xyz * lambert * atten * lightColour.a , 1.0f);
+colour[1] = vec4(lightColour.xyz * sFactor * atten * 0.33f * lightColour.a ,1.0f);
 
 
 }

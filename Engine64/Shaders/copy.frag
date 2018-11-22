@@ -10,6 +10,6 @@ in vec2 tex;
 void main(){
 
 	colour = texture(theTexture,tex);
-	//colour = vec4(1,0,0,1);
+		
 
 }

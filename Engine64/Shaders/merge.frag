@@ -3,7 +3,10 @@
 out vec4 colour;
 
 uniform sampler2D theTexture;
+uniform sampler2D firstHalf;
 uniform vec2 pixelSize;
+
+uniform float pct;
 
 in vec2 tex;
 in float a;
@@ -54,7 +57,7 @@ vec4 gaucianBlurr(){
 void main(){
 
 	
-	colour = texture(theTexture,tex);
+	colour = texture((tex.x < pct ? theTexture:firstHalf),tex);
 		
 
 }

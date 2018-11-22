@@ -146,12 +146,15 @@
     <ClCompile Include="Matrix4.cpp" />
     <ClCompile Include="Mesh.cpp" />
     <ClCompile Include="Object.cpp" />
+    <ClCompile Include="ObjectReflective.cpp" />
+    <ClCompile Include="PointLight.cpp" />
     <ClCompile Include="Rasteriser.cpp" />
     <ClCompile Include="Scene.cpp" />
     <ClCompile Include="Shader.cpp" />
     <ClCompile Include="Texture.cpp" />
     <ClCompile Include="Timer.cpp" />
     <ClCompile Include="Vector.cpp" />
+    <ClCompile Include="Water.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Camera.h" />
@@ -163,12 +166,15 @@
     <ClInclude Include="Matrix4.h" />
     <ClInclude Include="Mesh.h" />
     <ClInclude Include="Object.h" />
+    <ClInclude Include="ObjectReflective.h" />
+    <ClInclude Include="PointLight.h" />
     <ClInclude Include="Rasteriser.h" />
     <ClInclude Include="Scene.h" />
     <ClInclude Include="Shader.h" />
     <ClInclude Include="Texture.h" />
     <ClInclude Include="Timer.h" />
     <ClInclude Include="Vector.h" />
+    <ClInclude Include="Water.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Shaders\*.frag" />
