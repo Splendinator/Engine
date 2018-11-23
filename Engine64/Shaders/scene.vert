@@ -36,7 +36,7 @@ void main(){
 
 
 	//SHADOWS
-	vec4 shadowP = vec4(position + normal*0f,1);
+	vec4 shadowP = vec4(position + normal*0.8f,1);
 	shadowP *= model;
 	shadowP *= matShadow;
 	shadowPos = shadowP;

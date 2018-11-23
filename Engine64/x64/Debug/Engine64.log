@@ -5,14 +5,14 @@ c:\users\dominic\desktop\engine\engine64\matrix4.h(9): warning C4305: 'initializ
 c:\users\dominic\desktop\engine\engine64\hud.h(7): warning C4067: unexpected tokens following preprocessor directive - expected a newline
 c:\users\dominic\desktop\engine\engine64\heightmap.h(25): warning C4244: 'return': conversion from 'int' to 'float', possible loss of data
 c:\users\dominic\desktop\engine\engine64\heightmap.h(26): warning C4244: 'return': conversion from 'int' to 'float', possible loss of data
-c:\users\dominic\desktop\engine\engine64\main.cpp(130): warning C4244: '+=': conversion from 'double' to 'float', possible loss of data
-c:\users\dominic\desktop\engine\engine64\main.cpp(132): warning C4244: '+=': conversion from 'double' to 'float', possible loss of data
-c:\users\dominic\desktop\engine\engine64\main.cpp(141): warning C4244: 'argument': conversion from 'double' to 'const float', possible loss of data
+c:\users\dominic\desktop\engine\engine64\main.cpp(133): warning C4244: '+=': conversion from 'double' to 'float', possible loss of data
+c:\users\dominic\desktop\engine\engine64\main.cpp(135): warning C4244: '+=': conversion from 'double' to 'float', possible loss of data
 c:\users\dominic\desktop\engine\engine64\main.cpp(144): warning C4244: 'argument': conversion from 'double' to 'const float', possible loss of data
 c:\users\dominic\desktop\engine\engine64\main.cpp(147): warning C4244: 'argument': conversion from 'double' to 'const float', possible loss of data
 c:\users\dominic\desktop\engine\engine64\main.cpp(150): warning C4244: 'argument': conversion from 'double' to 'const float', possible loss of data
 c:\users\dominic\desktop\engine\engine64\main.cpp(153): warning C4244: 'argument': conversion from 'double' to 'const float', possible loss of data
 c:\users\dominic\desktop\engine\engine64\main.cpp(156): warning C4244: 'argument': conversion from 'double' to 'const float', possible loss of data
+c:\users\dominic\desktop\engine\engine64\main.cpp(159): warning C4244: 'argument': conversion from 'double' to 'const float', possible loss of data
   SOIL.lib(SOIL.obj) : MSIL .netmodule or module compiled with /GL found; restarting link with /LTCG; add /LTCG to the link command line to improve linker performance
 LINK : warning LNK4075: ignoring '/INCREMENTAL' due to '/LTCG' specification
 LINK : warning LNK4098: defaultlib 'LIBCMT' conflicts with use of other libs; use /NODEFAULTLIB:library

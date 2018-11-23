@@ -10,6 +10,8 @@ layout (location = 10) uniform mat4 model;
 layout (location = 11) uniform mat4 view;
 layout (location = 12) uniform mat4 proj;
 
+uniform vec3 cameraPos;
+
 out Vertex {
 	vec3 pos;
 } OUT;

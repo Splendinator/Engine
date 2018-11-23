@@ -18,9 +18,9 @@ void main(){
 
 	vec3 f = texture(texDepth,tex).xyz;
 
-	if(f == vec3(1,1,1))
-	colour = texture(texDiffuse, tex);
-	else
+	//if(f == vec3(1,1,1) || texture(texDiffuse,tex).a == 0)
+	//colour = texture(texDiffuse, tex);
+	//else
 	{
 	vec3 diffuse = texture(texDiffuse, tex).xyz ;
 	vec3 light = texture(texEmissive, tex).xyz ;

@@ -18,7 +18,7 @@
 #include <random>
 
 
-static const int MAX_SNOWFLAKES = 512;
+static const int MAX_SNOWFLAKES = 128;
 static const int WATER_SIZE = 127;
 
 
@@ -26,6 +26,7 @@ static const int WATER_SIZE = 127;
 struct Scene {
 
 	Object *root;
+	Object *transparent;
 	std::vector<PointLight *> *lights;
 
 };
@@ -80,7 +81,7 @@ PointLight sceneTwoLight(50.f, Vector4({ 0.6f,0.6f,0.6f,1.0f }), Vector3({100.f,
 
 ///SCENE 3
 Heightmap snowMap(257, 257, 16.f, 16.f, &snowTex, &rockTex, &shaderTerrain);
-Water ice(2, 2, 4.f, 4.f, &waterTex, &shaderReflect, &reflectionTexture, 0.6f);
+Water ice(2, 2, 4.f, 4.f, &waterTex, &shaderReflect, &reflectionTexture, 0.1f);
 Particle snowParticle(&snowflakeTex, &shaderParticle, 10.f);
 Particle snowParticleTwo(&snowflakeTex, &shaderParticle, 5.f);
 
@@ -114,7 +115,9 @@ void changeScene(int scene) {
 	for (std::vector<PointLight *>::iterator it = scenes[scene].lights->begin(); it != scenes[scene].lights->end(); ++it) {
 		r.addPointLight(*it);
 	}
-
+	if (scenes[scene].transparent) {
+		r.addTransparent(scenes[scene].transparent);
+	}
 }
 
 const float TRANSITION_ANIMATION_TIME = 1.0f;
@@ -174,7 +177,6 @@ void gameLoop(void) {
 			r.calculateShadowmap(sceneTwoLight.pos, -time);
 		}
 	}
-	else
 	if (scene == 0 || splitScreen < TRANSITION_ANIMATION_TIME) {
 		for (int i = 0; i < WATER_SIZE; ++i) {
 			for (int j = 0; j < WATER_SIZE; ++j) {
@@ -184,14 +186,13 @@ void gameLoop(void) {
 		}
 		water.updateHeight();
 	}
-	else
 	if (scene == 2 || splitScreen < TRANSITION_ANIMATION_TIME) {
 		for (int i = 0; i < MAX_SNOWFLAKES; ++i) {
 			snowflakes[i].particle = snowflakes[i].particle + Vector3({ 0, float(-delta*70), 0 });
 			if (snowflakes[i].particle[1] < -20.f) {
-				snowflakes[i].particle = Vector3({ -150 + std::rand() % 200000 / 100.f,
+				snowflakes[i].particle = Vector3({ -cam.getPosition()[0] -150 + std::rand() % 50000 / 100.f,
 					std::rand() % 30000 / 100.f,
-					-150 + std::rand() % 200000 / 100.f });
+					-cam.getPosition()[2] -150 + std::rand() % 50000 / 100.f });
 			}
 
 			snowflakes[i].buffer();
@@ -231,7 +232,7 @@ int main(int argc, char** argv) {
 	scenes[0].lights = &lightsOne;
 	scenes[1].root = &rootTwo;
 	scenes[1].lights = &lightsTwo;
-	scenes[2].root = &snowMap;//TODO
+	scenes[2].root = &snowMap;
 	scenes[2].lights = &lightsThree;
 
 
@@ -264,6 +265,8 @@ int main(int argc, char** argv) {
 	for (int i = 0; i < MAX_SNOWFLAKES; ++i) {
 		snowflakes.push_back(Particle(&snowflakeTex, &shaderParticle, 1.0f));
 	}
+
+	scenes[2].transparent = &(snowflakes[0]);
 
 
 	//REFLECTION MAP
@@ -329,9 +332,10 @@ int main(int argc, char** argv) {
 
 	lightsThree.push_back(&l);
 
-	for (int i = 0; i < MAX_SNOWFLAKES; ++i) {
-		snowMap.addChild(&snowflakes[i]);
+	for (int i = 1; i < MAX_SNOWFLAKES; ++i) {
+		snowflakes[0].addChild(&snowflakes[i]);
 	}
+
 
 	
 

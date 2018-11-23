@@ -20,7 +20,7 @@ class Rasteriser
 private:
 
 	static const int REFLECTION_RESOLUTION = 1024;
-	static const int SHADOW_RESOLUTION = 1024;
+	static const int SHADOW_RESOLUTION = 2048;
 
 	HUD hud;
 
@@ -114,7 +114,7 @@ private:
 	Object sphere = Object(&meshSphere, &texture, &shaderLight);
 
 
-	std::vector<Object *> opaque;	//Opaque
+	std::vector<Object *> transparent;	//Opaque
 	std::vector<Object *> objects;	//Transparent
 	std::vector<Object *> reflectiveObjs;	//Reflective
 	std::vector<PointLight *> pointLights;	//Reflective
@@ -122,6 +122,7 @@ private:
 
 	std::vector<Object *> prevObjects;
 	std::vector<PointLight *> prevPointLights;
+	std::vector<Object *> prevTransparent;
 
 
 
@@ -164,6 +165,8 @@ public:
 	void addObject(Object *o);
 	void removeObject(Object *o);
 
+	void addTransparent(Object *o);
+
 	void addPointLight(PointLight *p);
 
 	void setProjection(const Matrix4 &m);	
@@ -189,6 +192,16 @@ inline void Rasteriser::addObject(Object * o)
 		addObject(*it);
 	}
 }
+
+
+inline void Rasteriser::addTransparent(Object * o)
+{
+	transparent.push_back(o);
+	for (std::vector<Object *>::iterator it = o->children.begin(); it != o->children.end(); ++it) {
+		addTransparent(*it);
+	}
+}
+
 
 inline void Rasteriser::removeObject(Object * o)
 {

@@ -20,7 +20,6 @@ out vec4 colour[2];
 void main(){
 
 
-
 vec3 pos = vec3 ((gl_FragCoord.x * pixelSize.x) ,
 (gl_FragCoord.y * pixelSize.y) , 0.0f);
 

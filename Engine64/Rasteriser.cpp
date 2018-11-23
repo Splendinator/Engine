@@ -135,10 +135,11 @@ void Rasteriser::FillBuffers(Camera &c, const Matrix4 &proj)
 	Matrix4 model;
 
 	glBindFramebuffer(GL_FRAMEBUFFER, FBOdefferedBuffer);	glClear(GL_DEPTH_BUFFER_BIT);
-	for (std::vector<Object *>::iterator it = objects.begin(); it != objects.end(); ++it)
+
+	for (std::vector<Object *>::iterator it = objects.begin(); it != objects.end(); ++it)
 		(*it)->calcCameraDist(camera);
 
-	std::sort(objects.begin(), objects.end(), Object::compareCameraDistGT);	for (std::vector<Object *>::iterator it = objects.begin(); it != objects.end(); ++it) {
+	std::sort(objects.begin(), objects.end(), Object::compareCameraDistLT);	for (std::vector<Object *>::iterator it = objects.begin(); it != objects.end(); ++it) {
 
 		glUseProgram((*it)->s->programID);		glActiveTexture(GL_TEXTURE6);		glBindTexture(GL_TEXTURE_2D, bufferShadowDepthTex);		glUniform1i(glGetUniformLocation((*it)->s->programID, "texDiffuse"), 0);		glUniform1i(glGetUniformLocation((*it)->s->programID, "texNorms"), 1);		glUniform1i(glGetUniformLocation((*it)->s->programID, "texShadow"), 6);		glUniformMatrix4fv(glGetUniformLocation((*it)->s->programID, "proj"), 1, false, (GLfloat *)&proj);
 		glUniformMatrix4fv(glGetUniformLocation((*it)->s->programID, "view"), 1, false, (GLfloat *)&view);
@@ -154,7 +155,26 @@ void Rasteriser::FillBuffers(Camera &c, const Matrix4 &proj)
 
 
 
-	}
+	}	for (std::vector<Object *>::iterator it = transparent.begin(); it != transparent.end(); ++it)
+		(*it)->calcCameraDist(camera);
+
+	std::sort(transparent.begin(), transparent.end(), Object::compareCameraDistLT);	for (std::vector<Object *>::iterator it = transparent.begin(); it != transparent.end(); ++it) {
+
+		glUseProgram((*it)->s->programID);		glActiveTexture(GL_TEXTURE6);		glBindTexture(GL_TEXTURE_2D, bufferShadowDepthTex);		glUniform1i(glGetUniformLocation((*it)->s->programID, "texDiffuse"), 0);		glUniform1i(glGetUniformLocation((*it)->s->programID, "texNorms"), 1);		glUniform1i(glGetUniformLocation((*it)->s->programID, "texShadow"), 6);		glUniformMatrix4fv(glGetUniformLocation((*it)->s->programID, "proj"), 1, false, (GLfloat *)&proj);
+		glUniformMatrix4fv(glGetUniformLocation((*it)->s->programID, "view"), 1, false, (GLfloat *)&view);
+		glUniformMatrix4fv(glGetUniformLocation((*it)->s->programID, "matShadow"), 1, false, (GLfloat *)&matShadow);
+
+		glUniform3fv(glGetUniformLocation((*it)->s->programID, "cameraPos"), 1, (float *)&camera->getPosition());
+
+
+		model = (**it).getTransform();
+
+		glUniformMatrix4fv(glGetUniformLocation((**it).s->programID, "model"), 1, false, (GLfloat *)&model);
+		(*it)->draw();
+
+
+
+	}
 }
 
 void Rasteriser::DrawPointLights(Camera &c, const Matrix4 &proj)
@@ -324,13 +344,16 @@ void Rasteriser::update(float pct)
 	postProcess();
 	presentScene(FBOSplitScreen);
 
-	std::vector<Object *> tempObj = objects;	
+	std::vector<Object *> tempObj = objects;
+	std::vector<Object *> tempTransparent = transparent;
 	std::vector<PointLight *> tempLight = pointLights;
 	Matrix4 tempShadowMat = matShadow;
+
 
 	objects = prevObjects;
 	pointLights = prevPointLights;
 	matShadow = prevMatShadow;
+	transparent = prevTransparent;
 
 
 	
@@ -349,6 +372,7 @@ void Rasteriser::update(float pct)
 
 	objects = tempObj;
 	pointLights = tempLight;
+	transparent = tempTransparent;
 	for (int i = 0; i < 16; ++i) {
 		matShadow[i] = 0.0f;
 	}
@@ -446,10 +470,10 @@ void Rasteriser::calculateShadowmap(Vector3 pos, float yaw) {
 	c.move(pos);
 	c.rollYaw(yaw);
 
-	//matShadow = Matrix4::rotationY(yaw);
-	//matShadow *= Matrix4::translate(pos[0], pos[1], pos[2]);
-	matShadow = c.getTransform();
+	matShadow = Matrix4::identity();// *Matrix4::translate(pos[0], pos[1], pos[2]) * Matrix4::rotationY(yaw);
+	matShadow *= c.getTransform();
 	matShadow *= proj;
+	matShadow *= Matrix4::Bias();
 
 
 	glBindFramebuffer(GL_FRAMEBUFFER, FBOshadow);
@@ -796,9 +820,11 @@ void Rasteriser::clear()
 	prevObjects = objects;
 	prevPointLights = pointLights;
 	prevMatShadow = matShadow;
+	prevTransparent = transparent;
 
 	objects.clear();
 	pointLights.clear();
+	transparent.clear();
 
 	for (int i = 0; i < 16; ++i) {
 		matShadow[i] = 0.0f;
