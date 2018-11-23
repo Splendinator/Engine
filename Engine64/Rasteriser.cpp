@@ -149,8 +149,9 @@ void Rasteriser::FillBuffers(Camera &c, const Matrix4 &proj)
 
 		model = (**it).getTransform();
 
-		glUniformMatrix4fv(glGetUniformLocation((**it).s->programID, "model"), 1, false, (GLfloat *)&model);
+		glUniformMatrix4fv(glGetUniformLocation((**it).s->programID, "model"), 1, false, (GLfloat *)&model);	
 		(*it)->draw();
+
 
 
 	}
@@ -289,6 +290,8 @@ void Rasteriser::update()
 	//calculateShadowmap(Vector3({ 0,0.f,20.f }),0);
 
 	deferredRender(*camera, projection);
+
+	
 	//calculateReflections(Vector3({ 0,0,0 }));
 	//calculateShadowmap(Vector3({ 0,0,0 }));
 
@@ -310,6 +313,7 @@ void Rasteriser::update(float pct)
 {
 
 	deferredRender(*camera, projection);
+
 
 	
 	//Vector2({ 0,0 }), Vector2({ 0,1 }), Vector2({ 1,1 }), Vector2({ 1,0 })

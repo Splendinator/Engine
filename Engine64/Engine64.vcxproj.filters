@@ -76,6 +76,9 @@
     <ClCompile Include="Water.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Particle.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="IO.h">
@@ -132,6 +135,9 @@
     <ClInclude Include="Water.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Particle.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="Shaders\basic.frag">
@@ -230,6 +236,102 @@
     <None Include="Shaders\shadow.frag" />
     <None Include="Shaders\skybox.frag" />
     <None Include="Shaders\text.frag" />
+    <None Include="Shaders\basic.vert">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="Shaders\combine.vert" />
+    <None Include="Shaders\copy.vert" />
+    <None Include="Shaders\heightmap.vert" />
+    <None Include="Shaders\light.vert" />
+    <None Include="Shaders\pp.vert" />
+    <None Include="Shaders\scene.vert" />
+    <None Include="Shaders\shadow.vert" />
+    <None Include="Shaders\skybox.vert" />
+    <None Include="Shaders\text.vert" />
+    <None Include="Shaders\basic.vert">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="Shaders\combine.vert" />
+    <None Include="Shaders\copy.vert" />
+    <None Include="Shaders\heightmap.vert" />
+    <None Include="Shaders\light.vert" />
+    <None Include="Shaders\pp.vert" />
+    <None Include="Shaders\scene.vert" />
+    <None Include="Shaders\shadow.vert" />
+    <None Include="Shaders\skybox.vert" />
+    <None Include="Shaders\text.vert" />
+    <None Include="Shaders\basic.vert">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="Shaders\combine.vert" />
+    <None Include="Shaders\copy.vert" />
+    <None Include="Shaders\heightmap.vert" />
+    <None Include="Shaders\light.vert" />
+    <None Include="Shaders\pp.vert" />
+    <None Include="Shaders\scene.vert" />
+    <None Include="Shaders\shadow.vert" />
+    <None Include="Shaders\skybox.vert" />
+    <None Include="Shaders\text.vert" />
+    <None Include="Shaders\basic.vert">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="Shaders\combine.vert" />
+    <None Include="Shaders\copy.vert" />
+    <None Include="Shaders\heightmap.vert" />
+    <None Include="Shaders\light.vert" />
+    <None Include="Shaders\pp.vert" />
+    <None Include="Shaders\scene.vert" />
+    <None Include="Shaders\shadow.vert" />
+    <None Include="Shaders\skybox.vert" />
+    <None Include="Shaders\text.vert" />
+    <None Include="Shaders\basic.vert">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="Shaders\combine.vert" />
+    <None Include="Shaders\copy.vert" />
+    <None Include="Shaders\heightmap.vert" />
+    <None Include="Shaders\light.vert" />
+    <None Include="Shaders\pp.vert" />
+    <None Include="Shaders\scene.vert" />
+    <None Include="Shaders\shadow.vert" />
+    <None Include="Shaders\skybox.vert" />
+    <None Include="Shaders\text.vert" />
+    <None Include="Shaders\basic.vert">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="Shaders\combine.vert" />
+    <None Include="Shaders\copy.vert" />
+    <None Include="Shaders\heightmap.vert" />
+    <None Include="Shaders\light.vert" />
+    <None Include="Shaders\pp.vert" />
+    <None Include="Shaders\scene.vert" />
+    <None Include="Shaders\shadow.vert" />
+    <None Include="Shaders\skybox.vert" />
+    <None Include="Shaders\text.vert" />
+    <None Include="Shaders\basic.vert">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="Shaders\combine.vert" />
+    <None Include="Shaders\copy.vert" />
+    <None Include="Shaders\heightmap.vert" />
+    <None Include="Shaders\light.vert" />
+    <None Include="Shaders\pp.vert" />
+    <None Include="Shaders\scene.vert" />
+    <None Include="Shaders\shadow.vert" />
+    <None Include="Shaders\skybox.vert" />
+    <None Include="Shaders\text.vert" />
+    <None Include="Shaders\basic.vert">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="Shaders\combine.vert" />
+    <None Include="Shaders\copy.vert" />
+    <None Include="Shaders\heightmap.vert" />
+    <None Include="Shaders\light.vert" />
+    <None Include="Shaders\pp.vert" />
+    <None Include="Shaders\scene.vert" />
+    <None Include="Shaders\shadow.vert" />
+    <None Include="Shaders\skybox.vert" />
+    <None Include="Shaders\text.vert" />
     <None Include="Shaders\basic.frag">
       <Filter>Shaders</Filter>
     </None>
@@ -249,11 +351,153 @@
     <None Include="Shaders\copy.frag" />
     <None Include="Shaders\heightmap.frag" />
     <None Include="Shaders\light.frag" />
+    <None Include="Shaders\merge.frag" />
     <None Include="Shaders\pp.frag" />
     <None Include="Shaders\scene.frag" />
     <None Include="Shaders\shadow.frag" />
     <None Include="Shaders\skybox.frag" />
     <None Include="Shaders\text.frag" />
+    <None Include="Shaders\water.frag" />
+    <None Include="Shaders\basic.frag">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="Shaders\combine.frag" />
+    <None Include="Shaders\copy.frag" />
+    <None Include="Shaders\heightmap.frag" />
+    <None Include="Shaders\light.frag" />
+    <None Include="Shaders\merge.frag" />
+    <None Include="Shaders\pp.frag" />
+    <None Include="Shaders\scene.frag" />
+    <None Include="Shaders\shadow.frag" />
+    <None Include="Shaders\skybox.frag" />
+    <None Include="Shaders\text.frag" />
+    <None Include="Shaders\water.frag" />
+    <None Include="Shaders\basic.frag">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="Shaders\combine.frag" />
+    <None Include="Shaders\copy.frag" />
+    <None Include="Shaders\heightmap.frag" />
+    <None Include="Shaders\light.frag" />
+    <None Include="Shaders\merge.frag" />
+    <None Include="Shaders\pp.frag" />
+    <None Include="Shaders\scene.frag" />
+    <None Include="Shaders\shadow.frag" />
+    <None Include="Shaders\skybox.frag" />
+    <None Include="Shaders\text.frag" />
+    <None Include="Shaders\water.frag" />
+    <None Include="Shaders\basic.frag">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="Shaders\combine.frag" />
+    <None Include="Shaders\copy.frag" />
+    <None Include="Shaders\heightmap.frag" />
+    <None Include="Shaders\light.frag" />
+    <None Include="Shaders\merge.frag" />
+    <None Include="Shaders\pp.frag" />
+    <None Include="Shaders\scene.frag" />
+    <None Include="Shaders\shadow.frag" />
+    <None Include="Shaders\skybox.frag" />
+    <None Include="Shaders\text.frag" />
+    <None Include="Shaders\water.frag" />
+    <None Include="Shaders\basic.frag">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="Shaders\combine.frag" />
+    <None Include="Shaders\copy.frag" />
+    <None Include="Shaders\heightmap.frag" />
+    <None Include="Shaders\light.frag" />
+    <None Include="Shaders\merge.frag" />
+    <None Include="Shaders\pp.frag" />
+    <None Include="Shaders\scene.frag" />
+    <None Include="Shaders\shadow.frag" />
+    <None Include="Shaders\skybox.frag" />
+    <None Include="Shaders\text.frag" />
+    <None Include="Shaders\water.frag" />
+    <None Include="Shaders\basic.frag">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="Shaders\combine.frag" />
+    <None Include="Shaders\copy.frag" />
+    <None Include="Shaders\heightmap.frag" />
+    <None Include="Shaders\light.frag" />
+    <None Include="Shaders\merge.frag" />
+    <None Include="Shaders\pp.frag" />
+    <None Include="Shaders\scene.frag" />
+    <None Include="Shaders\shadow.frag" />
+    <None Include="Shaders\skybox.frag" />
+    <None Include="Shaders\text.frag" />
+    <None Include="Shaders\water.frag" />
+    <None Include="Shaders\basic.frag">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="Shaders\combine.frag" />
+    <None Include="Shaders\copy.frag" />
+    <None Include="Shaders\heightmap.frag" />
+    <None Include="Shaders\light.frag" />
+    <None Include="Shaders\merge.frag" />
+    <None Include="Shaders\pp.frag" />
+    <None Include="Shaders\scene.frag" />
+    <None Include="Shaders\shadow.frag" />
+    <None Include="Shaders\skybox.frag" />
+    <None Include="Shaders\text.frag" />
+    <None Include="Shaders\water.frag" />
+    <None Include="Shaders\basic.frag">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="Shaders\combine.frag" />
+    <None Include="Shaders\copy.frag" />
+    <None Include="Shaders\heightmap.frag" />
+    <None Include="Shaders\light.frag" />
+    <None Include="Shaders\merge.frag" />
+    <None Include="Shaders\pp.frag" />
+    <None Include="Shaders\scene.frag" />
+    <None Include="Shaders\shadow.frag" />
+    <None Include="Shaders\skybox.frag" />
+    <None Include="Shaders\text.frag" />
+    <None Include="Shaders\water.frag" />
+    <None Include="Shaders\basic.frag">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="Shaders\combine.frag" />
+    <None Include="Shaders\copy.frag" />
+    <None Include="Shaders\heightmap.frag" />
+    <None Include="Shaders\light.frag" />
+    <None Include="Shaders\merge.frag" />
+    <None Include="Shaders\pp.frag" />
+    <None Include="Shaders\scene.frag" />
+    <None Include="Shaders\shadow.frag" />
+    <None Include="Shaders\skybox.frag" />
+    <None Include="Shaders\text.frag" />
+    <None Include="Shaders\water.frag" />
+    <None Include="Shaders\basic.frag">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="Shaders\combine.frag" />
+    <None Include="Shaders\copy.frag" />
+    <None Include="Shaders\heightmap.frag" />
+    <None Include="Shaders\light.frag" />
+    <None Include="Shaders\merge.frag" />
+    <None Include="Shaders\pp.frag" />
+    <None Include="Shaders\scene.frag" />
+    <None Include="Shaders\shadow.frag" />
+    <None Include="Shaders\skybox.frag" />
+    <None Include="Shaders\text.frag" />
+    <None Include="Shaders\water.frag" />
+    <None Include="Shaders\basic.frag">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="Shaders\combine.frag" />
+    <None Include="Shaders\copy.frag" />
+    <None Include="Shaders\heightmap.frag" />
+    <None Include="Shaders\light.frag" />
+    <None Include="Shaders\merge.frag" />
+    <None Include="Shaders\pp.frag" />
+    <None Include="Shaders\scene.frag" />
+    <None Include="Shaders\shadow.frag" />
+    <None Include="Shaders\skybox.frag" />
+    <None Include="Shaders\text.frag" />
+    <None Include="Shaders\water.frag" />
     <None Include="Shaders\basic.vert">
       <Filter>Shaders</Filter>
     </None>
@@ -273,11 +517,13 @@
     <None Include="Shaders\copy.vert" />
     <None Include="Shaders\heightmap.vert" />
     <None Include="Shaders\light.vert" />
+    <None Include="Shaders\merge.vert" />
     <None Include="Shaders\pp.vert" />
     <None Include="Shaders\scene.vert" />
     <None Include="Shaders\shadow.vert" />
     <None Include="Shaders\skybox.vert" />
     <None Include="Shaders\text.vert" />
+    <None Include="Shaders\water.vert" />
     <None Include="Shaders\basic.vert">
       <Filter>Shaders</Filter>
     </None>
@@ -285,11 +531,13 @@
     <None Include="Shaders\copy.vert" />
     <None Include="Shaders\heightmap.vert" />
     <None Include="Shaders\light.vert" />
+    <None Include="Shaders\merge.vert" />
     <None Include="Shaders\pp.vert" />
     <None Include="Shaders\scene.vert" />
     <None Include="Shaders\shadow.vert" />
     <None Include="Shaders\skybox.vert" />
     <None Include="Shaders\text.vert" />
+    <None Include="Shaders\water.vert" />
     <None Include="Shaders\basic.vert">
       <Filter>Shaders</Filter>
     </None>
@@ -297,11 +545,13 @@
     <None Include="Shaders\copy.vert" />
     <None Include="Shaders\heightmap.vert" />
     <None Include="Shaders\light.vert" />
+    <None Include="Shaders\merge.vert" />
     <None Include="Shaders\pp.vert" />
     <None Include="Shaders\scene.vert" />
     <None Include="Shaders\shadow.vert" />
     <None Include="Shaders\skybox.vert" />
     <None Include="Shaders\text.vert" />
+    <None Include="Shaders\water.vert" />
     <None Include="Shaders\basic.vert">
       <Filter>Shaders</Filter>
     </None>
@@ -309,11 +559,13 @@
     <None Include="Shaders\copy.vert" />
     <None Include="Shaders\heightmap.vert" />
     <None Include="Shaders\light.vert" />
+    <None Include="Shaders\merge.vert" />
     <None Include="Shaders\pp.vert" />
     <None Include="Shaders\scene.vert" />
     <None Include="Shaders\shadow.vert" />
     <None Include="Shaders\skybox.vert" />
     <None Include="Shaders\text.vert" />
+    <None Include="Shaders\water.vert" />
     <None Include="Shaders\basic.vert">
       <Filter>Shaders</Filter>
     </None>
@@ -321,11 +573,13 @@
     <None Include="Shaders\copy.vert" />
     <None Include="Shaders\heightmap.vert" />
     <None Include="Shaders\light.vert" />
+    <None Include="Shaders\merge.vert" />
     <None Include="Shaders\pp.vert" />
     <None Include="Shaders\scene.vert" />
     <None Include="Shaders\shadow.vert" />
     <None Include="Shaders\skybox.vert" />
     <None Include="Shaders\text.vert" />
+    <None Include="Shaders\water.vert" />
     <None Include="Shaders\basic.vert">
       <Filter>Shaders</Filter>
     </None>
@@ -333,11 +587,13 @@
     <None Include="Shaders\copy.vert" />
     <None Include="Shaders\heightmap.vert" />
     <None Include="Shaders\light.vert" />
+    <None Include="Shaders\merge.vert" />
     <None Include="Shaders\pp.vert" />
     <None Include="Shaders\scene.vert" />
     <None Include="Shaders\shadow.vert" />
     <None Include="Shaders\skybox.vert" />
     <None Include="Shaders\text.vert" />
+    <None Include="Shaders\water.vert" />
     <None Include="Shaders\basic.vert">
       <Filter>Shaders</Filter>
     </None>
@@ -345,11 +601,13 @@
     <None Include="Shaders\copy.vert" />
     <None Include="Shaders\heightmap.vert" />
     <None Include="Shaders\light.vert" />
+    <None Include="Shaders\merge.vert" />
     <None Include="Shaders\pp.vert" />
     <None Include="Shaders\scene.vert" />
     <None Include="Shaders\shadow.vert" />
     <None Include="Shaders\skybox.vert" />
     <None Include="Shaders\text.vert" />
+    <None Include="Shaders\water.vert" />
     <None Include="Shaders\basic.vert">
       <Filter>Shaders</Filter>
     </None>
@@ -357,11 +615,13 @@
     <None Include="Shaders\copy.vert" />
     <None Include="Shaders\heightmap.vert" />
     <None Include="Shaders\light.vert" />
+    <None Include="Shaders\merge.vert" />
     <None Include="Shaders\pp.vert" />
     <None Include="Shaders\scene.vert" />
     <None Include="Shaders\shadow.vert" />
     <None Include="Shaders\skybox.vert" />
     <None Include="Shaders\text.vert" />
+    <None Include="Shaders\water.vert" />
     <None Include="Shaders\basic.vert">
       <Filter>Shaders</Filter>
     </None>
@@ -369,10 +629,433 @@
     <None Include="Shaders\copy.vert" />
     <None Include="Shaders\heightmap.vert" />
     <None Include="Shaders\light.vert" />
+    <None Include="Shaders\merge.vert" />
     <None Include="Shaders\pp.vert" />
     <None Include="Shaders\scene.vert" />
     <None Include="Shaders\shadow.vert" />
     <None Include="Shaders\skybox.vert" />
     <None Include="Shaders\text.vert" />
+    <None Include="Shaders\water.vert" />
+    <None Include="Shaders\basic.vert">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="Shaders\combine.vert" />
+    <None Include="Shaders\copy.vert" />
+    <None Include="Shaders\heightmap.vert" />
+    <None Include="Shaders\light.vert" />
+    <None Include="Shaders\merge.vert" />
+    <None Include="Shaders\pp.vert" />
+    <None Include="Shaders\scene.vert" />
+    <None Include="Shaders\shadow.vert" />
+    <None Include="Shaders\skybox.vert" />
+    <None Include="Shaders\text.vert" />
+    <None Include="Shaders\water.vert" />
+    <None Include="Shaders\basic.vert">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="Shaders\combine.vert" />
+    <None Include="Shaders\copy.vert" />
+    <None Include="Shaders\heightmap.vert" />
+    <None Include="Shaders\light.vert" />
+    <None Include="Shaders\merge.vert" />
+    <None Include="Shaders\pp.vert" />
+    <None Include="Shaders\scene.vert" />
+    <None Include="Shaders\shadow.vert" />
+    <None Include="Shaders\skybox.vert" />
+    <None Include="Shaders\text.vert" />
+    <None Include="Shaders\water.vert" />
+    <None Include="Shaders\basic.frag">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="Shaders\combine.frag" />
+    <None Include="Shaders\copy.frag" />
+    <None Include="Shaders\heightmap.frag" />
+    <None Include="Shaders\light.frag" />
+    <None Include="Shaders\merge.frag" />
+    <None Include="Shaders\particle.frag" />
+    <None Include="Shaders\pp.frag" />
+    <None Include="Shaders\scene.frag" />
+    <None Include="Shaders\shadow.frag" />
+    <None Include="Shaders\skybox.frag" />
+    <None Include="Shaders\text.frag" />
+    <None Include="Shaders\water.frag" />
+    <None Include="Shaders\basic.frag">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="Shaders\combine.frag" />
+    <None Include="Shaders\copy.frag" />
+    <None Include="Shaders\heightmap.frag" />
+    <None Include="Shaders\light.frag" />
+    <None Include="Shaders\merge.frag" />
+    <None Include="Shaders\particle.frag" />
+    <None Include="Shaders\pp.frag" />
+    <None Include="Shaders\scene.frag" />
+    <None Include="Shaders\shadow.frag" />
+    <None Include="Shaders\skybox.frag" />
+    <None Include="Shaders\text.frag" />
+    <None Include="Shaders\water.frag" />
+    <None Include="Shaders\basic.frag">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="Shaders\combine.frag" />
+    <None Include="Shaders\copy.frag" />
+    <None Include="Shaders\heightmap.frag" />
+    <None Include="Shaders\light.frag" />
+    <None Include="Shaders\merge.frag" />
+    <None Include="Shaders\particle.frag" />
+    <None Include="Shaders\pp.frag" />
+    <None Include="Shaders\scene.frag" />
+    <None Include="Shaders\shadow.frag" />
+    <None Include="Shaders\skybox.frag" />
+    <None Include="Shaders\text.frag" />
+    <None Include="Shaders\water.frag" />
+    <None Include="Shaders\basic.frag">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="Shaders\combine.frag" />
+    <None Include="Shaders\copy.frag" />
+    <None Include="Shaders\heightmap.frag" />
+    <None Include="Shaders\light.frag" />
+    <None Include="Shaders\merge.frag" />
+    <None Include="Shaders\particle.frag" />
+    <None Include="Shaders\pp.frag" />
+    <None Include="Shaders\scene.frag" />
+    <None Include="Shaders\shadow.frag" />
+    <None Include="Shaders\skybox.frag" />
+    <None Include="Shaders\text.frag" />
+    <None Include="Shaders\water.frag" />
+    <None Include="Shaders\basic.frag">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="Shaders\combine.frag" />
+    <None Include="Shaders\copy.frag" />
+    <None Include="Shaders\heightmap.frag" />
+    <None Include="Shaders\light.frag" />
+    <None Include="Shaders\merge.frag" />
+    <None Include="Shaders\particle.frag" />
+    <None Include="Shaders\pp.frag" />
+    <None Include="Shaders\scene.frag" />
+    <None Include="Shaders\shadow.frag" />
+    <None Include="Shaders\skybox.frag" />
+    <None Include="Shaders\text.frag" />
+    <None Include="Shaders\water.frag" />
+    <None Include="Shaders\basic.frag">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="Shaders\combine.frag" />
+    <None Include="Shaders\copy.frag" />
+    <None Include="Shaders\heightmap.frag" />
+    <None Include="Shaders\light.frag" />
+    <None Include="Shaders\merge.frag" />
+    <None Include="Shaders\particle.frag" />
+    <None Include="Shaders\pp.frag" />
+    <None Include="Shaders\scene.frag" />
+    <None Include="Shaders\shadow.frag" />
+    <None Include="Shaders\skybox.frag" />
+    <None Include="Shaders\text.frag" />
+    <None Include="Shaders\water.frag" />
+    <None Include="Shaders\basic.frag">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="Shaders\combine.frag" />
+    <None Include="Shaders\copy.frag" />
+    <None Include="Shaders\heightmap.frag" />
+    <None Include="Shaders\light.frag" />
+    <None Include="Shaders\merge.frag" />
+    <None Include="Shaders\particle.frag" />
+    <None Include="Shaders\pp.frag" />
+    <None Include="Shaders\scene.frag" />
+    <None Include="Shaders\shadow.frag" />
+    <None Include="Shaders\skybox.frag" />
+    <None Include="Shaders\text.frag" />
+    <None Include="Shaders\water.frag" />
+    <None Include="Shaders\basic.frag">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="Shaders\combine.frag" />
+    <None Include="Shaders\copy.frag" />
+    <None Include="Shaders\heightmap.frag" />
+    <None Include="Shaders\light.frag" />
+    <None Include="Shaders\merge.frag" />
+    <None Include="Shaders\particle.frag" />
+    <None Include="Shaders\pp.frag" />
+    <None Include="Shaders\scene.frag" />
+    <None Include="Shaders\shadow.frag" />
+    <None Include="Shaders\skybox.frag" />
+    <None Include="Shaders\text.frag" />
+    <None Include="Shaders\water.frag" />
+    <None Include="Shaders\basic.frag">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="Shaders\combine.frag" />
+    <None Include="Shaders\copy.frag" />
+    <None Include="Shaders\heightmap.frag" />
+    <None Include="Shaders\light.frag" />
+    <None Include="Shaders\merge.frag" />
+    <None Include="Shaders\particle.frag" />
+    <None Include="Shaders\pp.frag" />
+    <None Include="Shaders\scene.frag" />
+    <None Include="Shaders\shadow.frag" />
+    <None Include="Shaders\skybox.frag" />
+    <None Include="Shaders\text.frag" />
+    <None Include="Shaders\water.frag" />
+    <None Include="Shaders\basic.frag">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="Shaders\combine.frag" />
+    <None Include="Shaders\copy.frag" />
+    <None Include="Shaders\heightmap.frag" />
+    <None Include="Shaders\light.frag" />
+    <None Include="Shaders\merge.frag" />
+    <None Include="Shaders\particle.frag" />
+    <None Include="Shaders\pp.frag" />
+    <None Include="Shaders\scene.frag" />
+    <None Include="Shaders\shadow.frag" />
+    <None Include="Shaders\skybox.frag" />
+    <None Include="Shaders\text.frag" />
+    <None Include="Shaders\water.frag" />
+    <None Include="Shaders\basic.frag">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="Shaders\combine.frag" />
+    <None Include="Shaders\copy.frag" />
+    <None Include="Shaders\heightmap.frag" />
+    <None Include="Shaders\light.frag" />
+    <None Include="Shaders\merge.frag" />
+    <None Include="Shaders\particle.frag" />
+    <None Include="Shaders\pp.frag" />
+    <None Include="Shaders\scene.frag" />
+    <None Include="Shaders\shadow.frag" />
+    <None Include="Shaders\skybox.frag" />
+    <None Include="Shaders\text.frag" />
+    <None Include="Shaders\water.frag" />
+    <None Include="Shaders\basic.frag">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="Shaders\combine.frag" />
+    <None Include="Shaders\copy.frag" />
+    <None Include="Shaders\heightmap.frag" />
+    <None Include="Shaders\light.frag" />
+    <None Include="Shaders\merge.frag" />
+    <None Include="Shaders\particle.frag" />
+    <None Include="Shaders\pp.frag" />
+    <None Include="Shaders\scene.frag" />
+    <None Include="Shaders\shadow.frag" />
+    <None Include="Shaders\skybox.frag" />
+    <None Include="Shaders\text.frag" />
+    <None Include="Shaders\water.frag" />
+    <None Include="Shaders\basic.frag">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="Shaders\combine.frag" />
+    <None Include="Shaders\copy.frag" />
+    <None Include="Shaders\heightmap.frag" />
+    <None Include="Shaders\light.frag" />
+    <None Include="Shaders\merge.frag" />
+    <None Include="Shaders\particle.frag" />
+    <None Include="Shaders\pp.frag" />
+    <None Include="Shaders\scene.frag" />
+    <None Include="Shaders\shadow.frag" />
+    <None Include="Shaders\skybox.frag" />
+    <None Include="Shaders\text.frag" />
+    <None Include="Shaders\water.frag" />
+    <None Include="Shaders\basic.vert">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="Shaders\combine.vert" />
+    <None Include="Shaders\copy.vert" />
+    <None Include="Shaders\heightmap.vert" />
+    <None Include="Shaders\light.vert" />
+    <None Include="Shaders\merge.vert" />
+    <None Include="Shaders\particle.vert" />
+    <None Include="Shaders\pp.vert" />
+    <None Include="Shaders\scene.vert" />
+    <None Include="Shaders\shadow.vert" />
+    <None Include="Shaders\skybox.vert" />
+    <None Include="Shaders\text.vert" />
+    <None Include="Shaders\water.vert" />
+    <None Include="Shaders\basic.vert">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="Shaders\combine.vert" />
+    <None Include="Shaders\copy.vert" />
+    <None Include="Shaders\heightmap.vert" />
+    <None Include="Shaders\light.vert" />
+    <None Include="Shaders\merge.vert" />
+    <None Include="Shaders\particle.vert" />
+    <None Include="Shaders\pp.vert" />
+    <None Include="Shaders\scene.vert" />
+    <None Include="Shaders\shadow.vert" />
+    <None Include="Shaders\skybox.vert" />
+    <None Include="Shaders\text.vert" />
+    <None Include="Shaders\water.vert" />
+    <None Include="Shaders\basic.vert">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="Shaders\combine.vert" />
+    <None Include="Shaders\copy.vert" />
+    <None Include="Shaders\heightmap.vert" />
+    <None Include="Shaders\light.vert" />
+    <None Include="Shaders\merge.vert" />
+    <None Include="Shaders\particle.vert" />
+    <None Include="Shaders\pp.vert" />
+    <None Include="Shaders\scene.vert" />
+    <None Include="Shaders\shadow.vert" />
+    <None Include="Shaders\skybox.vert" />
+    <None Include="Shaders\text.vert" />
+    <None Include="Shaders\water.vert" />
+    <None Include="Shaders\basic.vert">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="Shaders\combine.vert" />
+    <None Include="Shaders\copy.vert" />
+    <None Include="Shaders\heightmap.vert" />
+    <None Include="Shaders\light.vert" />
+    <None Include="Shaders\merge.vert" />
+    <None Include="Shaders\particle.vert" />
+    <None Include="Shaders\pp.vert" />
+    <None Include="Shaders\scene.vert" />
+    <None Include="Shaders\shadow.vert" />
+    <None Include="Shaders\skybox.vert" />
+    <None Include="Shaders\text.vert" />
+    <None Include="Shaders\water.vert" />
+    <None Include="Shaders\basic.vert">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="Shaders\combine.vert" />
+    <None Include="Shaders\copy.vert" />
+    <None Include="Shaders\heightmap.vert" />
+    <None Include="Shaders\light.vert" />
+    <None Include="Shaders\merge.vert" />
+    <None Include="Shaders\particle.vert" />
+    <None Include="Shaders\pp.vert" />
+    <None Include="Shaders\scene.vert" />
+    <None Include="Shaders\shadow.vert" />
+    <None Include="Shaders\skybox.vert" />
+    <None Include="Shaders\text.vert" />
+    <None Include="Shaders\water.vert" />
+    <None Include="Shaders\basic.vert">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="Shaders\combine.vert" />
+    <None Include="Shaders\copy.vert" />
+    <None Include="Shaders\heightmap.vert" />
+    <None Include="Shaders\light.vert" />
+    <None Include="Shaders\merge.vert" />
+    <None Include="Shaders\particle.vert" />
+    <None Include="Shaders\pp.vert" />
+    <None Include="Shaders\scene.vert" />
+    <None Include="Shaders\shadow.vert" />
+    <None Include="Shaders\skybox.vert" />
+    <None Include="Shaders\text.vert" />
+    <None Include="Shaders\water.vert" />
+    <None Include="Shaders\basic.vert">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="Shaders\combine.vert" />
+    <None Include="Shaders\copy.vert" />
+    <None Include="Shaders\heightmap.vert" />
+    <None Include="Shaders\light.vert" />
+    <None Include="Shaders\merge.vert" />
+    <None Include="Shaders\particle.vert" />
+    <None Include="Shaders\pp.vert" />
+    <None Include="Shaders\scene.vert" />
+    <None Include="Shaders\shadow.vert" />
+    <None Include="Shaders\skybox.vert" />
+    <None Include="Shaders\text.vert" />
+    <None Include="Shaders\water.vert" />
+    <None Include="Shaders\basic.vert">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="Shaders\combine.vert" />
+    <None Include="Shaders\copy.vert" />
+    <None Include="Shaders\heightmap.vert" />
+    <None Include="Shaders\light.vert" />
+    <None Include="Shaders\merge.vert" />
+    <None Include="Shaders\particle.vert" />
+    <None Include="Shaders\pp.vert" />
+    <None Include="Shaders\scene.vert" />
+    <None Include="Shaders\shadow.vert" />
+    <None Include="Shaders\skybox.vert" />
+    <None Include="Shaders\text.vert" />
+    <None Include="Shaders\water.vert" />
+    <None Include="Shaders\basic.vert">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="Shaders\combine.vert" />
+    <None Include="Shaders\copy.vert" />
+    <None Include="Shaders\heightmap.vert" />
+    <None Include="Shaders\light.vert" />
+    <None Include="Shaders\merge.vert" />
+    <None Include="Shaders\particle.vert" />
+    <None Include="Shaders\pp.vert" />
+    <None Include="Shaders\scene.vert" />
+    <None Include="Shaders\shadow.vert" />
+    <None Include="Shaders\skybox.vert" />
+    <None Include="Shaders\text.vert" />
+    <None Include="Shaders\water.vert" />
+    <None Include="Shaders\basic.vert">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="Shaders\combine.vert" />
+    <None Include="Shaders\copy.vert" />
+    <None Include="Shaders\heightmap.vert" />
+    <None Include="Shaders\light.vert" />
+    <None Include="Shaders\merge.vert" />
+    <None Include="Shaders\particle.vert" />
+    <None Include="Shaders\pp.vert" />
+    <None Include="Shaders\scene.vert" />
+    <None Include="Shaders\shadow.vert" />
+    <None Include="Shaders\skybox.vert" />
+    <None Include="Shaders\text.vert" />
+    <None Include="Shaders\water.vert" />
+    <None Include="Shaders\basic.vert">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="Shaders\combine.vert" />
+    <None Include="Shaders\copy.vert" />
+    <None Include="Shaders\heightmap.vert" />
+    <None Include="Shaders\light.vert" />
+    <None Include="Shaders\merge.vert" />
+    <None Include="Shaders\particle.vert" />
+    <None Include="Shaders\pp.vert" />
+    <None Include="Shaders\scene.vert" />
+    <None Include="Shaders\shadow.vert" />
+    <None Include="Shaders\skybox.vert" />
+    <None Include="Shaders\text.vert" />
+    <None Include="Shaders\water.vert" />
+    <None Include="Shaders\basic.vert">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="Shaders\combine.vert" />
+    <None Include="Shaders\copy.vert" />
+    <None Include="Shaders\heightmap.vert" />
+    <None Include="Shaders\light.vert" />
+    <None Include="Shaders\merge.vert" />
+    <None Include="Shaders\particle.vert" />
+    <None Include="Shaders\pp.vert" />
+    <None Include="Shaders\scene.vert" />
+    <None Include="Shaders\shadow.vert" />
+    <None Include="Shaders\skybox.vert" />
+    <None Include="Shaders\text.vert" />
+    <None Include="Shaders\water.vert" />
+    <None Include="Shaders\basic.vert">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="Shaders\combine.vert" />
+    <None Include="Shaders\copy.vert" />
+    <None Include="Shaders\heightmap.vert" />
+    <None Include="Shaders\light.vert" />
+    <None Include="Shaders\merge.vert" />
+    <None Include="Shaders\particle.vert" />
+    <None Include="Shaders\pp.vert" />
+    <None Include="Shaders\scene.vert" />
+    <None Include="Shaders\shadow.vert" />
+    <None Include="Shaders\skybox.vert" />
+    <None Include="Shaders\text.vert" />
+    <None Include="Shaders\water.vert" />
+    <None Include="Shaders\particle.geo">
+      <Filter>Shaders</Filter>
+    </None>
   </ItemGroup>
 </Project>

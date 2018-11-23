@@ -48,6 +48,7 @@ public:
 	//static Mesh *Quad();
 	static Mesh *QuadInds();
 	static Mesh *Plane(int x, int z, float xTexture, float yTexture);
+	static Mesh *Point();
 	
 	void updateVerts() { 
 		//glEnableVertexAttribArray(vaoId);

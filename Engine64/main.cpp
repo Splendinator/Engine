@@ -13,10 +13,12 @@
 #include "PointLight.h"
 #include "ObjectReflective.h"
 #include "Water.h"
+#include "Particle.h"
 #include <chrono>
+#include <random>
 
 
-
+static const int MAX_SNOWFLAKES = 512;
 static const int WATER_SIZE = 127;
 
 
@@ -43,6 +45,7 @@ Mesh *m = Mesh::QuadInds();
 Mesh monkey("Models/monkey.model");
 
 Texture monkeyTex;
+Texture snowflakeTex;
 
 Texture t;
 Texture waterTex;
@@ -54,6 +57,7 @@ Texture snowTex;
 Shader s;
 Shader shaderTerrain;
 Shader shaderReflect;
+Shader shaderParticle;
 
 
 PointLight l(2000.f, Vector4({ 0.7f,0.7f,0.7f,0.4f }), Vector3({0, 1000.f, 0.f}));
@@ -62,7 +66,7 @@ PointLight l(2000.f, Vector4({ 0.7f,0.7f,0.7f,0.4f }), Vector3({0, 1000.f, 0.f})
 
 ///SCENE 1
 Heightmap h(257, 257, 16.f,16.f,&t,&rockTex,&shaderTerrain);
-Water water(WATER_SIZE, WATER_SIZE, 4.f, 4.f, &waterTex, &shaderReflect, &reflectionTexture, 0.6f);
+Water water(WATER_SIZE, WATER_SIZE, 1.f, 1.f, &waterTex, &shaderReflect, &reflectionTexture, 0.4f);
 
 
 
@@ -75,8 +79,10 @@ PointLight sceneTwoLight(50.f, Vector4({ 0.6f,0.6f,0.6f,1.0f }), Vector3({100.f,
 
 
 ///SCENE 3
-Heightmap h(257, 257, 16.f, 16.f, &snowTex, &rockTex, &shaderTerrain);
-Water water(WATER_SIZE, WATER_SIZE, 4.f, 4.f, &waterTex, &shaderReflect, &reflectionTexture, 0.6f);
+Heightmap snowMap(257, 257, 16.f, 16.f, &snowTex, &rockTex, &shaderTerrain);
+Water ice(2, 2, 4.f, 4.f, &waterTex, &shaderReflect, &reflectionTexture, 0.6f);
+Particle snowParticle(&snowflakeTex, &shaderParticle, 10.f);
+Particle snowParticleTwo(&snowflakeTex, &shaderParticle, 5.f);
 
 
 
@@ -92,6 +98,11 @@ const float SENSITIVITY = 0.003f;
 std::vector<PointLight *> lightsOne;
 std::vector<PointLight *> lightsTwo;
 std::vector<PointLight *> lightsThree;
+
+
+std::vector<Particle> snowflakes;
+
+
 
 Scene scenes[3];
 
@@ -119,7 +130,6 @@ void gameLoop(void) {
 	time += delta;
 	float camSpeed = CAMERA_SPEED;
 	splitScreen += delta;
-	std::cout << splitScreen << std::endl;
 
 	if (Input::keyDown(Input::KEYBOARD_ESC)) {
 		exit(0);
@@ -174,6 +184,22 @@ void gameLoop(void) {
 		}
 		water.updateHeight();
 	}
+	else
+	if (scene == 2 || splitScreen < TRANSITION_ANIMATION_TIME) {
+		for (int i = 0; i < MAX_SNOWFLAKES; ++i) {
+			snowflakes[i].particle = snowflakes[i].particle + Vector3({ 0, float(-delta*70), 0 });
+			if (snowflakes[i].particle[1] < -20.f) {
+				snowflakes[i].particle = Vector3({ -150 + std::rand() % 200000 / 100.f,
+					std::rand() % 30000 / 100.f,
+					-150 + std::rand() % 200000 / 100.f });
+			}
+
+			snowflakes[i].buffer();
+
+		}
+		
+	}
+
 
 	if (fpsUpdate < time) {
 		sprintf_s(charBuffer, 256, "FPS %d", int(1.f / delta));
@@ -205,7 +231,7 @@ int main(int argc, char** argv) {
 	scenes[0].lights = &lightsOne;
 	scenes[1].root = &rootTwo;
 	scenes[1].lights = &lightsTwo;
-	scenes[2].root = &h;//TODO
+	scenes[2].root = &snowMap;//TODO
 	scenes[2].lights = &lightsThree;
 
 
@@ -218,6 +244,7 @@ int main(int argc, char** argv) {
 	s = Shader("Shaders\\scene.vert", "Shaders\\scene.frag");
 	shaderTerrain = Shader("Shaders\\heightmap.vert", "Shaders\\heightmap.frag");
 	shaderReflect = Shader("Shaders/water.vert", "Shaders/water.frag");
+	shaderParticle = Shader("Shaders/particle.vert", "Shaders/particle.frag", "Shaders/particle.geo");
 
 	
 	t = Texture("Textures/grass.jpg");
@@ -225,12 +252,18 @@ int main(int argc, char** argv) {
 
 	snowTex = Texture("Textures/snow.jpg");
 
+	snowflakeTex = Texture("Textures/snowflake.png");
+
 	waterTex = Texture("Textures/water.jpg");
 
 	monkeyTex = Texture("Models/monkey.jpg");
 
 	bumpMapTex = Texture("Textures/ASSdiffuse.jpg", "Textures/ASSnormals.jpg");
 
+
+	for (int i = 0; i < MAX_SNOWFLAKES; ++i) {
+		snowflakes.push_back(Particle(&snowflakeTex, &shaderParticle, 1.0f));
+	}
 
 
 	//REFLECTION MAP
@@ -250,6 +283,7 @@ int main(int argc, char** argv) {
 	h.init();
 	//o.init();
 	water.init();
+
 	
 	h.readHM("Heightmap/hm.jpg", 2048, 2048);
 	h.transform(Matrix4::scale(300,0.6f,300.f));
@@ -280,8 +314,32 @@ int main(int argc, char** argv) {
 	lightsTwo.push_back(&sceneTwoLight);
 
 
+	///SCENE 3
+	ice.init();
+	snowMap.init();
+
+	snowMap.readHM("Heightmap/hm.jpg", 2048, 2048);
+	snowMap.transform(Matrix4::scale(300, 0.6f, 300.f));
+	snowMap.transform(Matrix4::translate(0, -50.f, 0));
+
+	snowMap.addChild(&ice);
+
+	ice.transform(Matrix4::scale(0.3f, 1.f, 0.3f));
+	ice.transform(Matrix4::translate(0, 70.f, 0));
+
+	lightsThree.push_back(&l);
+
+	for (int i = 0; i < MAX_SNOWFLAKES; ++i) {
+		snowMap.addChild(&snowflakes[i]);
+	}
+
+	
 
 
+
+
+	
+	//r.addObject(&ice);
 	
 	
 

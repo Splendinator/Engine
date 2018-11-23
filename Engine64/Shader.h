@@ -18,6 +18,7 @@ public:
 
 	//Compiles shaders pointed to by filepaths.
 	Shader(std::string vert, std::string frag);
+	Shader(std::string vert, std::string frag, std::string geo);
 
 
 

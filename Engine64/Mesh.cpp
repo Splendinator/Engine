@@ -287,6 +287,21 @@ Mesh *Mesh::QuadInds()
 	return m;
 }
 
+
+
+Mesh *Mesh::Point()
+{
+	Mesh *m = new Mesh;
+
+	m->num = 1;
+	m->verts = new Vector3[m->num]{ Vector3({ 0,0,0 })};
+	m->alpha = new GLfloat[m->num]{ 1 };
+	return m;
+}
+
+
+
+
 Mesh *Mesh::Plane(int xNum, int zNum, float xTexture, float zTexture) {
 	Mesh *m = new Mesh;
 	m->num = xNum * zNum;

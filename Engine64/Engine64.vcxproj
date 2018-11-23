@@ -147,6 +147,7 @@
     <ClCompile Include="Mesh.cpp" />
     <ClCompile Include="Object.cpp" />
     <ClCompile Include="ObjectReflective.cpp" />
+    <ClCompile Include="Particle.cpp" />
     <ClCompile Include="PointLight.cpp" />
     <ClCompile Include="Rasteriser.cpp" />
     <ClCompile Include="Scene.cpp" />
@@ -167,6 +168,7 @@
     <ClInclude Include="Mesh.h" />
     <ClInclude Include="Object.h" />
     <ClInclude Include="ObjectReflective.h" />
+    <ClInclude Include="Particle.h" />
     <ClInclude Include="PointLight.h" />
     <ClInclude Include="Rasteriser.h" />
     <ClInclude Include="Scene.h" />
@@ -179,6 +181,7 @@
   <ItemGroup>
     <None Include="Shaders\*.frag" />
     <None Include="Shaders\*.vert" />
+    <None Include="Shaders\particle.geo" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
