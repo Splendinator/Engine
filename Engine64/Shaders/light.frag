@@ -45,7 +45,7 @@ float lambert = clamp(dot(incident , normal)/3.f ,0.0 ,1.0);
 float rFactor = clamp(dot(halfDir , normal) ,0.0 ,1.0);
 float sFactor = pow(rFactor,33.0);
 
-colour[0] = vec4(lightColour.xyz * lambert * atten * lightColour.a , 1.0f);
+colour[0] = vec4(lightColour.xyz * lambert * atten * lightColour.a, 1.0f) ;
 colour[1] = vec4(lightColour.xyz * sFactor * atten * 0.33f * lightColour.a ,1.0f);
 
 

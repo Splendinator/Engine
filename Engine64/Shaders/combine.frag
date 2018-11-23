@@ -26,7 +26,7 @@ void main(){
 	vec3 light = texture(texEmissive, tex).xyz ;
 	vec3 specular = texture(texSpecular, tex).xyz ;
 
-	colour.xyz = diffuse * 0.2f;
+	colour.xyz = diffuse * 0.4f;
 	colour.xyw += diffuse * light;
 	colour.xyz += specular;
 	colour.a = 1.0f;

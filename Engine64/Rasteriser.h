@@ -22,10 +22,12 @@ private:
 	static const int REFLECTION_RESOLUTION = 1024;
 	static const int SHADOW_RESOLUTION = 2048;
 
+	static const int POST_PROCESSING_EFFECTS = 4;
+
 	HUD hud;
 
 
-	
+	int ppRepeat[POST_PROCESSING_EFFECTS] = { 0,2,4,1 };
 
 	
 
@@ -145,10 +147,13 @@ private:
 
 public:
 
+	int postProcessEffect = 0;
+
+
 	std::string hudText = "";
 
-	const static int SCREEN_WIDTH = 1280;
-	const static int SCREEN_HEIGHT = 720;
+	const static int SCREEN_WIDTH = 1920;
+	const static int SCREEN_HEIGHT = 1200;
 
 	Rasteriser();
 

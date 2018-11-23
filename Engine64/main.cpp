@@ -18,8 +18,9 @@
 #include <random>
 
 
+
 static const int MAX_SNOWFLAKES = 128;
-static const int WATER_SIZE = 127;
+static const int WATER_SIZE = 257;
 
 
 
@@ -53,6 +54,7 @@ Texture waterTex;
 Texture rockTex;
 Texture bumpMapTex;
 Texture snowTex;
+Texture iceTex;
 
 
 Shader s;
@@ -60,12 +62,14 @@ Shader shaderTerrain;
 Shader shaderReflect;
 Shader shaderParticle;
 
+PointLight lightArray[132];
 
-PointLight l(2000.f, Vector4({ 0.7f,0.7f,0.7f,0.4f }), Vector3({0, 1000.f, 0.f}));
+PointLight l(1500.f, Vector4({ 0.7f,0.7f,0.7f,1.0f }), Vector3({0, 1000.f, 0.f}));
 
 
 
 ///SCENE 1
+
 Heightmap h(257, 257, 16.f,16.f,&t,&rockTex,&shaderTerrain);
 Water water(WATER_SIZE, WATER_SIZE, 1.f, 1.f, &waterTex, &shaderReflect, &reflectionTexture, 0.4f);
 
@@ -73,6 +77,7 @@ Water water(WATER_SIZE, WATER_SIZE, 1.f, 1.f, &waterTex, &shaderReflect, &reflec
 
 
 ///SCENE 2
+
 Heightmap rootTwo(257, 257, 16.f, 16.f, &bumpMapTex, &s);
 Object monkeyObj(&monkey, &monkeyTex, &s);
 PointLight sceneTwoLight(50.f, Vector4({ 0.6f,0.6f,0.6f,1.0f }), Vector3({100.f,20.f,100.f}));
@@ -80,8 +85,9 @@ PointLight sceneTwoLight(50.f, Vector4({ 0.6f,0.6f,0.6f,1.0f }), Vector3({100.f,
 
 
 ///SCENE 3
+
 Heightmap snowMap(257, 257, 16.f, 16.f, &snowTex, &rockTex, &shaderTerrain);
-Water ice(2, 2, 4.f, 4.f, &waterTex, &shaderReflect, &reflectionTexture, 0.1f);
+Water ice(2, 2, 8.f, 8.f, &iceTex, &shaderReflect, &reflectionTexture, 0.1f);
 Particle snowParticle(&snowflakeTex, &shaderParticle, 10.f);
 Particle snowParticleTwo(&snowflakeTex, &shaderParticle, 5.f);
 
@@ -94,6 +100,7 @@ Camera cam;
 const float CAMERA_SPEED = 10.0f;
 const float SPRINT_SPEED = 50.f;
 const float SENSITIVITY = 0.003f;
+const float AUTO_CHANGE = 5.f;
 
 
 std::vector<PointLight *> lightsOne;
@@ -109,7 +116,7 @@ Scene scenes[3];
 
 
 void changeScene(int scene) {
-	
+
 	r.clear();
 	r.addObject(scenes[scene].root);
 	for (std::vector<PointLight *>::iterator it = scenes[scene].lights->begin(); it != scenes[scene].lights->end(); ++it) {
@@ -121,16 +128,23 @@ void changeScene(int scene) {
 }
 
 const float TRANSITION_ANIMATION_TIME = 1.0f;
+const float PP_RESET_TIME = 1.0f;
 
 float sceneChange = 0.f;
 float fpsUpdate = 0.f;
 float splitScreen = 1.0f;
+float ppChange;
+
+float fps_Time_Acc = 0.f;
+int counter = 0;
 
 //GAME LOOP
 void gameLoop(void) {
 	static float time = 0;
 	double delta = Timer::getDelta();
 	time += delta;
+
+
 	float camSpeed = CAMERA_SPEED;
 	splitScreen += delta;
 
@@ -164,6 +178,12 @@ void gameLoop(void) {
 			sceneChange = time + TRANSITION_ANIMATION_TIME;
 			changeScene(scene = ((scene + 1) % 3));
 			splitScreen = 0.0f;
+		}
+	}
+	if (Input::keyDown(Input::Key('p'))) {
+		if (ppChange < time) {
+			ppChange = time + PP_RESET_TIME;
+			r.postProcessEffect = (r.postProcessEffect + 1) % 4;
 		}
 	}
 
@@ -202,10 +222,19 @@ void gameLoop(void) {
 	}
 
 
-	if (fpsUpdate < time) {
-		sprintf_s(charBuffer, 256, "FPS %d", int(1.f / delta));
-		fpsUpdate += 1.f;
+
+#pragma region FPS_CALCULATION
+	{
+		fps_Time_Acc += delta;
+		counter++;
+		if (fps_Time_Acc >= 1.f) {
+			sprintf_s(charBuffer, 256, "FPS %d", counter);
+			fps_Time_Acc = 0.f;
+			counter = 0;
+		}
 	}
+#pragma endregion
+		
 	r.hudText = std::string(charBuffer);
 	
 	
@@ -224,16 +253,38 @@ void gameLoop(void) {
 
 }
 
+void genLights(Vector4 colour, float dist, float startPos, int bufStart) {
+
+	//Deffered Lights
+	Vector3 sp[4] = { Vector3({ -startPos,40,startPos }),Vector3({ startPos,40,-startPos }),Vector3({ -startPos ,40,-startPos }),Vector3({ startPos,40,startPos }) };
+	Vector3 offset[4] = { Vector3({ dist,0,0 }),Vector3({ -dist,0,0 }),Vector3({ 0,0,dist }),Vector3({ 0,0,-dist }) };
+	for (int i = 0; i < 11; ++i) {
+		lightArray[bufStart + i].pos = sp[0] + offset[0] * i;
+		lightArray[bufStart + 11 + i].pos = sp[1] + offset[1] * i;
+		lightArray[bufStart + 22 + i].pos = sp[2] + offset[2] * i;
+		lightArray[bufStart + 33 + i].pos = sp[3] + offset[3] * i;
+	}
+	for (int i = 0; i < 44; ++i) {
+		lightArray[bufStart + i].col = colour;
+		lightArray[bufStart + i].rad = 130.f;
+		lightsTwo.push_back(&(lightArray[bufStart + i]));
+	}
+}
 
 
 int main(int argc, char** argv) {
-	
+
 	scenes[0].root = &h;
 	scenes[0].lights = &lightsOne;
 	scenes[1].root = &rootTwo;
 	scenes[1].lights = &lightsTwo;
 	scenes[2].root = &snowMap;
 	scenes[2].lights = &lightsThree;
+	
+	genLights(Vector4({ 1, 0, 0, 1 }), 200, 1100, 0);
+	genLights(Vector4({ 1, 1, 1, 1 }), 150, 825, 44);
+	genLights(Vector4({ 0, 0, 1, 1 }), 100, 550, 88);
+
 
 
 	//INIT OPENGL/FREEGLUT
@@ -256,6 +307,8 @@ int main(int argc, char** argv) {
 	snowflakeTex = Texture("Textures/snowflake.png");
 
 	waterTex = Texture("Textures/water.jpg");
+
+	iceTex = Texture("Textures/water.jpg","Textures/iceNormal.jpg");
 
 	monkeyTex = Texture("Models/monkey.jpg");
 
@@ -317,17 +370,18 @@ int main(int argc, char** argv) {
 	lightsTwo.push_back(&sceneTwoLight);
 
 
+
 	///SCENE 3
 	ice.init();
 	snowMap.init();
 
-	snowMap.readHM("Heightmap/hm.jpg", 2048, 2048);
-	snowMap.transform(Matrix4::scale(300, 0.6f, 300.f));
+	snowMap.readHM("Heightmap/map.jpg", 2048, 2048);
+	snowMap.transform(Matrix4::scale(300, 0.3f, 300.f));
 	snowMap.transform(Matrix4::translate(0, -50.f, 0));
 
 	snowMap.addChild(&ice);
 
-	ice.transform(Matrix4::scale(0.3f, 1.f, 0.3f));
+	ice.transform(Matrix4::scale(1.0f, 1.f, 1.0f));
 	ice.transform(Matrix4::translate(0, 70.f, 0));
 
 	lightsThree.push_back(&l);
@@ -373,7 +427,7 @@ int main(int argc, char** argv) {
 
 
 	
-
+	
 	glutMainLoop();
 
 	

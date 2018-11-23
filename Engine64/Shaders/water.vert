@@ -26,8 +26,8 @@ void main(){
 	a  = alpha;
 
 
-	mat3 normalMatrix = transpose ( inverse ( mat3 ( model )));
-	normal = normalize ( normalMatrix * normalize ( norms ));
+	mat3 normalMatrix = inverse(mat3 ( model ));
+	normal = normalize ( normalize ( norms ) * normalMatrix);
 
 
 	tex = texCoords;

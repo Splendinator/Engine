@@ -26,7 +26,7 @@ void main(){
 	a  = alpha;
 
 
-	mat3 normalMatrix = transpose ( inverse ( mat3 ( model )));
+	mat3 normalMatrix =  transpose(inverse ( mat3 ( model )));
 	normal = normalize ( normalMatrix * normalize ( norms ));
 
 

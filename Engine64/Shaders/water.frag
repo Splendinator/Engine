@@ -42,7 +42,7 @@ void main(){
 
 	vec3 incident = normalize (pos + cameraPos);
 
-	vec4 reflection = texture(texReflect, reflect(incident, normalize(normal)));
+	vec4 reflection = texture(texReflect, reflect(incident, normalize(norm)));
 
 	colour[0] = mix(reflection,diffuse,reflectivity);
 

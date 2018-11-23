@@ -17,19 +17,19 @@ in vec3 binormal;
 void main(){
 
 	float grad = dot(normalize(normal),vec3(0,1,0));
-	float pct = grad;
+	float pct = clamp(grad * grad,0,1);
 
 	
 
 	mat3 TBN  = mat3(tangent, binormal, normal);
 	vec3 norm = normalize(TBN * texture(texNorms,tex).rgb);
 
-
+	
 
 
 
 	colour[0] = mix(texture(texDiffuse2, tex),texture(texDiffuse,tex),pct);
-	colour[1] = vec4(norm.xyz * 0.5f + 0.5f ,1.0f);
+	colour[1] = vec4(normal.xyz * 0.5f + 0.5f ,1.0f);
 
 }
 

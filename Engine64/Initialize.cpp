@@ -22,6 +22,8 @@ void Initialize::init(int argc, char** argv) {
 	glutInitWarningFunc(warningHandle);
 	glutCreateWindow("OpenGL Program");
 
+	glutFullScreen();
+
 
 	glutSetCursor(GLUT_CURSOR_NONE);
 

@@ -37,21 +37,28 @@ void Rasteriser::postProcess() {
 	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, bufferColourTex[1], 0);
 	glClear(GL_COLOR_BUFFER_BIT);
 	texture.id = bufferColourTex[0];
+
+	glActiveTexture(GL_TEXTURE3);
+	glBindTexture(GL_TEXTURE_2D, bufferLightEmissive);
+	glUniform1i(glGetUniformLocation(pps.programID, "texEmissive"),3);
+
+	glUniform1i(glGetUniformLocation(pps.programID, "effect"), postProcessEffect);
+
 	quad.draw();
 
 
 	///Multiple Passes
-	//for (int i = 0; i < 600; ++i) {
-	//	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, bufferColourTex[1], 0);
-	//	glClear(GL_COLOR_BUFFER_BIT);
-	//	texture.id = bufferColourTex[0];
-	//	quad.draw();
-	//
-	//	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, bufferColourTex[0], 0);
-	//	glClear(GL_COLOR_BUFFER_BIT);
-	//	texture.id = bufferColourTex[1];
-	//	quad.draw();
-	//}
+	for (int i = 0; i < ppRepeat[postProcessEffect]; ++i) {
+		glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, bufferColourTex[1], 0);
+		glClear(GL_COLOR_BUFFER_BIT);
+		texture.id = bufferColourTex[0];
+		quad.draw();
+	
+		glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, bufferColourTex[0], 0);
+		glClear(GL_COLOR_BUFFER_BIT);
+		texture.id = bufferColourTex[1];
+		quad.draw();
+	}
 
 
 
@@ -373,9 +380,21 @@ void Rasteriser::update(float pct)
 	objects = tempObj;
 	pointLights = tempLight;
 	transparent = tempTransparent;
-	for (int i = 0; i < 16; ++i) {
-		matShadow[i] = 0.0f;
-	}
+	//for (int i = 0; i < 16; ++i) {
+	//	matShadow[i] = 0.0f;
+	//}
+
+
+
+	Matrix4 proj = Matrix4::Perspective(0.01f, 1000, PI / 2.f, 1.f);
+	Camera c;
+	c.move(Vector3({ 0, 10, 100 }));
+	//c.rollPitch(0.f);
+	matShadow = Matrix4::identity();// *Matrix4::translate(pos[0], pos[1], pos[2]) * Matrix4::rotationY(yaw);
+	matShadow *= c.getTransform();
+	matShadow *= proj;
+	matShadow *= Matrix4::Bias();
+
 
 	//glutSwapBuffers();
 	glFlush();
@@ -826,8 +845,12 @@ void Rasteriser::clear()
 	pointLights.clear();
 	transparent.clear();
 
-	for (int i = 0; i < 16; ++i) {
-		matShadow[i] = 0.0f;
-	}
+	Matrix4 proj = Matrix4::Perspective(0.01f, 200, PI / 2.f, 1.f);
+	Camera c;
+	//c.rollPitch(0.f);
+	matShadow = Matrix4::identity();// *Matrix4::translate(pos[0], pos[1], pos[2]) * Matrix4::rotationY(yaw);
+	matShadow *= camera->getTransform();
+	matShadow *= proj;
+	matShadow *= Matrix4::Bias();
 
 }
